@@ -1,6 +1,6 @@
 # Interpolation
 
-When handling [core animation logic](./core_anim_logic.md), Most bone fields
+When handling [core animation logic](./core_anim_logic.md), most bone fields
 such as position, rotation, and scale must be interpolated across keyframes.
 
 This page will cover best practices for how to handle this.
@@ -35,8 +35,8 @@ must be processed:
 - 1: Get most recent keyframe based on requested frame
 - 2: Get next-most keyframe based on request frame
 - 3: Provide safeguards in the case that either or both cannot be gathered
-- 4: Generate frame data relevant only to both keyframes (since interpolation will
-  account only for them)
+- 4: Generate frame data relevant only to both keyframes (since interpolation
+  will account only for them)
 
 Pseudo-code:
 
@@ -69,9 +69,9 @@ fn interpolate(
 
   // 3: ensure both points are pointing somewhere
   if prev_kf == null {
-    prev_kf == next_kf
+    prev_kf = next_kf
   } else if next_kf == null {
-    next_kf == null
+    next_kf = prev_kf
   }
 
   // 3: if both are null, return default value
@@ -85,7 +85,7 @@ fn interpolate(
 
   let result = interpolate_float(prev_kf.value, next_kf.value, current_frame, total_frames);
 
-  // the function should at least return the interpolated value, 
+  // the function should at least return the interpolated value,
   // but other data is always welcome (keyframes, frame data, etc)
   return result
 }
