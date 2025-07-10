@@ -27,7 +27,16 @@ keyframe animates the bone (of id 4)'s position on the X axis.
 In relation to the element, the `value` field determines the actual value to
 interpolate by. On frame 12, the bone's X position will be it's own plus 7.
 
-## Meta Logic
+## Gathering Keyframe Data
+
+Before interpolation takes place, the proper keyframes and other relevant data
+must be processed:
+
+- Get most recent keyframe based on requested frame
+- Get next-most keyframe based on request frame
+- Provide safeguards in the case that either or both cannot be gathered
+- Generate frame data relevant only to both keyframes (since interpolation will
+  account only for them)
 
 Pseudo-code:
 
@@ -70,12 +79,14 @@ fn interpolate(
     return default_value
   }
 
+  // get total and current frames in relation to both keyframes
   let total_frames = next_kf.frame - prev_kf.frame;
-
   let current_frame = frame - prev_kf.frame;
 
   let result = interpolate_float(prev_kf.value, next_kf.value, current_frame, total_frames);
 
+  // the function should at least return the interpolated value, 
+  // but other data is always welcome (keyframes, frame data, etc)
   return result
 }
 ```
