@@ -445,7 +445,16 @@ fields to be easily identifiable via <code>element</code> or <code>element_id</c
 keyframe animates the bone (of id 4)'s position on the X axis.</p>
 <p>In relation to the element, the <code>value</code> field determines the actual value to
 interpolate by. On frame 12, the bone's X position will be it's own plus 7.</p>
-<h2 id="meta-logic"><a class="header" href="#meta-logic">Meta Logic</a></h2>
+<h2 id="gathering-keyframe-data"><a class="header" href="#gathering-keyframe-data">Gathering Keyframe Data</a></h2>
+<p>Before interpolation takes place, the proper keyframes and other relevant data
+must be processed:</p>
+<ul>
+<li>Get most recent keyframe based on requested frame</li>
+<li>Get next-most keyframe based on request frame</li>
+<li>Provide safeguards in the case that either or both cannot be gathered</li>
+<li>Generate frame data relevant only to both keyframes (since interpolation will
+account only for them)</li>
+</ul>
 <p>Pseudo-code:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -487,12 +496,14 @@ interpolate by. On frame 12, the bone's X position will be it's own plus 7.</p>
     return default_value
   }
 
+  // get total and current frames in relation to both keyframes
   let total_frames = next_kf.frame - prev_kf.frame;
-
   let current_frame = frame - prev_kf.frame;
 
   let result = interpolate_float(prev_kf.value, next_kf.value, current_frame, total_frames);
 
+  // the function should at least return the interpolated value, 
+  // but other data is always welcome (keyframes, frame data, etc)
   return result
 }
 <span class="boring">}</span></code></pre></pre>
