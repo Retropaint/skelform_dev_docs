@@ -83,7 +83,12 @@ fn interpolate(
   let total_frames = next_kf.frame - prev_kf.frame;
   let current_frame = frame - prev_kf.frame;
 
-  let result = interpolate_float(prev_kf.value, next_kf.value, current_frame, total_frames);
+  let result = interpolate_float(
+    prev_kf.value, 
+    next_kf.value, 
+    current_frame, 
+    total_frames
+  );
 
   // the function should at least return the interpolated value,
   // but other data is always welcome (keyframes, frame data, etc)
