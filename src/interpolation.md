@@ -32,10 +32,10 @@ interpolate by. On frame 12, the bone's X position will be it's own plus 7.
 Before interpolation takes place, the proper keyframes and other relevant data
 must be processed:
 
-- Get most recent keyframe based on requested frame
-- Get next-most keyframe based on request frame
-- Provide safeguards in the case that either or both cannot be gathered
-- Generate frame data relevant only to both keyframes (since interpolation will
+- 1: Get most recent keyframe based on requested frame
+- 2: Get next-most keyframe based on request frame
+- 3: Provide safeguards in the case that either or both cannot be gathered
+- 4: Generate frame data relevant only to both keyframes (since interpolation will
   account only for them)
 
 Pseudo-code:
@@ -51,7 +51,7 @@ fn interpolate(
   let prev_kf;
   let next_kf;
 
-  // get most recent frame
+  // 1: get most recent frame
   for kf in keyframes {
     if kf.frame < frame && kf.bone_id == bone_id && kf.element == element {
       prev_kf = kf
@@ -59,7 +59,7 @@ fn interpolate(
     break
   }
 
-  // get next frame
+  // 2: get next frame
   for kf in keyframes {
     if kf.frame > frame && kf.bone_id == bone_id && kf.element == element {
       next_kf = kf
@@ -67,19 +67,19 @@ fn interpolate(
     }
   }
 
-  // ensure both points are pointing somewhere
+  // 3: ensure both points are pointing somewhere
   if prev_kf == null {
     prev_kf == next_kf
   } else if next_kf == null {
     next_kf == null
   }
 
-  // if both are null, return default value
+  // 3: if both are null, return default value
   if prev_kf == null && next_kf == null {
     return default_value
   }
 
-  // get total and current frames in relation to both keyframes
+  // 4: get total and current frames in relation to both keyframes
   let total_frames = next_kf.frame - prev_kf.frame;
   let current_frame = frame - prev_kf.frame;
 
