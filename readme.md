@@ -2,7 +2,7 @@
 
 Developer documentation for [SkelForm](https://github.com/Retropaint/SkelForm), made with [mdBook](https://github.com/rust-lang/mdBook).
 
-This is different from the [User Documentation](https://github.com/retropaint/skelform_user_docs);
+This is different from the [User Documentation](https://github.com/retropaint/skelform_user_docs).
 
 ## Building
 
