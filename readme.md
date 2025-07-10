@@ -1,6 +1,8 @@
-# SkelForm User Documentation
+# SkelForm Developer Documentation
 
-User documentation for [SkelForm](https://github.com/Retropaint/SkelForm), made with [mdBook](https://github.com/rust-lang/mdBook).
+Developer documentation fr [SkelForm](https://github.com/Retropaint/SkelForm), made with [mdBook](https://github.com/rust-lang/mdBook).
+
+This is different from the [User Documentation](https://github.com/retropaint/skelform_user_docs);
 
 ## Building
 
@@ -12,16 +14,12 @@ This will create the distributable `book` dir, which can be published to web (an
 
 ## Formatting
 
-Formatting markdown files is done with [dprint](https://dprint.dev/), with the
+Formatting markdown files is done with [prettier](https://prettier.io/), with the
 following relevant config file:
 
 ````json
 {
-    "markdown": {
-        "textWrap": "always"
-    },
-    "plugins": [
-        "https://plugins.dprint.dev/markdown-0.18.0.wasm",
-    ]
+  "proseWrap": "always",
+  "printWidth": 80
 }
 ````
