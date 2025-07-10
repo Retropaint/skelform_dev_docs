@@ -174,8 +174,8 @@
 optional if they require dependencies.</p>
 <p>These runtimes should be engine &amp; render agnostic, and the 'generic' nature
 allowing it to be expandable to other environments.</p>
-<p>Example: A generic Rust runtime can be expanded for Rust game engines like
-Macroquad or Bevy.</p>
+<p>Example: A <a href="https://github.com/Retropaint/rusty_skelform">generic Rust runtime</a>
+can be expanded for Rust game engines like Macroquad or Bevy.</p>
 <h2 id="engine-runtimes"><a class="header" href="#engine-runtimes">Engine Runtimes</a></h2>
 <p>Engine runtimes handle specific environments and must have a user-friendly API.</p>
 <p>Because of the user-friendly nature, features such as loading <code>.skf</code> files can
@@ -184,8 +184,10 @@ customization.</p>
 <p>Ideally, engine runtimes should simply depend on a generic runtime to do the
 heavy lifting, and leave itself to only handle rendering and engine-specific
 quirks.</p>
-<p>Example: The Macroquad runtime depends on a generic Rust runtime, and takes care
-of drawing the bones with Macroquad after animation logic has processed.</p>
+<p>Example: The
+<a href="https://github.com/Retropaint/rusty_skelform_macroquad">Macroquad runtime</a>
+depends on a generic Rust runtime, and takes care of drawing the bones with
+Macroquad after animation logic has processed.</p>
 
                     </main>
 
