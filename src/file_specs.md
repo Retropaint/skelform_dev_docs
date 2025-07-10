@@ -7,7 +7,7 @@ exporting from the editor.
 
 - `armature.json` - JSON file containing all relevant data (bones, animations,
   etc)
-- `textures.png` - Texture atlas / Sprite sheet
+- `textures.png` - Texture atlas / sprite sheet
 
 ## Sample files
 
