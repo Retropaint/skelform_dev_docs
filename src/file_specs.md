@@ -11,7 +11,12 @@ exporting from the editor.
 
 ## Sample files
 
-- `.skf` file
+Feel free to download the following to dissect, or just follow along with the
+documentation:
+
+- [`.skf` file](https://github.com/Retropaint/skelform_dev_docs/raw/refs/heads/main/skellington.skf)
+- <a href="https://raw.githubusercontent.com/Retropaint/skelform_dev_docs/refs/heads/main/armature.json" target="_blank">armature.json</a>
+- <a href="https://raw.githubusercontent.com/Retropaint/skelform_dev_docs/refs/heads/main/textures.png" target="_blank">textures.png</a>
 
 ## `armature.json` Structure
 
