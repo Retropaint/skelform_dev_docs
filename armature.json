@@ -1,0 +1,817 @@
+{
+  "texture_size": { "x": 4942.0, "y": 897.0 },
+  "armature": {
+    "bones": [
+      {
+        "id": 0,
+        "name": "Right Leg\u0000",
+        "parent_id": -1,
+        "tex_idx": -1,
+        "rot": 0.0,
+        "scale": { "x": 1.0, "y": 1.0 },
+        "pos": { "x": 100.0, "y": -339.5 },
+        "pivot": { "x": 0.5, "y": 0.5 },
+        "zindex": 0.0
+      },
+      {
+        "id": 1,
+        "name": "Texture",
+        "parent_id": 0,
+        "tex_idx": 0,
+        "rot": 0.0,
+        "scale": { "x": 1.0, "y": 1.0 },
+        "pos": { "x": 299.5, "y": -15.5 },
+        "pivot": { "x": 0.5, "y": 0.5 },
+        "zindex": 1.0
+      },
+      {
+        "id": 2,
+        "name": "Left Leg\u0000",
+        "parent_id": -1,
+        "tex_idx": -1,
+        "rot": 0.0,
+        "scale": { "x": 1.0, "y": 1.0 },
+        "pos": { "x": -40.0, "y": -469.5 },
+        "pivot": { "x": 0.5, "y": 0.5 },
+        "zindex": 2.0
+      },
+      {
+        "id": 3,
+        "name": "Texture",
+        "parent_id": 2,
+        "tex_idx": 1,
+        "rot": 0.0,
+        "scale": { "x": 1.0, "y": 1.0 },
+        "pos": { "x": -240.0, "y": -364.0 },
+        "pivot": { "x": 0.5, "y": 0.5 },
+        "zindex": 3.0
+      },
+      {
+        "id": 4,
+        "name": "Left Arm\u0000",
+        "parent_id": -1,
+        "tex_idx": -1,
+        "rot": 0.0,
+        "scale": { "x": 1.0, "y": 1.0 },
+        "pos": { "x": -211.0, "y": -18.5 },
+        "pivot": { "x": 0.5, "y": 0.5 },
+        "zindex": 4.0
+      },
+      {
+        "id": 5,
+        "name": "Texture",
+        "parent_id": 4,
+        "tex_idx": 2,
+        "rot": 0.0,
+        "scale": { "x": 1.0, "y": 1.0 },
+        "pos": { "x": -120.0, "y": -397.0 },
+        "pivot": { "x": 0.5, "y": 0.5 },
+        "zindex": 5.0
+      },
+      {
+        "id": 6,
+        "name": "Right Arm\u0000",
+        "parent_id": -1,
+        "tex_idx": -1,
+        "rot": 0.0,
+        "scale": { "x": 1.0, "y": 1.0 },
+        "pos": { "x": -41.0, "y": 30.5 },
+        "pivot": { "x": 0.5, "y": 0.5 },
+        "zindex": 6.0
+      },
+      {
+        "id": 7,
+        "name": "Texture",
+        "parent_id": 6,
+        "tex_idx": 3,
+        "rot": 0.0,
+        "scale": { "x": 1.0, "y": 1.0 },
+        "pos": { "x": 193.0, "y": 384.5 },
+        "pivot": { "x": 0.5, "y": 0.5 },
+        "zindex": 7.0
+      },
+      {
+        "id": 8,
+        "name": "Torso\u0000",
+        "parent_id": -1,
+        "tex_idx": 4,
+        "rot": 0.0,
+        "scale": { "x": 1.0, "y": 1.0 },
+        "pos": { "x": -22.5, "y": -200.5 },
+        "pivot": { "x": 0.5, "y": 0.5 },
+        "zindex": 8.0
+      },
+      {
+        "id": 9,
+        "name": "Collar\u0000",
+        "parent_id": -1,
+        "tex_idx": 5,
+        "rot": 0.0,
+        "scale": { "x": 1.0, "y": 1.0 },
+        "pos": { "x": -164.5, "y": 70.0 },
+        "pivot": { "x": 0.5, "y": 0.5 },
+        "zindex": 9.0
+      },
+      {
+        "id": 10,
+        "name": "Neck\u0000",
+        "parent_id": -1,
+        "tex_idx": -1,
+        "rot": 0.0,
+        "scale": { "x": 1.0, "y": 1.0 },
+        "pos": { "x": -140.0, "y": 76.5 },
+        "pivot": { "x": 0.5, "y": 0.5 },
+        "zindex": 10.0
+      },
+      {
+        "id": 11,
+        "name": "Texture",
+        "parent_id": 10,
+        "tex_idx": 6,
+        "rot": 0.0,
+        "scale": { "x": 1.0, "y": 1.0 },
+        "pos": { "x": -46.5, "y": 69.5 },
+        "pivot": { "x": 0.5, "y": 0.5 },
+        "zindex": 11.0
+      },
+      {
+        "id": 12,
+        "name": "Skull\u0000",
+        "parent_id": 10,
+        "tex_idx": -1,
+        "rot": 0.0,
+        "scale": { "x": 1.0, "y": 1.0 },
+        "pos": { "x": -102.0, "y": 167.0 },
+        "pivot": { "x": 0.5, "y": 0.5 },
+        "zindex": 12.0
+      },
+      {
+        "id": 13,
+        "name": "Texture",
+        "parent_id": 12,
+        "tex_idx": 7,
+        "rot": 0.0,
+        "scale": { "x": 1.0, "y": 1.0 },
+        "pos": { "x": 43.0, "y": 189.0 },
+        "pivot": { "x": 0.5, "y": 0.5 },
+        "zindex": 13.0
+      },
+      {
+        "id": 14,
+        "name": "Eyes\u0000",
+        "parent_id": 12,
+        "tex_idx": 8,
+        "rot": 0.0,
+        "scale": { "x": 1.0, "y": 1.0 },
+        "pos": { "x": 81.0, "y": 228.0 },
+        "pivot": { "x": 0.5, "y": 0.5 },
+        "zindex": 14.0
+      },
+      {
+        "id": 15,
+        "name": "Bowtie\u0000",
+        "parent_id": -1,
+        "tex_idx": -1,
+        "rot": 0.0,
+        "scale": { "x": 1.0, "y": 1.0 },
+        "pos": { "x": -100.0, "y": 25.5 },
+        "pivot": { "x": 0.5, "y": 0.5 },
+        "zindex": 15.0
+      },
+      {
+        "id": 16,
+        "name": "Texture",
+        "parent_id": 15,
+        "tex_idx": 9,
+        "rot": 0.0,
+        "scale": { "x": 1.0, "y": 1.0 },
+        "pos": { "x": -20.0, "y": -13.0 },
+        "pivot": { "x": 0.5, "y": 0.5 },
+        "zindex": 16.0
+      },
+      {
+        "id": 17,
+        "name": "Top Hat\u0000",
+        "parent_id": -1,
+        "tex_idx": -1,
+        "rot": 0.0,
+        "scale": { "x": 1.0, "y": 1.0 },
+        "pos": { "x": -258.0, "y": 678.5 },
+        "pivot": { "x": 0.5, "y": 0.5 },
+        "zindex": 17.0
+      },
+      {
+        "id": 18,
+        "name": "Texture",
+        "parent_id": 17,
+        "tex_idx": 10,
+        "rot": 0.0,
+        "scale": { "x": 1.0, "y": 1.0 },
+        "pos": { "x": -41.0, "y": 141.5 },
+        "pivot": { "x": 0.5, "y": 0.5 },
+        "zindex": 18.0
+      }
+    ],
+    "animations": [
+      {
+        "name": "Stand",
+        "fps": 60,
+        "id": 0,
+        "keyframes": [
+          {
+            "frame": 0,
+            "bone_id": 4,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.0,
+            "transition": "Linear"
+          },
+          {
+            "frame": 0,
+            "bone_id": 2,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.0,
+            "transition": "Linear"
+          },
+          {
+            "frame": 0,
+            "bone_id": 6,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.0,
+            "transition": "Linear"
+          },
+          {
+            "frame": 0,
+            "bone_id": 0,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.0,
+            "transition": "Linear"
+          },
+          {
+            "frame": 40,
+            "bone_id": 4,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": -0.122173056,
+            "transition": "Linear"
+          },
+          {
+            "frame": 40,
+            "bone_id": 2,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": -0.17453294,
+            "transition": "Linear"
+          },
+          {
+            "frame": 40,
+            "bone_id": 6,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.08726647,
+            "transition": "Linear"
+          },
+          {
+            "frame": 40,
+            "bone_id": 0,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.15707964,
+            "transition": "Linear"
+          },
+          {
+            "frame": 75,
+            "bone_id": 4,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.0,
+            "transition": "SineIn"
+          },
+          {
+            "frame": 75,
+            "bone_id": 2,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.0,
+            "transition": "SineIn"
+          },
+          {
+            "frame": 75,
+            "bone_id": 6,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.0,
+            "transition": "SineIn"
+          },
+          {
+            "frame": 75,
+            "bone_id": 0,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.0,
+            "transition": "SineIn"
+          }
+        ]
+      },
+      {
+        "name": "Walk",
+        "fps": 60,
+        "id": 1,
+        "keyframes": [
+          {
+            "frame": 0,
+            "bone_id": 4,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.0,
+            "transition": "Linear"
+          },
+          {
+            "frame": 0,
+            "bone_id": 6,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.0,
+            "transition": "Linear"
+          },
+          {
+            "frame": 0,
+            "bone_id": 17,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.0,
+            "transition": "Linear"
+          },
+          {
+            "frame": 0,
+            "bone_id": 17,
+            "element_id": 0,
+            "element": "PositionX",
+            "value": 0.0,
+            "transition": "Linear"
+          },
+          {
+            "frame": 0,
+            "bone_id": 17,
+            "element_id": 1,
+            "element": "PositionY",
+            "value": 0.0,
+            "transition": "Linear"
+          },
+          {
+            "frame": 0,
+            "bone_id": 2,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.0,
+            "transition": "Linear"
+          },
+          {
+            "frame": 0,
+            "bone_id": 0,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.0,
+            "transition": "Linear"
+          },
+          {
+            "frame": 0,
+            "bone_id": 15,
+            "element_id": 3,
+            "element": "ScaleX",
+            "value": 1.0,
+            "transition": "Linear"
+          },
+          {
+            "frame": 0,
+            "bone_id": 12,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.0,
+            "transition": "Linear"
+          },
+          {
+            "frame": 0,
+            "bone_id": 12,
+            "element_id": 4,
+            "element": "ScaleY",
+            "value": 1.0,
+            "transition": "Linear"
+          },
+          {
+            "frame": 0,
+            "bone_id": 12,
+            "element_id": 1,
+            "element": "PositionY",
+            "value": 0.0,
+            "transition": "Linear"
+          },
+          {
+            "frame": 0,
+            "bone_id": 14,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.0,
+            "transition": "Linear"
+          },
+          {
+            "frame": 0,
+            "bone_id": 0,
+            "element_id": 4,
+            "element": "ScaleY",
+            "value": 1.0,
+            "transition": "Linear"
+          },
+          {
+            "frame": 0,
+            "bone_id": 0,
+            "element_id": 3,
+            "element": "ScaleX",
+            "value": 1.0,
+            "transition": "Linear"
+          },
+          {
+            "frame": 0,
+            "bone_id": 2,
+            "element_id": 3,
+            "element": "ScaleX",
+            "value": 1.0,
+            "transition": "Linear"
+          },
+          {
+            "frame": 0,
+            "bone_id": 4,
+            "element_id": 3,
+            "element": "ScaleX",
+            "value": 1.0,
+            "transition": "Linear"
+          },
+          {
+            "frame": 0,
+            "bone_id": 6,
+            "element_id": 3,
+            "element": "ScaleX",
+            "value": 1.0,
+            "transition": "Linear"
+          },
+          {
+            "frame": 16,
+            "bone_id": 1,
+            "element_id": 1,
+            "element": "PositionY",
+            "value": 0.0,
+            "transition": "Linear"
+          },
+          {
+            "frame": 16,
+            "bone_id": 1,
+            "element_id": 0,
+            "element": "PositionX",
+            "value": 0.0,
+            "transition": "Linear"
+          },
+          {
+            "frame": 16,
+            "bone_id": 4,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": -0.7853982,
+            "transition": "SineOut"
+          },
+          {
+            "frame": 16,
+            "bone_id": 6,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.34906587,
+            "transition": "SineOut"
+          },
+          {
+            "frame": 16,
+            "bone_id": 17,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.34906587,
+            "transition": "SineOut"
+          },
+          {
+            "frame": 16,
+            "bone_id": 17,
+            "element_id": 0,
+            "element": "PositionX",
+            "value": -124.80551,
+            "transition": "SineOut"
+          },
+          {
+            "frame": 16,
+            "bone_id": 17,
+            "element_id": 1,
+            "element": "PositionY",
+            "value": 25.190186,
+            "transition": "SineOut"
+          },
+          {
+            "frame": 16,
+            "bone_id": 2,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": -0.34906587,
+            "transition": "SineOut"
+          },
+          {
+            "frame": 16,
+            "bone_id": 0,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.34906587,
+            "transition": "SineOut"
+          },
+          {
+            "frame": 16,
+            "bone_id": 15,
+            "element_id": 3,
+            "element": "ScaleX",
+            "value": 1.2,
+            "transition": "SineOut"
+          },
+          {
+            "frame": 16,
+            "bone_id": 12,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.17453294,
+            "transition": "SineOut"
+          },
+          {
+            "frame": 16,
+            "bone_id": 12,
+            "element_id": 4,
+            "element": "ScaleY",
+            "value": 1.2,
+            "transition": "SineOut"
+          },
+          {
+            "frame": 16,
+            "bone_id": 14,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": -0.17453294,
+            "transition": "SineOut"
+          },
+          {
+            "frame": 16,
+            "bone_id": 0,
+            "element_id": 4,
+            "element": "ScaleY",
+            "value": 1.0,
+            "transition": "SineOut"
+          },
+          {
+            "frame": 16,
+            "bone_id": 0,
+            "element_id": 3,
+            "element": "ScaleX",
+            "value": 1.5,
+            "transition": "SineOut"
+          },
+          {
+            "frame": 16,
+            "bone_id": 2,
+            "element_id": 3,
+            "element": "ScaleX",
+            "value": 1.5,
+            "transition": "SineOut"
+          },
+          {
+            "frame": 16,
+            "bone_id": 4,
+            "element_id": 3,
+            "element": "ScaleX",
+            "value": 1.5,
+            "transition": "SineOut"
+          },
+          {
+            "frame": 16,
+            "bone_id": 6,
+            "element_id": 3,
+            "element": "ScaleX",
+            "value": 1.5,
+            "transition": "SineOut"
+          },
+          {
+            "frame": 31,
+            "bone_id": 2,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.0,
+            "transition": "SineIn"
+          },
+          {
+            "frame": 31,
+            "bone_id": 6,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.0,
+            "transition": "SineIn"
+          },
+          {
+            "frame": 31,
+            "bone_id": 0,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.0,
+            "transition": "SineIn"
+          },
+          {
+            "frame": 31,
+            "bone_id": 6,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.0,
+            "transition": "SineIn"
+          },
+          {
+            "frame": 31,
+            "bone_id": 17,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.0,
+            "transition": "SineIn"
+          },
+          {
+            "frame": 31,
+            "bone_id": 17,
+            "element_id": 0,
+            "element": "PositionX",
+            "value": 0.0,
+            "transition": "SineIn"
+          },
+          {
+            "frame": 31,
+            "bone_id": 17,
+            "element_id": 1,
+            "element": "PositionY",
+            "value": 0.0,
+            "transition": "SineIn"
+          },
+          {
+            "frame": 31,
+            "bone_id": 2,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.0,
+            "transition": "SineIn"
+          },
+          {
+            "frame": 31,
+            "bone_id": 0,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.0,
+            "transition": "SineIn"
+          },
+          {
+            "frame": 31,
+            "bone_id": 4,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.0,
+            "transition": "SineIn"
+          },
+          {
+            "frame": 31,
+            "bone_id": 15,
+            "element_id": 3,
+            "element": "ScaleX",
+            "value": 1.0,
+            "transition": "SineIn"
+          },
+          {
+            "frame": 31,
+            "bone_id": 12,
+            "element_id": 1,
+            "element": "PositionY",
+            "value": 0.0,
+            "transition": "SineIn"
+          },
+          {
+            "frame": 31,
+            "bone_id": 12,
+            "element_id": 4,
+            "element": "ScaleY",
+            "value": 1.0,
+            "transition": "SineIn"
+          },
+          {
+            "frame": 31,
+            "bone_id": 12,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.0,
+            "transition": "SineIn"
+          },
+          {
+            "frame": 31,
+            "bone_id": 14,
+            "element_id": 2,
+            "element": "Rotation",
+            "value": 0.0,
+            "transition": "SineIn"
+          },
+          {
+            "frame": 31,
+            "bone_id": 0,
+            "element_id": 3,
+            "element": "ScaleX",
+            "value": 1.0,
+            "transition": "SineIn"
+          },
+          {
+            "frame": 31,
+            "bone_id": 2,
+            "element_id": 3,
+            "element": "ScaleX",
+            "value": 1.0,
+            "transition": "SineIn"
+          },
+          {
+            "frame": 31,
+            "bone_id": 4,
+            "element_id": 3,
+            "element": "ScaleX",
+            "value": 1.0,
+            "transition": "Linear"
+          },
+          {
+            "frame": 31,
+            "bone_id": 6,
+            "element_id": 3,
+            "element": "ScaleX",
+            "value": 1.0,
+            "transition": "Linear"
+          }
+        ]
+      }
+    ],
+    "textures": [
+      {
+        "offset": { "x": 0.0, "y": 0.0 },
+        "size": { "x": 659.0, "y": 387.0 },
+        "name": "Right Leg\u0000"
+      },
+      {
+        "offset": { "x": 659.0, "y": 0.0 },
+        "size": { "x": 622.0, "y": 798.0 },
+        "name": "Left Leg\u0000"
+      },
+      {
+        "offset": { "x": 1281.0, "y": 0.0 },
+        "size": { "x": 402.0, "y": 864.0 },
+        "name": "Left Arm\u0000"
+      },
+      {
+        "offset": { "x": 1683.0, "y": 0.0 },
+        "size": { "x": 462.0, "y": 897.0 },
+        "name": "Right Arm\u0000"
+      },
+      {
+        "offset": { "x": 2145.0, "y": 0.0 },
+        "size": { "x": 393.0, "y": 702.0 },
+        "name": "Torso\u0000"
+      },
+      {
+        "offset": { "x": 2538.0, "y": 0.0 },
+        "size": { "x": 187.0, "y": 167.0 },
+        "name": "Collar\u0000"
+      },
+      {
+        "offset": { "x": 2725.0, "y": 0.0 },
+        "size": { "x": 183.0, "y": 183.0 },
+        "name": "Neck\u0000"
+      },
+      {
+        "offset": { "x": 2908.0, "y": 0.0 },
+        "size": { "x": 630.0, "y": 488.0 },
+        "name": "Skull\u0000"
+      },
+      {
+        "offset": { "x": 3538.0, "y": 0.0 },
+        "size": { "x": 322.0, "y": 236.0 },
+        "name": "Eyes\u0000"
+      },
+      {
+        "offset": { "x": 3860.0, "y": 0.0 },
+        "size": { "x": 292.0, "y": 278.0 },
+        "name": "Bowtie\u0000"
+      },
+      {
+        "offset": { "x": 4152.0, "y": 0.0 },
+        "size": { "x": 790.0, "y": 817.0 },
+        "name": "Top Hat\u0000"
+      }
+    ]
+  }
+}

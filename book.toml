@@ -1,0 +1,11 @@
+[book]
+authors = ["Retropaint"]
+language = "en"
+src = "src"
+title = "SkelForm Developer Documentation"
+
+[output.html]
+theme = "skelform"
+default-theme = "skelform"
+preferred-dark-theme = "skelform"
+
