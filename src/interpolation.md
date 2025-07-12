@@ -38,9 +38,7 @@ must be processed:
 - 4: Generate frame data relevant only to both keyframes (since interpolation
   will account only for them)
 
-Pseudo-code:
-
-```rust
+```rust,noplayground
 fn interpolate(
   keyframes: Keyframe[],
   frame: int,

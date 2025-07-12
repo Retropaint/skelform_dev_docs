@@ -15,14 +15,16 @@ Optional features such as loading the `.skf` file should be made optional if it
 requires a dependency to function. Otherwise, dependencies are fine for
 mandatory functionality.
 
+Additionally, the texture image (`textures.png`) should not be necessary for
+generic runtimes to process. All relevant texture data is already included in
+`armature.json`.
+
 ## Meta Logic Considerations
 
 - Animating based on timestamp (eg; 0.4s of an animation)
 - Clamping frame boundaries
 - Looping
 - Playing in reverse
-
-Timestamp pseudo-code (including reversing):
 
 ```rust,noplayground
 let fps = 60
@@ -41,7 +43,7 @@ if reverse {
 }
 ```
 
-Boundary pseudo-code (with and without looping):
+Boundary example (with and without looping):
 
 ```rust,noplayground
 if loop {
@@ -77,8 +79,6 @@ with.<br>(eg; addition for position, multiplication for scale, etc)
 Integer values like `bone.tex_idx` or `bone.zindex` must be overriden by the
 most recent keyframe of the current frame.
 
-Pseudo-code:
-
 ```rust,noplayground
 let frame = 12;
 
@@ -97,10 +97,8 @@ bone.zindex  = last_keyframe_of(frame, "Zindex");
 This phase does not have hardcoded logic. Instead, the API must allow custom
 code injection for the consumer (eg; closures & anonymous functions).
 
-Pseudo-code:
-
 ```rust,noplayground
-fn animate(post_interp: FnOnce) {
+fn animate(post_interp: Fn) {
   let animated_bones = []
 
   // run interpolations, populating the bones list
@@ -111,13 +109,9 @@ fn animate(post_interp: FnOnce) {
 }
 ```
 
-Note: `FnOnce` refers to an anonymous function (or closure as known in Rust).
-
 ### Parent inheritance
 
 Runs immediately after post-interpolation.
-
-Pseudo-code:
 
 ```rust,noplayground
 fn inherit_parent(bone: Bone) {
@@ -148,8 +142,6 @@ fn inherit_parent(bone: Bone) {
 
 Assuming all 3 phases are in a single function, it should look something like
 this:
-
-Pseudo-code:
 
 ```rust,noplayground
 fn animate(
