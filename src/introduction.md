@@ -5,8 +5,13 @@ video games. Said set includes the editor, runtimes, and a file specification.
 
 SkelForm (and this documentation) is a work in progress.
 
+## Pseudo Code
+
+Throughout this documentation will be pseudo-code blocks. It does not adhere to any
+language, though is mostly Rust-like (to support syntax highlighting).
+
 ## Table of Contents
 
 - [File Structure](./file_specs.md) - Layout of `.skf` files
-- [Runtimes](./runtime_spec.md) - Specifications and rules to
-  aid in runtime development
+- [Runtimes](./runtime_spec.md) - Specifications and rules to aid in runtime
+  development
