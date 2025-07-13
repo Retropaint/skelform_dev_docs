@@ -171,6 +171,11 @@
 <p>When handling <a href="./core_anim_logic.html">core animation logic</a>, most bone fields
 such as position, rotation, and scale must be interpolated across keyframes.</p>
 <p>This page will cover best practices for how to handle this.</p>
+<h2 id="table-of-contents"><a class="header" href="#table-of-contents">Table of Contents</a></h2>
+<ul>
+<li><a href="#iterating-keyframes">Iterating Keyframes</a></li>
+<li><a href="#gathering-keyframe-data">Gathering Keyframe Data</a></li>
+</ul>
 <h2 id="iterating-keyframes"><a class="header" href="#iterating-keyframes">Iterating Keyframes</a></h2>
 <p>The following section will use this keyframe as a reference:</p>
 <pre><code class="language-json">{
@@ -197,10 +202,7 @@ must be processed:</p>
 <li>4: Generate frame data relevant only to both keyframes (since interpolation
 will account only for them)</li>
 </ul>
-<p>Pseudo-code:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>fn interpolate(
+<pre><code class="language-rust noplayground">fn interpolate(
   keyframes: Keyframe[],
   frame: int,
   bone_id: int,
@@ -243,17 +245,16 @@ will account only for them)</li>
   let current_frame = frame - prev_kf.frame;
 
   let result = interpolate_float(
-    prev_kf.value, 
-    next_kf.value, 
-    current_frame, 
+    prev_kf.value,
+    next_kf.value,
+    current_frame,
     total_frames
   );
 
   // the function should at least return the interpolated value,
   // but other data is always welcome (keyframes, frame data, etc)
   return result
-}
-<span class="boring">}</span></code></pre></pre>
+}</code></pre>
 
                     </main>
 
@@ -263,6 +264,9 @@ will account only for them)</li>
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
+                            <a rel="next prefetch" href="rendering.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -274,6 +278,9 @@ will account only for them)</li>
                         <i class="fa fa-angle-left"></i>
                     </a>
 
+                    <a rel="next prefetch" href="rendering.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>

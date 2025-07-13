@@ -172,11 +172,14 @@
 <p>SkelForm is a collection of software for 2D animation, primarily focused on
 video games. Said set includes the editor, runtimes, and a file specification.</p>
 <p>SkelForm (and this documentation) is a work in progress.</p>
+<h2 id="pseudo-code"><a class="header" href="#pseudo-code">Pseudo Code</a></h2>
+<p>Throughout this documentation will be pseudo-code blocks. It does not adhere to any
+language, though is mostly Rust-like (to support syntax highlighting).</p>
 <h2 id="table-of-contents"><a class="header" href="#table-of-contents">Table of Contents</a></h2>
 <ul>
 <li><a href="./file_specs.html">File Structure</a> - Layout of <code>.skf</code> files</li>
-<li><a href="./runtime_spec.html">Runtimes</a> - Specifications and rules to
-aid in runtime development</li>
+<li><a href="./runtime_spec.html">Runtimes</a> - Specifications and rules to aid in runtime
+development</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="file-structure"><a class="header" href="#file-structure">File Structure</a></h1>
 <p>SkelForm utilizes it's own file structure (with the extension <code>.skf</code>) upon
@@ -187,7 +190,23 @@ exporting from the editor.</p>
 etc)</li>
 <li><code>textures.png</code> - Texture atlas / sprite sheet</li>
 </ul>
-<h2 id="sample-files"><a class="header" href="#sample-files">Sample files</a></h2>
+<h2 id="table-of-contents-1"><a class="header" href="#table-of-contents-1">Table of Contents</a></h2>
+<ul>
+<li><a href="file_specs.html#sample-files">Sample Files</a></li>
+<li><a href="file_specs.html#armaturejson-structure"><code>armature.json</code> Structure</a></li>
+<li><a href="file_specs.html#bones">Bones</a>
+<ul>
+<li><a href="file_specs.html#bones-structure">Bones Structure</a></li>
+</ul>
+</li>
+<li><a href="file_specs.html#animations">Animations</a>
+<ul>
+<li><a href="file_specs.html#keyframes">Keyframes</a></li>
+</ul>
+</li>
+<li><a href="file_specs.html#Textures">Textures</a></li>
+</ul>
+<h2 id="sample-files"><a class="header" href="#sample-files">Sample Files</a></h2>
 <p>Feel free to download the following to dissect, or just follow along with the
 documentation:</p>
 <ul>
@@ -257,6 +276,11 @@ texture atlas</li>
 <p>Can be treated as enum <a href="#fr-3-1">↩</a> <a href="#fr-3-2">↩2</a> <a href="#fr-3-3">↩3</a></p>
 </li>
 </ol><div style="break-before: page; page-break-before: always;"></div><h1 id="runtimes"><a class="header" href="#runtimes">Runtimes</a></h1>
+<h2 id="table-of-contents-2"><a class="header" href="#table-of-contents-2">Table of Contents</a></h2>
+<ul>
+<li><a href="runtime_spec.html#generic-runtimes">Generic Runtimes</a></li>
+<li><a href="runtime_spec.html#engine-runtimes">Engine Runtimes</a></li>
+</ul>
 <h2 id="generic-runtimes"><a class="header" href="#generic-runtimes">Generic Runtimes</a></h2>
 <p>Generic runtimes mostly handle <a href="./core_anim_logic.html">core animation logic</a>.</p>
 <p>Other features such as loading <code>.skf</code> files or special effects must be made
@@ -280,13 +304,21 @@ Macroquad after animation logic has processed.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="core-animation-logic"><a class="header" href="#core-animation-logic">Core Animation Logic</a></h1>
 <p>This page covers logic that should normally be handled in generic runtimes.</p>
 <p>All of the following logic should be render &amp; engine agnostic.</p>
-<p><em>Note: there will be pseudo-code throughout this page. It does not adhere to any
-particular language and should only be used as a reference.</em></p>
+<h2 id="table-of-contents-3"><a class="header" href="#table-of-contents-3">Table of Contents</a></h2>
+<ul>
+<li><a href="core_anim_logic.html#dependency-considerations">Dependency Considerations</a></li>
+<li><a href="core_anim_logic.html#meta-logic-considerations">Meta Logic Considerations</a></li>
+<li><a href="core_anim_logic.html#animating-bones">Animating Bones</a></li>
+<li><a href="core_anim_logic.html#static-armatures">Static Armatures</a></li>
+</ul>
 <h2 id="dependency-considerations"><a class="header" href="#dependency-considerations">Dependency Considerations</a></h2>
 <p>Ideally, generic runtimes should have as few dependencies as possible.</p>
 <p>Optional features such as loading the <code>.skf</code> file should be made optional if it
 requires a dependency to function. Otherwise, dependencies are fine for
 mandatory functionality.</p>
+<p>Additionally, the texture image (<code>textures.png</code>) should not be necessary for
+generic runtimes to process. All relevant texture data is already included in
+<code>armature.json</code>.</p>
 <h2 id="meta-logic-considerations"><a class="header" href="#meta-logic-considerations">Meta Logic Considerations</a></h2>
 <ul>
 <li>Animating based on timestamp (eg; 0.4s of an animation)</li>
@@ -294,7 +326,6 @@ mandatory functionality.</p>
 <li>Looping</li>
 <li>Playing in reverse</li>
 </ul>
-<p>Timestamp pseudo-code (including reversing):</p>
 <pre><code class="language-rust noplayground">let fps = 60
 let time = 0.4
 let last_frame = 60
@@ -309,7 +340,7 @@ if reverse {
 
   print(frame) // 36
 }</code></pre>
-<p>Boundary pseudo-code (with and without looping):</p>
+<p>Boundary example (with and without looping):</p>
 <pre><code class="language-rust noplayground">if loop {
   if frame &lt; 0 {
     frame = last_anim_frame
@@ -335,22 +366,19 @@ consumer.</p>
 with.<br>(eg; addition for position, multiplication for scale, etc)</p>
 <p>Integer values like <code>bone.tex_idx</code> or <code>bone.zindex</code> must be overriden by the
 most recent keyframe of the current frame.</p>
-<p>Pseudo-code:</p>
 <pre><code class="language-rust noplayground">let frame = 12;
 
-bone.pos.x   += interpolate(frame, "PositionX")
-bone.pos.y   += interpolate(frame, "PositionX")
-bone.rot     += interpolate(frame, "Rotation")
-bone.scale.x *= interpolate(frame, "ScaleX")
-bone.scale.y *= interpolate(frame, "ScaleY")
-
+bone.pos.x   += interpolate(frame, "PositionX");
+bone.pos.y   += interpolate(frame, "PositionX");
+bone.rot     += interpolate(frame, "Rotation");
+bone.scale.x *= interpolate(frame, "ScaleX");
+bone.scale.y *= interpolate(frame, "ScaleY");
 bone.tex_idx = last_keyframe_of(frame, "Texture");
 bone.zindex  = last_keyframe_of(frame, "Zindex");</code></pre>
 <h3 id="post-interpolation"><a class="header" href="#post-interpolation">Post-interpolation</a></h3>
 <p>This phase does not have hardcoded logic. Instead, the API must allow custom
 code injection for the consumer (eg; closures &amp; anonymous functions).</p>
-<p>Pseudo-code:</p>
-<pre><code class="language-rust noplayground">fn animate(post_interp: FnOnce) {
+<pre><code class="language-rust noplayground">fn animate(post_interp: Fn) {
   let animated_bones = []
 
   // run interpolations, populating the bones list
@@ -359,10 +387,8 @@ code injection for the consumer (eg; closures &amp; anonymous functions).</p>
 
   // proceed with other phases
 }</code></pre>
-<p>Note: <code>FnOnce</code> refers to an anonymous function (or closure as known in Rust).</p>
 <h3 id="parent-inheritance"><a class="header" href="#parent-inheritance">Parent inheritance</a></h3>
 <p>Runs immediately after post-interpolation.</p>
-<p>Pseudo-code:</p>
 <pre><code class="language-rust noplayground">fn inherit_parent(bone: Bone) {
   if bone.parent_id == -1 {
     return
@@ -388,7 +414,6 @@ code injection for the consumer (eg; closures &amp; anonymous functions).</p>
 <h3 id="overview"><a class="header" href="#overview">Overview</a></h3>
 <p>Assuming all 3 phases are in a single function, it should look something like
 this:</p>
-<p>Pseudo-code:</p>
 <pre><code class="language-rust noplayground">fn animate(
   armature: Armature,
   anim_index: int,
@@ -396,6 +421,14 @@ this:</p>
   loop: bool,
   post_interp: FnOnce
 ) {
+  // safeguard for no animations; just create an empty one
+  let anim: Animation;
+  if armature.animations.length == 0 {
+    anim = Animation::default();
+  } else {
+    anim = armature.animations[anim_index];
+  }
+
   // process meta logic (frame boundaries, looping, etc)
   let last_frame = armature.animations[anim_index].keyframe.last().frame;
   if loop {
@@ -427,10 +460,22 @@ this:</p>
 
   return animated_bones
 }</code></pre>
+<h2 id="static-armatures"><a class="header" href="#static-armatures">Static Armatures</a></h2>
+<p>All of the above logic assumes, and is designed for static armatures (ie. it
+has no animation). This is because the <a href="./interpolation.html">ideal interpolation logic</a> already
+handles such cases by default, and the only safeguard required is an animation
+length check.</p>
+<p>At the very least, it is mandatory in some way to support static armatures. In
+this case, only phase 3 (parent inheritance) is required.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="interpolation-1"><a class="header" href="#interpolation-1">Interpolation</a></h1>
 <p>When handling <a href="./core_anim_logic.html">core animation logic</a>, most bone fields
 such as position, rotation, and scale must be interpolated across keyframes.</p>
 <p>This page will cover best practices for how to handle this.</p>
+<h2 id="table-of-contents-4"><a class="header" href="#table-of-contents-4">Table of Contents</a></h2>
+<ul>
+<li><a href="interpolation.html#iterating-keyframes">Iterating Keyframes</a></li>
+<li><a href="interpolation.html#gathering-keyframe-data">Gathering Keyframe Data</a></li>
+</ul>
 <h2 id="iterating-keyframes"><a class="header" href="#iterating-keyframes">Iterating Keyframes</a></h2>
 <p>The following section will use this keyframe as a reference:</p>
 <pre><code class="language-json">{
@@ -457,10 +502,7 @@ must be processed:</p>
 <li>4: Generate frame data relevant only to both keyframes (since interpolation
 will account only for them)</li>
 </ul>
-<p>Pseudo-code:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>fn interpolate(
+<pre><code class="language-rust noplayground">fn interpolate(
   keyframes: Keyframe[],
   frame: int,
   bone_id: int,
@@ -503,17 +545,94 @@ will account only for them)</li>
   let current_frame = frame - prev_kf.frame;
 
   let result = interpolate_float(
-    prev_kf.value, 
-    next_kf.value, 
-    current_frame, 
+    prev_kf.value,
+    next_kf.value,
+    current_frame,
     total_frames
   );
 
   // the function should at least return the interpolated value,
   // but other data is always welcome (keyframes, frame data, etc)
   return result
+}</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rendering"><a class="header" href="#rendering">Rendering</a></h1>
+<p>Rendering is best handled on a per-environment/engine basis with dedicated
+runtimes (known as 'engine runtimes').</p>
+<p>This page covers best practices and general advice that applies to any engine
+runtime.</p>
+<h2 id="table-of-contents-5"><a class="header" href="#table-of-contents-5">Table of Contents</a></h2>
+<ul>
+<li><a href="rendering.html#loading-armatures">Loading Armatures</a></li>
+<li><a href="rendering.html#general-animate-function">General <code>animate()</code> Function</a></li>
+</ul>
+<h2 id="loading-armatures"><a class="header" href="#loading-armatures">Loading Armatures</a></h2>
+<p>It is recommended for engine runtimes to provide convenient helpers for loading
+<code>.skf</code> files directly. This would most likely require dependencies for reading
+zip, JSON, and PNG files.</p>
+<pre><code class="language-rust noplayground">fn load_skelform(zip_path: string): (SkelformArmature, TextureImage){
+  let zip = load_zip(zip_path);
+  let armature = load_json(zip.by_name("armature.json"));
+  let texture_img = load_png(zip.by_name("texture.png"));
+
+  return (armature, texture_img);
+}</code></pre>
+<p>Additionally, an option to load the armature and texture image separately can be
+helpful for debugging.</p>
+<pre><code class="language-rust noplayground">fn load_skelform_scatted(
+  armature_path: string,
+  texture_path: string
+): (SkelformArmature, TextureImage) {
+  let armature = load_json(armature_path);
+  let texture_img = load_png(texture_path);
+
+  return (armature, texture_img);
+}</code></pre>
+<h2 id="general-animate-function"><a class="header" href="#general-animate-function">General <code>animate()</code> Function</a></h2>
+<p>In this example, we will assume the engine as a simple <code>engine</code> variable. The
+complexity of the actual code will greatly vary.</p>
+<pre><code class="language-rust noplayground">struct AnimationOptions {
+  position_offset: Vec2,
+  rotation_offset: Vec2,
+  // ... and more
+
+  speed: float,
+  should_loop: bool,
+
+  // an option can be provided to immediately render the animation,
+  // or just provide the bones
+  render: bool
 }
-<span class="boring">}</span></code></pre></pre>
+
+fn animate(
+  armature: SkelformArmature,
+  texture: TextureImage
+  anim_idx: int,
+  frame: i32,
+  time: Time
+  options: AnimationOptions
+): Bone[] {
+  let animated_bones = [];
+
+  // process core animation logic (via a generic runtime or such)
+  animated_bones = skelform::animate(armature, anim_idx, frame, speed);
+
+  // process user options
+  for bone in animated_bones {
+    bone.pos += options.position_offset;
+    bone.rot += options.rotation_offset;
+  }
+
+  // if user chooses to, provide convenient and immediate rendering
+  if options.render {
+    engine.render(
+      animated_bones,
+      texture
+    );
+  }
+
+  // always return animated bones
+  return animated_bones;
+}</code></pre>
 
                     </main>
 
