@@ -5,6 +5,11 @@ such as position, rotation, and scale must be interpolated across keyframes.
 
 This page will cover best practices for how to handle this.
 
+## Table of Contents
+
+- [Iterating Keyframes](#iterating-keyframes)
+- [Gathering Keyframe Data](#gathering-keyframe-data)
+
 ## Iterating Keyframes
 
 The following section will use this keyframe as a reference:
@@ -82,9 +87,9 @@ fn interpolate(
   let current_frame = frame - prev_kf.frame;
 
   let result = interpolate_float(
-    prev_kf.value, 
-    next_kf.value, 
-    current_frame, 
+    prev_kf.value,
+    next_kf.value,
+    current_frame,
     total_frames
   );
 

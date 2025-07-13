@@ -6,6 +6,11 @@ runtimes (known as 'engine runtimes').
 This page covers best practices and general advice that applies to any engine
 runtime.
 
+## Table of Contents
+
+- [Loading Armatures](#loading-armatures)
+- [General `animate()` Function](#general-animate-function)
+
 ## Loading Armatures
 
 It is recommended for engine runtimes to provide convenient helpers for loading
@@ -13,7 +18,7 @@ It is recommended for engine runtimes to provide convenient helpers for loading
 zip, JSON, and PNG files.
 
 ```rust,noplayground
-fn load_skelform(zip_path: string) -> (SkelformArmature, TextureImage){
+fn load_skelform(zip_path: string): (SkelformArmature, TextureImage){
   let zip = load_zip(zip_path);
   let armature = load_json(zip.by_name("armature.json"));
   let texture_img = load_png(zip.by_name("texture.png"));

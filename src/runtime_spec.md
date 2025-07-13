@@ -1,5 +1,10 @@
 # Runtimes
 
+## Table of Contents
+
+- [Generic Runtimes](#generic-runtimes)
+- [Engine Runtimes](#engine-runtimes)
+
 ## Generic Runtimes
 
 Generic runtimes mostly handle [core animation logic](./core_anim_logic.md).
