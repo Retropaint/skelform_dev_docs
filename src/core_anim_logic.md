@@ -183,3 +183,13 @@ fn animate(
   return animated_bones
 }
 ```
+
+## Static Armatures
+
+All of the above logic assumes, and is designed for static armatures (ie. it
+has no animation). This is because the [ideal interpolation logic](./interpolation.md) already
+handles such cases by default, and the only safeguard required is an animation
+length check.
+
+At the very least, it is mandatory in some way to support static armatures. In
+this case, only phase 3 (parent inheritance) is required.
