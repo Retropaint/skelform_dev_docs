@@ -4,9 +4,6 @@ This page covers logic that should normally be handled in generic runtimes.
 
 All of the following logic should be render & engine agnostic.
 
-_Note: there will be pseudo-code throughout this page. It does not adhere to any
-particular language and should only be used as a reference._
-
 ## Table of Contents
 
 - [Dependency Considerations](#dependency-considerations)
