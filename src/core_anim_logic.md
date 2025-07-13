@@ -7,6 +7,13 @@ All of the following logic should be render & engine agnostic.
 _Note: there will be pseudo-code throughout this page. It does not adhere to any
 particular language and should only be used as a reference._
 
+## Table of Contents
+
+- [Dependency Considerations](#dependency-considerations)
+- [Meta Logic Considerations](#meta-logic-considerations)
+- [Animating Bones](#animating-bones)
+- [Static Armatures](#static-armatures)
+
 ## Dependency Considerations
 
 Ideally, generic runtimes should have as few dependencies as possible.
@@ -82,12 +89,11 @@ most recent keyframe of the current frame.
 ```rust,noplayground
 let frame = 12;
 
-bone.pos.x   += interpolate(frame, "PositionX")
-bone.pos.y   += interpolate(frame, "PositionX")
-bone.rot     += interpolate(frame, "Rotation")
-bone.scale.x *= interpolate(frame, "ScaleX")
-bone.scale.y *= interpolate(frame, "ScaleY")
-
+bone.pos.x   += interpolate(frame, "PositionX");
+bone.pos.y   += interpolate(frame, "PositionX");
+bone.rot     += interpolate(frame, "Rotation");
+bone.scale.x *= interpolate(frame, "ScaleX");
+bone.scale.y *= interpolate(frame, "ScaleY");
 bone.tex_idx = last_keyframe_of(frame, "Texture");
 bone.zindex  = last_keyframe_of(frame, "Zindex");
 ```
@@ -151,6 +157,14 @@ fn animate(
   loop: bool,
   post_interp: FnOnce
 ) {
+  // safeguard for no animations; just create an empty one
+  let anim: Animation;
+  if armature.animations.length == 0 {
+    anim = Animation::default();
+  } else {
+    anim = armature.animations[anim_index];
+  }
+
   // process meta logic (frame boundaries, looping, etc)
   let last_frame = armature.animations[anim_index].keyframe.last().frame;
   if loop {

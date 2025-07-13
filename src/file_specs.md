@@ -9,7 +9,17 @@ exporting from the editor.
   etc)
 - `textures.png` - Texture atlas / sprite sheet
 
-## Sample files
+## Table of Contents
+
+- [Sample Files](#sample-files)
+- [`armature.json` Structure](#armaturejson-structure)
+- [Bones](#bones)
+  - [Bones Structure](#bones-structure)
+- [Animations](#animations)
+  - [Keyframes](#keyframes)
+- [Textures](#Textures)
+
+## Sample Files
 
 Feel free to download the following to dissect, or just follow along with the
 documentation:
