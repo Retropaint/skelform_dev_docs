@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Introduction - SkelForm Developer Documentation</title>
+        <title>Interpolation - SkelForm Developer Documentation</title>
 
 
         <!-- Custom HTML head -->
@@ -167,27 +167,104 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
-<p>SkelForm is a collection of software for 2D animation, primarily focused on
-video games. Said set includes the editor, runtimes, and a file specification.</p>
-<p>SkelForm (and this documentation) is a work in progress.</p>
-<p><strong>NOTE:</strong> As of 09/09/25, this doc is heavily outdated (originally written for v0.1)</p>
-<h2 id="pseudo-code"><a class="header" href="#pseudo-code">Pseudo Code</a></h2>
-<p>Throughout this documentation will be pseudo-code blocks. It does not adhere to any
-language, though is mostly Rust-like (to support syntax highlighting).</p>
+                        <h1 id="interpolation"><a class="header" href="#interpolation">Interpolation</a></h1>
+<p>When handling <a href="./core_anim_logic.html">core animation logic</a>, most bone fields
+such as position, rotation, and scale must be interpolated across keyframes.</p>
+<p>This page will cover best practices for how to handle this.</p>
 <h2 id="table-of-contents"><a class="header" href="#table-of-contents">Table of Contents</a></h2>
 <ul>
-<li><a href="./file_specs.html">File Structure</a> - Layout of <code>.skf</code> files</li>
-<li><a href="./runtime_spec.html">Runtimes</a> - Specifications and rules to aid in runtime
-development</li>
+<li><a href="#iterating-keyframes">Iterating Keyframes</a></li>
+<li><a href="#gathering-keyframe-data">Gathering Keyframe Data</a></li>
 </ul>
+<h2 id="iterating-keyframes"><a class="header" href="#iterating-keyframes">Iterating Keyframes</a></h2>
+<p>The following section will use this keyframe as a reference:</p>
+<pre><code class="language-json">{
+  "frame": 12,
+  "bone_id": 4,
+  "element_id": 2,
+  "element": "PositionX",
+  "value": 7.0,
+  "transition": "Linear"
+}
+</code></pre>
+<p>The keyframe structure of the <code>animations</code> object is designed to allow bone
+fields to be easily identifiable via <code>element</code> or <code>element_id</code>. The above
+keyframe animates the bone (of id 4)'s position on the X axis.</p>
+<p>In relation to the element, the <code>value</code> field determines the actual value to
+interpolate by. On frame 12, the bone's X position will be it's own plus 7.</p>
+<h2 id="gathering-keyframe-data"><a class="header" href="#gathering-keyframe-data">Gathering Keyframe Data</a></h2>
+<p>Before interpolation takes place, the proper keyframes and other relevant data
+must be processed:</p>
+<ul>
+<li>1: Get most recent keyframe based on requested frame</li>
+<li>2: Get next-most keyframe based on request frame</li>
+<li>3: Provide safeguards in the case that either or both cannot be gathered</li>
+<li>4: Generate frame data relevant only to both keyframes (since interpolation
+will account only for them)</li>
+</ul>
+<pre><code class="language-rust noplayground">fn interpolate(
+  keyframes: Keyframe[],
+  frame: int,
+  bone_id: int,
+  element: Element,
+  default_value: float,
+) {
+  let prev_kf;
+  let next_kf;
+
+  // 1: get most recent frame
+  for kf in keyframes {
+    if kf.frame &lt; frame &amp;&amp; kf.bone_id == bone_id &amp;&amp; kf.element == element {
+      prev_kf = kf
+    }
+    break
+  }
+
+  // 2: get next frame
+  for kf in keyframes {
+    if kf.frame &gt; frame &amp;&amp; kf.bone_id == bone_id &amp;&amp; kf.element == element {
+      next_kf = kf
+      break
+    }
+  }
+
+  // 3: ensure both points are pointing somewhere
+  if prev_kf == null {
+    prev_kf = next_kf
+  } else if next_kf == null {
+    next_kf = prev_kf
+  }
+
+  // 3: if both are null, return default value
+  if prev_kf == null &amp;&amp; next_kf == null {
+    return default_value
+  }
+
+  // 4: get total and current frames in relation to both keyframes
+  let total_frames = next_kf.frame - prev_kf.frame;
+  let current_frame = frame - prev_kf.frame;
+
+  let result = interpolate_float(
+    prev_kf.value,
+    next_kf.value,
+    current_frame,
+    total_frames
+  );
+
+  // the function should at least return the interpolated value,
+  // but other data is always welcome (keyframes, frame data, etc)
+  return result
+}</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="core_anim_logic.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
-                            <a rel="next prefetch" href="file_specs.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="rendering.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -197,8 +274,11 @@ development</li>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="core_anim_logic.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
-                    <a rel="next prefetch" href="file_specs.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="rendering.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
