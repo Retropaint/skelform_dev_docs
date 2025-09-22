@@ -38,28 +38,28 @@ following data:
 - `textures` - Array containing individual texture data, in relation to to the
   texture atlas
 
+**Note**: Fields starting with `_` are not required to be parsed.
+
 ## Bones
 
-| Key        | Type   | Data                                                  |
-| ---------- | ------ | ----------------------------------------------------- |
-| id         | int    | ID of bone                                            |
-| Name       | string | Name of bone                                          |
-| parent_id  | int    | ID of bone's parent                                   |
-| tex_idx    | int    | Index of texture in `textures` object                 |
-| rot        | float  | Rotation of bone                                      |
-| scale      | float  | Scale of bone                                         |
-| pos        | float  | Position of bone                                      |
-| pivot[^1]  | float  | Pivot of bone                                         |
-| zindex[^2] | int    | Z-index of bone<br>(higher index renders above lower) |
+| Key        | Type      | Data                                                          |
+| ---------- | --------- | ------------------------------------------------------------- |
+| \_idx[^1]  | int       | index of bone in the array                                    |
+| \_name[^1] | string    | Name of bone                                                  |
+| parent_idx | int       | index of bone's parent                                        |
+| style_idxs | int array | Indexes of this bone's assigned styles                        |
+| tex_idx    | int       | The texture (by index) that this bone will use in it's styles |
+| rot        | vector2   | Rotation of bone                                              |
+| scale      | vector2   | Scale of bone                                                 |
+| pos        | vector2   | Position of bone                                              |
+| zindex     | int       | Z-index of bone<br>(higher index renders above lower)         |
 
-[^1]: Currently unused in editor; should not be acknowledged in runtimes
-
-[^2]: Exported as float for compatibility reasons, but should be treated as int
+[^!]: Development aid, not required to be parsed
 
 ### Bones Structure
 
 The bone array uses a flat structure, with parent-child relationships defined by
-`parent_id` on all bones (`-1` if it doesn't have a parent).
+`parent_idx` on all bones (`-1` if it doesn't have a parent).
 
 **Note**: A child bone is always _after_ it's parent in the array.
 
