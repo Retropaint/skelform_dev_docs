@@ -11,7 +11,8 @@ v0.1)
 ## Pseudo Code
 
 Throughout this documentation will be pseudo-code blocks. It mostly follows
-Golang, but will bend the syntax and rules occasionally for simplicity.
+[Golang](https://go.dev/tour/welcome/1), but will bend the syntax and rules
+occasionally for simplicity.
 
 ## Table of Contents
 
