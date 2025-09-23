@@ -5,9 +5,11 @@ exporting from the editor.
 
 `.skf` files are simply zip files, and can be unzipped to reveal:
 
-- `armature.json` - JSON file containing all relevant data (bones, animations,
+- `armature.json` - JSON file containing all armature data (bones, animations,
   etc)
 - `textures.png` - Texture atlas / sprite sheet
+- `editor.json` - (Editor only) JSON file containing data relevant to editors
+- `thumbnail.png` - (Editor only) preview image of the armature
 
 ## Table of Contents
 
@@ -38,30 +40,21 @@ following data:
 - `textures` - Array containing individual texture data, in relation to to the
   texture atlas
 
-**Note**: Fields starting with `_` are not required to be parsed.
-
 ## Bones
 
-| Key        | Type      | Data                                                          |
-| ---------- | --------- | ------------------------------------------------------------- |
-| \_idx[^1]  | int       | index of bone in the array                                    |
-| \_name[^1] | string    | Name of bone                                                  |
-| parent_idx | int       | index of bone's parent                                        |
-| style_idxs | int array | Indexes of this bone's assigned styles                        |
-| tex_idx    | int       | The texture (by index) that this bone will use in it's styles |
-| rot        | vector2   | Rotation of bone                                              |
-| scale      | vector2   | Scale of bone                                                 |
-| pos        | vector2   | Position of bone                                              |
-| zindex     | int       | Z-index of bone<br>(higher index renders above lower)         |
+| Key        | Type   | Data                                                          |
+| ---------- | ------ | ------------------------------------------------------------- |
+| \_idx[^1]  | int    | index of bone in the array                                    |
+| \_name[^1] | string | Name of bone                                                  |
+| parent_idx | int    | index of bone's parent                                        |
+| style_idxs | int[]  | Indexes of this bone's assigned styles                        |
+| tex_idx    | int    | The texture (by index) that this bone will use in it's styles |
+| rot        | Vec2   | Rotation of bone                                              |
+| scale      | Vec2   | Scale of bone                                                 |
+| pos        | Vec2   | Position of bone                                              |
+| zindex     | int    | Z-index of bone<br>(higher index renders above lower)         |
 
-[^!]: Development aid, not required to be parsed
-
-### Bones Structure
-
-The bone array uses a flat structure, with parent-child relationships defined by
-`parent_idx` on all bones (`-1` if it doesn't have a parent).
-
-**Note**: A child bone is always _after_ it's parent in the array.
+[^1]: Debug field & development aid, not required to be parsed
 
 ## Animations
 
@@ -78,10 +71,10 @@ The bone array uses a flat structure, with parent-child relationships defined by
 | ---------- | ---------- | --------------------------------------- |
 | frame      | int        | frame of keyframe                       |
 | bone_id    | int        | ID of bone that keyframe refers to      |
-| element    | string[^3] | Element to be animated by this keyframe |
+| element    | string[^2] | Element to be animated by this keyframe |
 | element_id | int        | Same as `element`, but as int           |
-| value      | string[^3] | Value to append `element` of bone by    |
-| transition | string[^3] | Transition type (linear, sine, etc)     |
+| value      | float      | Value to append `element` of bone by    |
+| transition | string[^2] | Transition type (linear, sine, etc)     |
 
 ## Textures
 
@@ -89,8 +82,8 @@ Note: Coordinates are in pixels.
 
 | Key    | Type   | Data                                                     |
 | ------ | ------ | -------------------------------------------------------- |
-| name   | string | Name of texture                                          |
+| \_name | string | Name of texture                                          |
 | offset | Vec2   | Top-left corner of texture in the atlas                  |
 | size   | Vec2   | Append to `offset` to get bottom-right corner of texture |
 
-[^3]: Can be treated as enum
+[^2]: Can be treated as enum
