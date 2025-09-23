@@ -30,7 +30,7 @@ themselves, and do not include the parent.
 
 Child bones must inherit their parent's properties:
 
-```golang
+```go
 func inheritance(tempBones []Bone) {
    for i := range(tempBones) {
       if tempBones[i].parent_idx == -1 {
@@ -75,3 +75,17 @@ If the armature contains inverse kinematics, construction is done via 3 steps:
 
 3. The bones are reset, and inheritance runs again with the rotations provided
    by inverse kinematics.
+
+### Logic
+
+Inverse kinematics is entirely non-mutable; it only serves to return the new
+rotations for bones to use in the 2nd inheritance call.
+
+The following is based on the
+[FABRIK](https://www.youtube.com/watch?v=NfuO66wsuRg) technique:
+
+```go
+func inverseKinematics(tempBones []Bone, ikFamily IkFamily) {
+
+}
+```
