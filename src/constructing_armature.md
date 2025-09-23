@@ -12,19 +12,16 @@ process of the armature.
 ## Non-Mutability
 
 It is recommended that the original bones supplied to construction are not
-modified.
-
-Instead, construction should work with cloned bones and return them to the
-consumer.
+modified. Instead, construction should work with cloned bones and return them to
+the consumer.
 
 This does not apply to generic runtimes, as the supplied bones (coming from an
 engine runtime) are expected to be cloned already.
 
 ### Reasoning:
 
-Runtimes should ideally be as deterministic as possible. By mutating the
-original bones, animations may behave differently depending on what played
-before it.
+Runtimes should ideally be deterministic. By mutating the original bones,
+animations may behave differently depending on what played before it.
 
 ## Inheritance
 
@@ -32,6 +29,33 @@ The properties of bones as laid out in `armature.json` is only local to
 themselves, and do not include the parent.
 
 Child bones must inherit their parent's properties:
+
+```golang
+func inheritance(tempBones []Bone) {
+   for i := range(tempBones) {
+      if tempBones[i].parent_idx == -1 {
+         continue
+      }
+
+      parent := tempBones[tempBones[i].parent_idx]
+
+      tempBones[i].rot += parent.rot;
+
+      tempBones[i].scale *= parent.scale;
+
+      // maintain child's position from parent when scaling
+      tempBones[i].pos *= parent.scale;
+
+      // rotate child such that it will orbit the parent
+      tempBones[i].pos = Vec2.new(
+         tempBones[i].pos.x * Cos(parent.rot) - tempBones[i].pos.y * Sin(parent.rot),
+         tempBones[i].pos.x * Sin(parent.rot) - tempBones[i].pos.y * Cos(parent.rot),
+      )
+
+      tempBones[i].pos += parent.pos;
+   }
+}
+```
 
 ## Inverse Kinematics
 
