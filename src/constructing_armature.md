@@ -93,10 +93,8 @@ The following is based on the
 through all IK families:
 
 ```go
-func inverseKinematics(tempBones []Bone, ikFamilies []IkFamily) {
-   for i := range(ikFamilies) {
-      ik_family := ikFamilies[i]
-
+func inverseKinematics(tempBones []Bone, ikFamilies []IkFamily) map[uint]float {
+   for ikFamily, i := range(ikFamilies) {
       root := tempBones[ikFamily.boneIdxs[0]]
 
       // forward reaching
@@ -133,6 +131,25 @@ func inverseKinematics(tempBones []Bone, ikFamilies []IkFamily) {
 
          // move the bone, but maintain distance between it and previous bone
          bone.pos = prevPos - length;
+      }
+
+      rotMap := make(map[uint]float)
+
+      // rotating bones and saving their results
+      endBone := tempBones[ikFamily.boneIdxs[-1]]
+      tipPos := endBone.pos
+      for idx, i := range(reverse(ikFamily.boneIdxs)) {
+         // don't rotate end bone
+         if i == 0 {
+            continue
+         }
+
+         dir := tipPos - tempBones[idx].pos
+         rot := atan2(dir.y, dir.x)
+         tipPos = tempBones[idx].pos
+
+         // save the bones to a hash map, mapping the rotations to the bone's idx
+         rotMap[idx] = rot
       }
    }
 }
