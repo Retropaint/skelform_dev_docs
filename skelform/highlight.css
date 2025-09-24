@@ -9,7 +9,7 @@
 /* Comment */
 .hljs-comment,
 .hljs-quote {
-  color: #d186e1;
+  color: #a26fac;
 }
 
 /* Red */
@@ -35,7 +35,7 @@
 .hljs-literal,
 .hljs-type,
 .hljs-params {
-  color: #e96f34;
+  color: #d26f3f;
 }
 
 .hljs-number {
@@ -52,13 +52,13 @@
 /* Blue */
 .hljs-title,
 .hljs-section {
-  color: #75b1fd;
+  color: #6da2e6;
 }
 
 /* Purple */
 .hljs-keyword,
 .hljs-selector-tag {
-  color: #58db66;
+  color: #64d370;
 }
 
 .hljs {
