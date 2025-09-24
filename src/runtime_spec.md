@@ -1,10 +1,5 @@
 # Runtimes
 
-## Table of Contents
-
-- [Generic Runtimes](#generic-runtimes)
-- [Engine Runtimes](#engine-runtimes)
-
 ## Generic Runtimes
 
 Generic runtimes mostly handle [animations](./animating.md) and
@@ -23,13 +18,9 @@ can be expanded for Rust game engines like Macroquad or Bevy.
 
 Engine runtimes handle specific environments and must have a user-friendly API.
 
-Because of the user-friendly nature, features such as loading `.skf` files can
-be made mandatory. It is still preferrable to be optional to allow user
-customization.
-
-Ideally, engine runtimes should simply depend on a generic runtime to do the
-heavy lifting, and leave itself to only handle rendering and engine-specific
-quirks.
+These runtimes may depend on a generic one to do the heavy lifting, leaving it
+to handle features that are best dealt with the engine (eg; loading and/or
+[rendering](./rendering.md)).
 
 Example: The
 [Macroquad runtime](https://github.com/Retropaint/rusty_skelform_macroquad)
