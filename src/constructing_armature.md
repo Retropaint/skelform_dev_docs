@@ -26,7 +26,7 @@ before it.
 
 ## Inheritance
 
-The properties of bones as laid out in `armature.json` is only local to
+The properties of bones as laid out in `armature.json` are only local to
 themselves, and do not include the parent.
 
 Child bones must inherit their parent's properties:
@@ -126,7 +126,7 @@ func inverseKinematics(tempBones []Bone, ikFamilies []IkFamily) map[uint]float {
 
          if i != 0 {
             prevBone := &tempBones[ikFamily.boneIdxs[i-1]]
-            prevtLength = magnitude(bone.pos - prevBone.pos)
+            prevLength = magnitude(bone.pos - prevBone.pos)
          }
 
          // move the bone, but maintain distance between it and previous bone

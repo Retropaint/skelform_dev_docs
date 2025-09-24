@@ -7,7 +7,10 @@ hljs.registerLanguage("go", function(hljs) {
     "break", "case", "continue", "default", "defer",
     "else", "fallthrough", "for", "go", "goto",
     "if", "import", "package", "range", "return",
-    "select", "switch",
+    "select", "switch", "make",
+
+    "Cos", "Sin", "reverse", "magnitude", "normalize",
+    "atan2"
   ].join(" ");
 
   const TYPES = [
@@ -22,8 +25,13 @@ hljs.registerLanguage("go", function(hljs) {
 
   const BUILT_INS = [
     "append", "cap", "close", "complex", "copy",
-    "delete", "imag", "len", "make", "new",
+    "delete", "imag", "len", "new",
     "panic", "print", "println", "real", "recover",
+
+    "tempBones", "parent", "nextPos", "nextLength",
+    "bone", "nextBone", "root", "prevPos", "prevLength",
+    "rotMap", "endBone", "tipPos", "dir", "rot", "prevBone",
+    "ikFamily", "ikFamilies", "idx"
   ].join(" ");
 
   return {
