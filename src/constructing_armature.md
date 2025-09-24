@@ -1,28 +1,13 @@
 # Constructing Armature
 
-Before animations can take place, it is best to nail down the construction
-process of the armature.
+Once the (temporary) bones have been [animated](./animating.md), they must be
+constructed via inheritance and/or inverse kinematics.
 
 ## Table of Contents
 
-- [Non-Mutability](#non-mutability)
 - [Inheritance](#inheritance)
 - [Inverse Kinematics](#inverse-kinematics)
-  - [Process](#process)
   - [Logic](#logic)
-
-## Non-Mutability
-
-It is recommended that the original bones supplied to construction are not
-modified. Instead, construction should work with cloned bones and return them to
-the consumer.
-
-This does not apply to generic runtimes, as the supplied bones (coming from an
-engine runtime) are expected to be cloned already.
-
-**Reasoning**: Runtimes should ideally be deterministic. By mutating the
-original bones, animations may behave differently depending on what played
-before it.
 
 ## Inheritance
 
@@ -59,8 +44,6 @@ func inheritance(tempBones []Bone) {
 ```
 
 ## Inverse Kinematics
-
-### Process
 
 If the armature contains inverse kinematics, construction is done via 3 steps:
 
