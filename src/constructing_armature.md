@@ -1,7 +1,7 @@
 # Constructing Armature
 
-Once the (temporary) bones have been [animated](./animating.md), they must be
-constructed via inheritance and/or inverse kinematics.
+Once the bones have been [animated](./animating.md), they must be constructed
+via inheritance and/or inverse kinematics.
 
 ## Table of Contents
 
