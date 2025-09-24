@@ -1,6 +1,6 @@
 # File Structure
 
-SkelForm utilizes it's own file structure (with the extension `.skf`) upon
+SkelForm utilizes it's own file format (with the extension `.skf`) upon
 exporting from the editor.
 
 `.skf` files are simply zip files, and can be unzipped to reveal:
