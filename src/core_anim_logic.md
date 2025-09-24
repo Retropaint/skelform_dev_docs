@@ -6,22 +6,9 @@ All of the following logic should be render & engine agnostic.
 
 ## Table of Contents
 
-- [Dependency Considerations](#dependency-considerations)
 - [Meta Logic Considerations](#meta-logic-considerations)
-- [Animating Bones](#animating-bones)
-- [Static Armatures](#static-armatures)
-
-## Dependency Considerations
-
-Ideally, generic runtimes should have as few dependencies as possible.
-
-Optional features such as loading the `.skf` file should be made optional if it
-requires a dependency to function. Otherwise, dependencies are fine for
-mandatory functionality.
-
-Additionally, the texture image (`textures.png`) should not be necessary for
-generic runtimes to process. All relevant texture data is already included in
-`armature.json`.
+- [Interpolation](#interpolation)
+- [Summary](#summary)
 
 ## Meta Logic Considerations
 
@@ -61,19 +48,7 @@ if loop {
 }
 ```
 
-## Animating Bones
-
-Bone animation logic should clone the provided armature's bones, then animate
-them via 3 phases:
-
-- Interpolation
-- Post-interpolation (customizable)
-- Parent inheritance
-
-Once all phases are completed, the animated bones should be returned to the
-consumer.
-
-### Interpolation
+## Interpolation
 
 Interpolation for most bone fields should be _modified_, not _overridden_.
 
@@ -95,53 +70,7 @@ bone.tex_idx = last_keyframe_of(frame, "Texture");
 bone.zindex  = last_keyframe_of(frame, "Zindex");
 ```
 
-### Post-interpolation
-
-This phase does not have hardcoded logic. Instead, the API must allow custom
-code injection for the consumer (eg; closures & anonymous functions).
-
-```rust,noplayground
-fn animate(post_interp: Fn) {
-  let animated_bones = []
-
-  // run interpolations, populating the bones list
-
-  post_interp(animated_bones);
-
-  // proceed with other phases
-}
-```
-
-### Parent inheritance
-
-Runs immediately after post-interpolation.
-
-```rust,noplayground
-fn inherit_parent(bone: Bone) {
-  if bone.parent_id == -1 {
-    return
-  }
-
-  let parent = find_bone(bone.parent_id);
-
-  bone.rot += parent.rot;
-  bone.scale *= parent.scale;
-  // account for parent's scale in bone's position
-  bone.pos *= parent.scale;
-
-  // rotate bone 'around' parent
-  bone.pos = Vec2::new(
-    bone.pos.x * cos(parent.rot) - bone.pos.y * sin(parent.rot)
-    bone.pos.x * sin(parent.rot) + bone.pos.y * cos(parent.rot)
-  );
-
-  bone.pos += parent.pos;
-
-  return bone
-}
-```
-
-### Overview
+## Summary
 
 Assuming all 3 phases are in a single function, it should look something like
 this:
@@ -154,13 +83,12 @@ fn animate(
   loop: bool,
   post_interp: FnOnce
 ) {
-  // safeguard for no animations; just create an empty one
-  let anim: Animation;
+  // do nothing without an animation
   if armature.animations.length == 0 {
-    anim = Animation::default();
-  } else {
-    anim = armature.animations[anim_index];
+    return;
   }
+
+  let anim = armature.animations[anim_index];
 
   // process meta logic (frame boundaries, looping, etc)
   let last_frame = armature.animations[anim_index].keyframe.last().frame;
@@ -179,28 +107,11 @@ fn animate(
   for bone in armature.bones {
     animated_bones.push(bone)
 
-    // phase 1: interpolation
     animated_bones.last().pos.x += interpolate(bone, "PositionX")
     animated_bones.last().pos.y += interpolate(bone, "PositionY")
     animated_bones.last().rot   += interpolate(bone, "Rotation")
-
-    // phase 2: post-interpolation
-    post_interp(animated_bones)
-
-    // phase 3: parent inheritance
-    animated_bones = inherit_parent(animated_bones)
   }
 
   return animated_bones
 }
 ```
-
-## Static Armatures
-
-All of the above logic assumes, and is designed for static armatures (ie. it
-has no animation). This is because the [ideal interpolation logic](./interpolation.md) already
-handles such cases by default, and the only safeguard required is an animation
-length check.
-
-At the very least, it is mandatory in some way to support static armatures. In
-this case, only phase 3 (parent inheritance) is required.
