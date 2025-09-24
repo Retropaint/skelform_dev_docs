@@ -8,6 +8,8 @@ process of the armature.
 - [Non-Mutability](#non-mutability)
 - [Inheritance](#inheritance)
 - [Inverse Kinematics](#inverse-kinematics)
+  - [Process](#process)
+  - [Logic](#logic)
 
 ## Non-Mutability
 
@@ -18,10 +20,9 @@ the consumer.
 This does not apply to generic runtimes, as the supplied bones (coming from an
 engine runtime) are expected to be cloned already.
 
-### Reasoning:
-
-Runtimes should ideally be deterministic. By mutating the original bones,
-animations may behave differently depending on what played before it.
+**Reasoning**: Runtimes should ideally be deterministic. By mutating the
+original bones, animations may behave differently depending on what played
+before it.
 
 ## Inheritance
 
@@ -59,16 +60,19 @@ func inheritance(tempBones []Bone) {
 
 ## Inverse Kinematics
 
+### Process
+
 If the armature contains inverse kinematics, construction is done via 3 steps:
 
 1. Inheritance
 2. Inverse kinematics
 3. Inheritance (with rotations from 2nd step)
 
-### Reasoning:
+**Reasoning**:
 
-1. Inheritance is run once to put all bones in place. This is needed as inverse
-   kinematics will require bones with their world properties.
+1. Inheritance is run once to put all bones in place. Inverse kinematics
+   requires this to accurately calculate the final rotations that bones will
+   take on.
 
 2. Inverse kinematics is run to calculate the new rotations that the affected
    bones will use.
@@ -81,8 +85,8 @@ If the armature contains inverse kinematics, construction is done via 3 steps:
 Inverse kinematics is entirely non-mutable; it only serves to return the new
 rotations for bones to use in the 2nd inheritance call.
 
-As described in the steps above, the temp bones provided must have been constructed
-from forward kinematics.
+As described in the steps above, the temp bones provided must have been
+constructed from forward kinematics.
 
 The following is based on the
 [FABRIK](https://www.youtube.com/watch?v=NfuO66wsuRg) technique, and iterates
