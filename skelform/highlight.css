@@ -9,7 +9,7 @@
 /* Comment */
 .hljs-comment,
 .hljs-quote {
-  color: #575757;
+  color: #d186e1;
 }
 
 /* Red */
@@ -24,7 +24,7 @@
 .hljs-name,
 .hljs-selector-id,
 .hljs-selector-class {
-  color: #d70025;
+  color: #e96f34;
 }
 
 /* Orange */
@@ -35,7 +35,7 @@
 .hljs-literal,
 .hljs-type,
 .hljs-params {
-  color: #b21e00;
+  color: #e96f34;
 }
 
 /* Green */
@@ -48,13 +48,13 @@
 /* Blue */
 .hljs-title,
 .hljs-section {
-  color: #0030f2;
+  color: #75b1fd;
 }
 
 /* Purple */
 .hljs-keyword,
 .hljs-selector-tag {
-  color: #9d00ec;
+  color: #58db66;
 }
 
 .hljs {
