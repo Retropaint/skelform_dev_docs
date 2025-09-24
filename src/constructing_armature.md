@@ -81,11 +81,55 @@ If the armature contains inverse kinematics, construction is done via 3 steps:
 Inverse kinematics is entirely non-mutable; it only serves to return the new
 rotations for bones to use in the 2nd inheritance call.
 
+As described in the steps above, the temp bones provided must have been constructed
+from forward kinematics.
+
 The following is based on the
-[FABRIK](https://www.youtube.com/watch?v=NfuO66wsuRg) technique:
+[FABRIK](https://www.youtube.com/watch?v=NfuO66wsuRg) technique, and iterates
+through all IK families:
 
 ```go
-func inverseKinematics(tempBones []Bone, ikFamily IkFamily) {
+func inverseKinematics(tempBones []Bone, ikFamilies []IkFamily) {
+   for i := range(ikFamilies) {
+      ik_family := ikFamilies[i]
 
+      root := tempBones[ikFamily.boneIdxs[0]]
+
+      // forward reaching
+      nextPos := tempBones[ikFamily.targetIdx].pos
+      nextLength := 0
+      for idx, i := reverse(range(ikFamily.boneIdxs)) {
+         bone := &tempBones[idx]
+
+         // before moving the bone, keep the length in mind for the next bone
+         length := normalize(nextPos - bone.pos) * nextLength
+
+         if i != 0 {
+            nextBone := &tempBones[ikFamily.boneIdxs[i-1]]
+            nextLength = magnitude(bone.pos - nextBone.pos)
+         }
+
+         // move the bone, but maintain distance between it and previous bone
+         bone.pos = nextPos - length;
+      }
+
+      // backward reaching
+      prevPos := tempBones[ikFamily.boneIdxs[0]].pos;
+      prevLength := 0
+      for idx, i := range(ikFamily.boneIdxs) {
+         bone := &tempBones[idx]
+
+         // before moving the bone, keep the length in mind for the next bone
+         length := normalize(prevPos - bone.pos) * prevLength
+
+         if i != 0 {
+            prevBone := &tempBones[ikFamily.boneIdxs[i-1]]
+            prevtLength = magnitude(bone.pos - prevBone.pos)
+         }
+
+         // move the bone, but maintain distance between it and previous bone
+         bone.pos = prevPos - length;
+      }
+   }
 }
 ```
