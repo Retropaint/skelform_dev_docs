@@ -38,6 +38,10 @@
   color: #e96f34;
 }
 
+.hljs-number {
+  color: #d7cc31;
+}
+
 /* Green */
 .hljs-string,
 .hljs-symbol,
