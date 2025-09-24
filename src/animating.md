@@ -18,18 +18,18 @@ All of the following logic should be render & engine agnostic.
 - Looping
 - Playing in reverse
 
-```rust,noplayground
-let fps = 60
-let time = 0.4
-let last_frame = 60
+```go
+fps := 60
+time := 0.4
+lastFrame := 60
 
-let frametime = 1 / fps
-let frame = time / frametime
+frametime := 1 / fps
+frame := time / frametime
 
 print(frame) // 24
 
-if reverse {
-  frame = last_frame - frame;
+if isReverse {
+  frame = lastFrame - frame;
 
   print(frame) // 36
 }
@@ -37,15 +37,15 @@ if reverse {
 
 Boundary example (with and without looping):
 
-```rust,noplayground
-if loop {
+```go
+if isLooped {
   if frame < 0 {
-    frame = last_anim_frame
-  } else if frame > last_anim_frame {
+    frame = lastAnimFrame
+  } else if frame > lastAnimFrame {
     frame = 0
   }
 } else {
-  frame = clamp(0, last_anim_frame)
+  frame = clamp(0, lastAnimFrame)
 }
 ```
 
@@ -56,16 +56,17 @@ Interpolation for most bone fields should be _modified_, not _overridden_.
 Please see the pseudo-code below for the operation to modify fields
 with.<br>(eg; addition for position, multiplication for scale, etc)
 
-```rust,noplayground
-let frame = 12;
+```go
+frame := 12;
 
-bone.pos.x   += interpolate(frame, "PositionX");
-bone.pos.y   += interpolate(frame, "PositionX");
-bone.rot     += interpolate(frame, "Rotation");
-bone.scale.x *= interpolate(frame, "ScaleX");
-bone.scale.y *= interpolate(frame, "ScaleY");
-bone.tex_idx =  prev_keyframe(frame, "Texture");
-bone.zindex  =  prev_keyframe(frame, "Zindex");
+bone.pos.x   += interpolate(frame, "PositionX")
+bone.pos.y   += interpolate(frame, "PositionX")
+bone.rot     += interpolate(frame, "Rotation")
+bone.scale.x *= interpolate(frame, "ScaleX")
+bone.scale.y *= interpolate(frame, "ScaleY")
+
+bone.texIdx = prevKeyframe(frame, "Texture")
+bone.zindex = prevKeyframe(frame, "Zindex")
 ```
 
 Integer values like `bone.tex_idx` or `bone.zindex` must be overriden by the
@@ -82,54 +83,54 @@ must be processed:
 - 4: Generate frame data relevant only to both keyframes (since interpolation
   will account only for them)
 
-```rust,noplayground
-fn interpolate(
-  keyframes: Keyframe[],
-  frame: int,
-  bone_id: int,
-  element: Element,
-  default_value: float,
-) {
-  let prev_kf;
-  let next_kf;
+```go
+func interpolate(
+  keyframes Keyframe[],
+  frame int,
+  boneId int,
+  element Element,
+  defaultValue float,
+) float {
+  var prevKf Keyframe;
+  var nextKf Keyframe;
 
   // 1: get most recent frame
-  for kf in keyframes {
+  for kf, _ in range(keyframes) {
     if kf.frame < frame && kf.bone_id == bone_id && kf.element == element {
-      prev_kf = kf
+      prevKf = kf
     }
     break
   }
 
   // 2: get next frame
-  for kf in keyframes {
+  for kf, _ in range(keyframes) {
     if kf.frame > frame && kf.bone_id == bone_id && kf.element == element {
-      next_kf = kf
+      nextKf = kf
       break
     }
   }
 
   // 3: ensure both points are pointing somewhere
-  if prev_kf == null {
-    prev_kf = next_kf
-  } else if next_kf == null {
-    next_kf = prev_kf
+  if prevKf == null {
+    prevKf = nextKf
+  } else if nextKf == null {
+    nextKf = prevKf
   }
 
   // 3: if both are null, return default value
-  if prev_kf == null && next_kf == null {
+  if prevKf == null && nextKf == null {
     return default_value
   }
 
   // 4: get total and current frames in relation to both keyframes
-  let total_frames = next_kf.frame - prev_kf.frame;
-  let current_frame = frame - prev_kf.frame;
+  totalframes := nextKf.frame - prevKf.frame;
+  currentFrame := frame - prevKf.frame;
 
-  let result = interpolate_float(
-    prev_kf.value,
-    next_kf.value,
-    current_frame,
-    total_frames
+  result := interpolateFloat(
+    prevKf.value,
+    nextKf.value,
+    currentFrame,
+    totalFrames
   );
 
   // the function should at least return the interpolated value,
@@ -143,22 +144,22 @@ fn interpolate(
 Assuming all 3 phases are in a single function, it should look something like
 this:
 
-```rust,noplayground
-fn animate(
-  armature: Armature,
-  anim_index: int,
-  frame: int,
-  loop: bool,
-  post_interp: FnOnce
+```go
+func animate(
+  armature Armature,
+  animIndex int,
+  frame int,
+  loop bool,
+  postInterp FnOnce
 ) {
   // do nothing if animation is invalid
-  if anim_index > armature.animations.length - 1 {
-    return;
+  if animIndex > armature.animations.length - 1 {
+    return
   }
 
   // process meta logic (frame boundaries, looping, etc)
-  let last_frame = armature.animations[anim_index].keyframe.last().frame;
-  if loop {
+  lastFrame := armature.animations[animIndex].keyframe.last().frame;
+  if isLoop {
     if frame < 0 {
       frame = last_frame;
     } else if frame > last_frame {
@@ -169,12 +170,10 @@ fn animate(
   }
 
   // interpolate values and modify bones
-  for bone in armature.bones {
+  for bone, _ := range(armature.bones) {
     bone.last().pos.x += interpolate(bone, "PositionX")
     bone.last().pos.y += interpolate(bone, "PositionY")
     bone.last().rot   += interpolate(bone, "Rotation")
   }
-
-  return animated_bones
 }
 ```
