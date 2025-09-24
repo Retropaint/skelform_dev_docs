@@ -68,8 +68,8 @@ If the armature contains inverse kinematics, construction is done via 3 steps:
 Inverse kinematics is entirely non-mutable; it only serves to return the new
 rotations for bones to use in the 2nd inheritance call.
 
-As described in the steps above, the temp bones provided must have been
-constructed from forward kinematics.
+As described in the steps above, the bones provided must have been constructed
+from forward kinematics.
 
 The following is based on the
 [FABRIK](https://www.youtube.com/watch?v=NfuO66wsuRg) technique, and iterates
