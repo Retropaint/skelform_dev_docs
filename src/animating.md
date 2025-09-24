@@ -141,9 +141,6 @@ func interpolate(
 
 ## Summary
 
-Assuming all 3 phases are in a single function, it should look something like
-this:
-
 ```go
 func animate(
   armature Armature,

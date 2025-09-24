@@ -7,7 +7,8 @@
 
 ## Generic Runtimes
 
-Generic runtimes mostly handle [core animation logic](./core_anim_logic.md).
+Generic runtimes mostly handle [animations](./animating.md) and
+[armature construction](./constructing_armature.md).
 
 Other features such as loading `.skf` files or special effects must be made
 optional if they require dependencies.
