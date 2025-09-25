@@ -4,6 +4,7 @@
 
 - [File Structure](./file_specs.md)
 - [Runtimes](./runtime_spec.md)
+  - [Loading](./loading.md)
   - [Animating](./animating.md)
   - [Constructing Armature](./constructing_armature.md)
   - [Rendering](./rendering.md)
