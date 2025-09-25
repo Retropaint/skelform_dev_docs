@@ -112,7 +112,7 @@ func inverseKinematics(tempBones []Bone, ikFamilies []IkFamily) map[uint]float {
          length := normalize(prevPos - bone.pos) * prevLength
 
          if i != 0 {
-            prevBone := &tempBones[ikFamily.boneIdxs[i-1]]
+            prevBone := &tempBones[ikFamily.boneIdxs[i+1]]
             prevLength = magnitude(bone.pos - prevBone.pos)
          }
 
