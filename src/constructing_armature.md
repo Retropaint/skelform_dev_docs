@@ -57,8 +57,8 @@ If the armature contains inverse kinematics, construction is done via 3 steps:
    requires this to accurately calculate the final rotations that bones will
    take on.
 
-2. Inverse kinematics is run to calculate the new rotations that the affected
-   bones will use.
+2. Inverse kinematics is run to calculate the new rotations that affected
+   bones will take on.
 
 3. The bones are reset, and inheritance runs again with the rotations provided
    by inverse kinematics.

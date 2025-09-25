@@ -1,10 +1,10 @@
 # Rendering
 
-Rendering is best handled on a per-environment/engine basis with dedicated
-runtimes (known as 'engine runtimes').
+This page covers best practices and general advice that applies to rendering in
+any engine runtime.
 
-This page covers best practices and general advice that applies to any engine
-runtime.
+Keep in mind that nothing in this page is conclusive to any engine runtime; they
+all have different requires and methods.
 
 ## Table of Contents
 
