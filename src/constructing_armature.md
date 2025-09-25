@@ -17,28 +17,32 @@ themselves, and do not include the parent.
 Child bones must inherit their parent's properties:
 
 ```go
-func inheritance(tempBones []Bone) {
+func inheritance(tempBones []Bone, ik_rots map[int]float) {
    for i := range(tempBones) {
       if tempBones[i].parent_idx == -1 {
-         continue
+         parent := tempBones[tempBones[i].parent_idx]
+
+         tempBones[i].rot += parent.rot;
+
+         tempBones[i].scale *= parent.scale;
+
+         // maintain child's position from parent when scaling
+         tempBones[i].pos *= parent.scale;
+
+         // rotate child such that it will orbit the parent
+         tempBones[i].pos = Vec2.new(
+            tempBones[i].pos.x * Cos(parent.rot) - tempBones[i].pos.y * Sin(parent.rot),
+            tempBones[i].pos.x * Sin(parent.rot) - tempBones[i].pos.y * Cos(parent.rot),
+         )
+
+         tempBones[i].pos += parent.pos;
       }
 
-      parent := tempBones[tempBones[i].parent_idx]
-
-      tempBones[i].rot += parent.rot;
-
-      tempBones[i].scale *= parent.scale;
-
-      // maintain child's position from parent when scaling
-      tempBones[i].pos *= parent.scale;
-
-      // rotate child such that it will orbit the parent
-      tempBones[i].pos = Vec2.new(
-         tempBones[i].pos.x * Cos(parent.rot) - tempBones[i].pos.y * Sin(parent.rot),
-         tempBones[i].pos.x * Sin(parent.rot) - tempBones[i].pos.y * Cos(parent.rot),
-      )
-
-      tempBones[i].pos += parent.pos;
+      // use rotations provided from inverse kinematics
+      ik_rot := map[i]
+      if ik_rot != None {
+         tempBones[i].rot = ik_rot
+      }
    }
 }
 ```
@@ -57,8 +61,8 @@ If the armature contains inverse kinematics, construction is done via 3 steps:
    requires this to accurately calculate the final rotations that bones will
    take on.
 
-2. Inverse kinematics is run to calculate the new rotations that affected
-   bones will take on.
+2. Inverse kinematics is run to calculate the new rotations that affected bones
+   will take on.
 
 3. The bones are reset, and inheritance runs again with the rotations provided
    by inverse kinematics.
