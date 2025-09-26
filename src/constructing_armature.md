@@ -188,10 +188,9 @@ if isFirstBone || bone.constraint == "None" {
 
    // 4. and 5.
    if localAngle > constraintMax || localAngle < constraintMin {
-      // twice the opposite angle to push bone
-      //
-      // if it were only pushed once, the joint would be straight
-      // by pushing again, it will end up on the other side
+      // push the bone by twice it's opposing angle.
+      // if it were only pushed once, it would be straight with the base line.
+      // by pushing again, it will end up on the other side.
       pushAngle := -jointAngle * 2
 
       line := bone.pos - prevBone.pos
