@@ -1,7 +1,7 @@
 # Rendering
 
 The final step of any runtime is rendering the animation, or simply providing
-the bones to the consumer:
+the animated bones to the consumer:
 
 ```go
 type AnimationOptions struct {
@@ -38,7 +38,7 @@ func animate(
 
   // if user chooses to, provide convenient and immediate rendering
   if options.render {
-    engine.render(
+    render(
       animated_bones,
       texture
     );
@@ -46,5 +46,21 @@ func animate(
 
   // always return animated bones
   return animated_bones;
+}
+
+func render(bones []Bone, styles []Style, activeStyles []int, texture TextureImage) {
+  for bone, _ ;= bones {
+    var texture Texture
+
+    for style, i := bone.style_idxs {
+      for activeIdx, _ := activeStyles {
+        if activeIdx == i {
+          texture = style.textures[bone.tex_idx]
+        }
+      }
+    }
+
+    engine.render(bone, texture)
+  }
 }
 ```
