@@ -133,8 +133,7 @@ func interpolate(
     totalFrames
   );
 
-  // the function should at least return the interpolated value,
-  // but other data is always welcome (keyframes, frame data, etc)
+  // always return interpolated value
   return result
 }
 ```
