@@ -8,6 +8,7 @@ via inheritance and/or inverse kinematics.
 - [Inheritance](#inheritance)
 - [Inverse Kinematics](#inverse-kinematics)
   - [Logic](#logic)
+  - [Constraints](#constraints)
 
 ## Inheritance
 
@@ -30,10 +31,7 @@ func inheritance(tempBones []Bone, ik_rots map[int]float) {
          tempBones[i].pos *= parent.scale;
 
          // rotate child such that it will orbit the parent
-         tempBones[i].pos = Vec2.new(
-            tempBones[i].pos.x * Cos(parent.rot) - tempBones[i].pos.y * Sin(parent.rot),
-            tempBones[i].pos.x * Sin(parent.rot) - tempBones[i].pos.y * Cos(parent.rot),
-         )
+         tempBones[i].pos = rotate(tempBones[i].pos, parent.rot)
 
          tempBones[i].pos += parent.pos;
       }
@@ -141,3 +139,69 @@ func inverseKinematics(tempBones []Bone, ikFamilies []IkFamily) map[uint]float {
    }
 }
 ```
+
+### Constraints
+
+For simplicity, the editor provides only 2 constraint types: clockwise and
+counter-clockwise.
+
+During the forward-reaching step, for each bone:
+
+1. Get angle of line from root to target[^1]
+2. Get angle of line from current and previous bone
+3. Get their difference (2nd - 1st), which gives the bone's 'local' angle
+4. Check if this local angle satisfies the constraint. If it does, do nothing
+5. If it's not satisfied, rotate the current bone against it's local angle twice
+
+The bone should now end up on the opposite side of where it would have been
+without constraints.
+
+```go
+// at the end of the forward-reaching loop...
+
+isFirstBone = b < bones.length < 1
+if isFirstBone || bone.constraint == "None" {
+   prevBone := bones[b + 1].pos
+
+   // 1.
+   baseLine := normalize(root.pos - target)
+   baseAngle := atan2(baseDir.y, baseDir.x)
+
+   // 2.
+   jointLine := normalize(bone.pos - prevBone.pos);
+   jointAngle := atan2(jointDir.y, jointDir.x);
+
+   // 3.
+   localAngle := jointAngle - baseAngle;
+
+   // constraints based on bone
+   var constraintMin float
+   var constraintMax float
+   switch bone.constraint {
+      case "Clockwise":
+         constraintMin = -3.14
+         constraintMax = 0
+      case "CounterClockwise":
+         constraintMin = 0
+         constraintMax = 3.14
+   }
+
+   // 4. and 5.
+   if localAngle > constraintMax || localAngle < constraintMin {
+      // twice the opposite angle to push bone
+      //
+      // if it were only pushed once, the joint would be straight
+      // by pushing again, it will end up on the other side
+      pushAngle := -jointAngle * 2
+
+      line := bone.pos - prevBone.pos
+      newPoint = rotate(line, pushAngle)
+      bone.pos = newPoint + prevBone.pos
+      nextPos = bone.pos
+   }
+}
+```
+
+[^1]:
+    can be done once before the forward-reaching loop, but lumped in with other
+    steps for simplicty.
