@@ -52,11 +52,16 @@ func render(bones []Bone, styles []Style, activeStyles []int, texture TextureIma
   for bone, _ ;= bones {
     var texture Texture
 
-    for style, i := bone.style_idxs {
+    // get texture of first active style
+    for styleIdx, _ := bone.style_idxs {
       for activeIdx, _ := activeStyles {
-        if activeIdx == i {
+        if activeIdx == styleIdx {
           texture = style.textures[bone.tex_idx]
+          break
         }
+      }
+      if texture != None {
+        break
       }
     }
 
