@@ -23,17 +23,17 @@ func inheritance(tempBones []Bone, ik_rots map[int]float) {
       if tempBones[i].parent_idx == -1 {
          parent := tempBones[tempBones[i].parent_idx]
 
-         tempBones[i].rot += parent.rot;
+         tempBones[i].rot += parent.rot
 
-         tempBones[i].scale *= parent.scale;
+         tempBones[i].scale *= parent.scale
 
          // maintain child's position from parent when scaling
-         tempBones[i].pos *= parent.scale;
+         tempBones[i].pos *= parent.scale
 
          // rotate child such that it will orbit the parent
          tempBones[i].pos = rotate(tempBones[i].pos, parent.rot)
 
-         tempBones[i].pos += parent.pos;
+         tempBones[i].pos += parent.pos
       }
 
       // use rotations provided from inverse kinematics
@@ -168,8 +168,8 @@ if isFirstBone || bone.constraint == "None" {
    baseAngle := atan2(baseDir.y, baseDir.x)
 
    // 2.
-   jointLine := normalize(bone.pos - prevBone.pos);
-   jointAngle := atan2(jointDir.y, jointDir.x);
+   jointLine := normalize(bone.pos - prevBone.pos)
+   jointAngle := atan2(jointDir.y, jointDir.x)
 
    // 3.
    localAngle := jointAngle - baseAngle;
