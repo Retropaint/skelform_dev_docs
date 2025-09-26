@@ -160,7 +160,7 @@ without constraints.
 // at the end of the forward-reaching loop...
 
 isFirstBone = b < bones.length < 1
-if isFirstBone || bone.constraint == "None" {
+if !isFirstBone && bone.constraint == "None" {
    prevBone := bones[b + 1].pos
 
    // 1.
