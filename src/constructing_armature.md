@@ -148,7 +148,7 @@ func inverseKinematics(tempBones []Bone, ikFamilies []IkFamily) map[uint]float {
 
 ### Multiple Iterations
 
-The above IK logic could be run multiple times for improved accuracy.
+The above logic could be run multiple times for improved accuracy.
 
 ```go
 for i := range(10) {
