@@ -80,38 +80,43 @@ through all IK families:
 
 ```go
 func inverseKinematics(tempBones []Bone, ikFamilies []IkFamily) map[uint]float {
+   // tempBones should be immutable to IK.
+   bones = copy(tempBones);
+
    for ikFamily, i := range(ikFamilies) {
-      root := tempBones[ikFamily.boneIdxs[0]]
+      root := bones[ikFamily.boneIdxs[0]]
 
       // forward reaching
-      nextPos := tempBones[ikFamily.targetIdx].pos
+      nextPos := bones[ikFamily.targetIdx].pos
       nextLength := 0
       for idx, i := reverse(range(ikFamily.boneIdxs)) {
-         bone := &tempBones[idx]
+         bone := &bones[idx]
 
          // before moving the bone, keep the length in mind for the next bone
          length := normalize(nextPos - bone.pos) * nextLength
 
          if i != 0 {
-            nextBone := &tempBones[ikFamily.boneIdxs[i-1]]
+            nextBone := &bones[ikFamily.boneIdxs[i-1]]
             nextLength = magnitude(bone.pos - nextBone.pos)
          }
+
+         // [constraints]
 
          // move the bone, but maintain distance between it and previous bone
          bone.pos = nextPos - length;
       }
 
       // backward reaching
-      prevPos := tempBones[ikFamily.boneIdxs[0]].pos;
+      prevPos := bones[ikFamily.boneIdxs[0]].pos;
       prevLength := 0
       for idx, i := range(ikFamily.boneIdxs) {
-         bone := &tempBones[idx]
+         bone := &bones[idx]
 
          // before moving the bone, keep the length in mind for the next bone
          length := normalize(prevPos - bone.pos) * prevLength
 
          if i != 0 {
-            prevBone := &tempBones[ikFamily.boneIdxs[i+1]]
+            prevBone := &bones[ikFamily.boneIdxs[i+1]]
             prevLength = magnitude(bone.pos - prevBone.pos)
          }
 
@@ -122,7 +127,7 @@ func inverseKinematics(tempBones []Bone, ikFamilies []IkFamily) map[uint]float {
       rotMap := make(map[uint]float)
 
       // rotating bones and saving their results
-      endBone := tempBones[ikFamily.boneIdxs[-1]]
+      endBone := bones[ikFamily.boneIdxs[-1]]
       tipPos := endBone.pos
       for idx, i := range(reverse(ikFamily.boneIdxs)) {
          // don't rotate end bone
@@ -130,9 +135,9 @@ func inverseKinematics(tempBones []Bone, ikFamilies []IkFamily) map[uint]float {
             continue
          }
 
-         dir := tipPos - tempBones[idx].pos
+         dir := tipPos - bones[idx].pos
          rot := atan2(dir.y, dir.x)
-         tipPos = tempBones[idx].pos
+         tipPos = bones[idx].pos
 
          // save the bones to a hash map, mapping the rotations to the bone's idx
          rotMap[idx] = rot
@@ -167,9 +172,9 @@ During the forward-reaching step, for each bone:
 The bone should now end up on the opposite side of where it would have been
 without constraints.
 
-```go
-// at the end of the forward-reaching loop...
+The IK pseudo-code marks where this code should go with `[constraints]`.
 
+```go
 isFirstBone = b < bones.length < 1
 if !isFirstBone && bone.constraint == "None" {
    prevBone := bones[b + 1].pos
@@ -212,5 +217,5 @@ if !isFirstBone && bone.constraint == "None" {
 ```
 
 [^1]:
-    can be done once before the forward-reaching loop, but lumped in with other
+    Can be done once before the forward-reaching loop, but lumped in with other
     steps for simplicty.
