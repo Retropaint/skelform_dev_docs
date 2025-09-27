@@ -8,6 +8,7 @@ via inheritance and/or inverse kinematics.
 - [Inheritance](#inheritance)
 - [Inverse Kinematics](#inverse-kinematics)
   - [Logic](#logic)
+  - [Multiple Iterations](#multiple-iterations)
   - [Constraints](#constraints)
 
 ## Inheritance
@@ -137,6 +138,16 @@ func inverseKinematics(tempBones []Bone, ikFamilies []IkFamily) map[uint]float {
          rotMap[idx] = rot
       }
    }
+}
+```
+
+### Multiple Iterations
+
+The above IK logic could be run multiple times for improved accuracy.
+
+```go
+for i := range(10) {
+   inverse_kinematics(tempBones, ikFamilies)
 }
 ```
 
