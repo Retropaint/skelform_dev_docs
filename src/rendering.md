@@ -27,8 +27,11 @@ func animate(
 ) Bone[] {
   animated_bones := [];
 
-  // process core animation logic (via a generic runtime or such)
+  // process bones
   animated_bones := skelform::animate(armature, anim_idx, frame, speed);
+  animated_bones = skelform::inheritance(animated_bones, armature.ikFamilies, []);
+  ikRot := skelform::inverseKinematics(animated_bones, armature.ikFamilies);
+  animated_bones = skelform::inheritance(animated_bones, armature.ikFamilies, ikRot);
 
   // process user options
   for bone, _ := range animated_bones {
