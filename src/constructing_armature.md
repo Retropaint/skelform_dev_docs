@@ -172,7 +172,7 @@ During the forward-reaching step, for each bone:
 The bone should now end up on the opposite side of where it would have been
 without constraints.
 
-The IK pseudo-code marks where this code should go with `[constraints]`.
+The inverse kinematics pseudo-code marks where this should go with `[constraints]`.
 
 ```go
 isFirstBone = b < bones.length < 1
