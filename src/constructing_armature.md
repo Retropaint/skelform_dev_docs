@@ -190,7 +190,8 @@ if ikFamily.constraint != "None" && !isLastBone && !isFirstBone {
    // 3.
    localAngle := jointAngle - baseAngle;
 
-   // constraints based on bone
+   // constraints based on bone.
+   // numbers may have to be swapped.
    var constraintMin float
    var constraintMax float
    switch IkFamily.constraint {
