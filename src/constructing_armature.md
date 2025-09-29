@@ -131,7 +131,7 @@ func inverseKinematics(tempBones []Bone, ikFamilies []IkFamily) map[uint]float {
       tipPos := endBone.pos
       for idx, i := range(reverse(ikFamily.boneIdxs)) {
          // don't rotate end bone
-         if i == 0 {
+         if i == ikFamily.boneIdxs.length - 1 {
             continue
          }
 
@@ -172,19 +172,19 @@ During the forward-reaching step, for each bone:
 The bone should now end up on the opposite side of where it would have been
 without constraints.
 
-The inverse kinematics pseudo-code marks where this should go with `[constraints]`.
+The inverse kinematics pseudo-code marks where this should go with
+`[constraints]`.
 
 ```go
-isFirstBone = b < bones.length < 1
-if !isFirstBone && bone.constraint == "None" {
-   prevBone := bones[b + 1].pos
-
+isFirstBone = b == bones.length < 1
+isLastBone = b == 0
+if ikFamily.constraint != "None" && !isLastBone && !isFirstBone {
    // 1.
    baseLine := normalize(root.pos - target)
-   baseAngle := atan2(baseDir.y, baseDir.x)
+   baseAngle := atan2(baseLine.y, baseLine.x)
 
    // 2.
-   jointLine := normalize(bone.pos - prevBone.pos)
+   jointLine := normalize(bone.pos - nextPos)
    jointAngle := atan2(jointDir.y, jointDir.x)
 
    // 3.
@@ -193,7 +193,7 @@ if !isFirstBone && bone.constraint == "None" {
    // constraints based on bone
    var constraintMin float
    var constraintMax float
-   switch bone.constraint {
+   switch IkFamily.constraint {
       case "Clockwise":
          constraintMin = -3.14
          constraintMax = 0
@@ -206,13 +206,14 @@ if !isFirstBone && bone.constraint == "None" {
    if localAngle > constraintMax || localAngle < constraintMin {
       // push the bone by twice it's opposing angle.
       // it will end up on the opposite side of the base line.
-      pushAngle := -jointAngle * 2
+      pushAngle := -localAngle * 2
 
-      line := bone.pos - prevBone.pos
+      line := bone.pos - nextPos
       newPoint = rotate(line, pushAngle)
-      bone.pos = newPoint + prevBone.pos
-      nextPos = bone.pos
+      bone.pos = newPoint + nextPos
    }
+
+   nextPos = bone.pos
 }
 ```
 
