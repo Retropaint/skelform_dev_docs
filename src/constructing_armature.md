@@ -93,8 +93,9 @@ func inverseKinematics(tempBones []Bone, ikFamilies []IkFamily) map[uint]float {
       for idx, i := reverse(range(ikFamily.boneIdxs)) {
          bone := &bones[idx]
 
-         // before moving the bone, keep the length in mind for the next bone
-         length := normalize(nextPos - bone.pos) * nextLength
+         // before moving the bone, keep the length in mind
+         // for next bone to maintain distance
+         lengthLine := normalize(nextPos - bone.pos) * nextLength
 
          if i != 0 {
             nextBone := &bones[ikFamily.boneIdxs[i-1]]
@@ -104,7 +105,7 @@ func inverseKinematics(tempBones []Bone, ikFamilies []IkFamily) map[uint]float {
          // [constraints]
 
          // move the bone, but maintain distance between it and previous bone
-         bone.pos = nextPos - length;
+         bone.pos = nextPos - lengthLine
       }
 
       // backward reaching
@@ -113,8 +114,9 @@ func inverseKinematics(tempBones []Bone, ikFamilies []IkFamily) map[uint]float {
       for idx, i := range(ikFamily.boneIdxs) {
          bone := &bones[idx]
 
-         // before moving the bone, keep the length in mind for the next bone
-         length := normalize(prevPos - bone.pos) * prevLength
+         // before moving the bone, keep the length in mind
+         // for next bone to maintain distance
+         lengthLine := normalize(prevPos - bone.pos) * prevLength
 
          if i != 0 {
             prevBone := &bones[ikFamily.boneIdxs[i+1]]
@@ -122,7 +124,7 @@ func inverseKinematics(tempBones []Bone, ikFamilies []IkFamily) map[uint]float {
          }
 
          // move the bone, but maintain distance between it and previous bone
-         bone.pos = prevPos - length;
+         bone.pos = prevPos - lengthLine
       }
 
       rotMap := make(map[uint]float)
