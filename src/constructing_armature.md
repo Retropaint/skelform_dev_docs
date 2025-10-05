@@ -94,7 +94,7 @@ func inverseKinematics(tempBones []Bone, ikFamilies []IkFamily) map[uint]float {
       // forward reaching
       nextPos := bones[ikFamily.targetIdx].pos
       nextLength := 0
-		  for i := len(ikFamily.Bone_ids) - 1; i >= 0; i-- {
+      for i := len(ikFamily.Bone_ids) - 1; i >= 0; i-- {
 			   bone := &bones[ikFamily.Bone_ids[i]]
 
          // before moving the bone, keep the length in mind
@@ -116,7 +116,7 @@ func inverseKinematics(tempBones []Bone, ikFamilies []IkFamily) map[uint]float {
       // backward reaching
       prevPos := startPos;
       prevLength := 0
-		  for i := 0; i < len(ikFamily.Bone_ids); i++ {
+      for i := 0; i < len(ikFamily.Bone_ids); i++ {
 			   bone := &bones[ikFamily.Bone_ids[i]]
 
          // before moving the bone, keep the length in mind
