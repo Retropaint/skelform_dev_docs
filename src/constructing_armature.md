@@ -142,13 +142,13 @@ func inverseKinematics(tempBones []Bone, ikFamilies []IkFamily) map[uint]float {
       // rotating bones and saving their results
       endBone := bones[ikFamily.boneIdxs[-1]]
       tipPos := endBone.pos
-		  for i := len(ikFamily.Bone_ids) - 1; i >= 0; i-- {
+      for i := len(ikFamily.Bone_ids) - 1; i >= 0; i-- {
          // don't rotate end bone
          if i == ikFamily.boneIdxs.length - 1 {
             continue
          }
 
-			   bone := &bones[ikFamily.Bone_ids[i]]
+         bone := &bones[ikFamily.Bone_ids[i]]
 
          dir := tipPos - bone.pos
          rot := atan2(dir.y, dir.x)
