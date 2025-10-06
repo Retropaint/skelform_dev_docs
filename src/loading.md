@@ -8,7 +8,7 @@ For runtimes, the files that need to be loaded are:
 - `armature.json`
 - `textures.png`
 
-The rest are only relevant to the editor.
+Other files are only relevant to the editor.
 
 ```go
 type SkelformRoot struct {
