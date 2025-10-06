@@ -21,7 +21,7 @@ Child bones must inherit their parent's properties:
 ```go
 func inheritance(tempBones []Bone, ik_rots map[int]float) {
    for i := range(tempBones) {
-      if tempBones[i].parent_idx == -1 {
+      if tempBones[i].parent_idx != -1 {
          parent := tempBones[tempBones[i].parent_idx]
 
          tempBones[i].rot += parent.rot
