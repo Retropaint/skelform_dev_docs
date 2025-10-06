@@ -66,6 +66,17 @@ If the armature contains inverse kinematics, construction is done via 3 steps:
 3. The bones are reset, and inheritance runs again with the rotations provided
    by inverse kinematics.
 
+```go
+inheritedBones := inheritance(animatedBones, [])
+
+ikRots = make(map[uint]float)
+for i := range(10) {
+   ikRots = inverse_kinematics(inheritedBones, armature.IkFamilies)
+}
+
+finalBones := inheritance(inheritedBones, ikRots)
+```
+
 ### Logic
 
 Inverse kinematics is entirely non-mutable; it only serves to return the new
