@@ -95,7 +95,7 @@ func inverseKinematics(tempBones []Bone, ikFamilies []IkFamily) map[uint]float {
       nextPos := bones[ikFamily.targetIdx].pos
       nextLength := 0
       for i := len(ikFamily.Bone_ids) - 1; i >= 0; i-- {
-			   bone := &bones[ikFamily.Bone_ids[i]]
+         bone := &bones[ikFamily.Bone_ids[i]]
 
          // before moving the bone, keep the length in mind
          // for next bone to maintain distance
@@ -117,7 +117,7 @@ func inverseKinematics(tempBones []Bone, ikFamilies []IkFamily) map[uint]float {
       prevPos := startPos;
       prevLength := 0
       for i := 0; i < len(ikFamily.Bone_ids); i++ {
-			   bone := &bones[ikFamily.Bone_ids[i]]
+         bone := &bones[ikFamily.Bone_ids[i]]
 
          // before moving the bone, keep the length in mind
          // for next bone to maintain distance
@@ -167,7 +167,7 @@ The above logic could be run multiple times for improved accuracy.
 
 ```go
 for i := range(10) {
-   inverse_kinematics(tempBones, ikFamilies)
+   ik_rots = inverse_kinematics(tempBones, ikFamilies)
 }
 ```
 
