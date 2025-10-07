@@ -1,9 +1,6 @@
 # Loading
 
-Generally, all that is needed to load `.skf` files are zip, JSON, and PNG
-readers.
-
-For runtimes, the files that need to be loaded are:
+Runtimes need unzip to the `.skf` file and load 2 files:
 
 - `armature.json`
 - `textures.png`
@@ -31,3 +28,5 @@ func load_armature(path String) SkelformRoot {
   return root
 }
 ```
+
+The `root` can then be used to pass around the armature and texture(s).

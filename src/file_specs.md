@@ -1,15 +1,11 @@
 # File Structure
 
-SkelForm utilizes it's own file format (with the extension `.skf`) upon
-exporting from the editor.
+The editor exports a unique `.skf` file, which can be unzipped to reveal:
 
-`.skf` files are simply zip files, and can be unzipped to reveal:
-
-- `armature.json` - JSON file containing all armature data (bones, animations,
-  etc)
+- `armature.json` - Armature data (bones, animations, etc)
 - `textures.png` - Texture atlas / sprite sheet
-- `editor.json` - (Editor only) JSON file containing data relevant to editors
-- `thumbnail.png` - (Editor only) preview image of the armature
+- `editor.json` - Editor-only data
+- `thumbnail.png` - Armature preview image
 
 ## Table of Contents
 
@@ -23,8 +19,7 @@ exporting from the editor.
 
 ## Sample Files
 
-Feel free to download the following to dissect, or just follow along with the
-documentation:
+The following can be downloaded for reference:
 
 - [`.skf` file](https://github.com/Retropaint/skelform_dev_docs/raw/refs/heads/main/skellington.skf)
 - <a href="https://raw.githubusercontent.com/Retropaint/skelform_dev_docs/refs/heads/main/armature.json" target="_blank">armature.json</a>
@@ -32,27 +27,25 @@ documentation:
 
 ## `armature.json` Structure
 
-The `armature.json` file primarily consists of an `armature` object with the
-following data:
+Primarily consists of an `armature` object with the following data:
 
-- `bones` - Contains bone data
-- `animations` - Array containing all animation data, including keyframes
-- `textures` - Array containing individual texture data, in relation to to the
-  texture atlas
+- `bones` - Data of all bones
+- `animations` - Array of all animation data, including keyframes
+- `styles` - Array of style data, including texture coordinates
 
 ## Bones
 
-| Key        | Type   | Data                                                          |
-| ---------- | ------ | ------------------------------------------------------------- |
-| \_idx[^1]  | int    | index of bone in the array                                    |
-| \_name[^1] | string | Name of bone                                                  |
-| parent_idx | int    | index of bone's parent                                        |
-| style_idxs | int[]  | Indexes of this bone's assigned styles                        |
-| tex_idx    | int    | The texture (by index) that this bone will use in it's styles |
-| rot        | Vec2   | Rotation of bone                                              |
-| scale      | Vec2   | Scale of bone                                                 |
-| pos        | Vec2   | Position of bone                                              |
-| zindex     | int    | Z-index of bone<br>(higher index renders above lower)         |
+| Key        | Type   | Data                                                  |
+| ---------- | ------ | ----------------------------------------------------- |
+| id         | int    | bone ID                                               |
+| \_name[^1] | string | Name of bone                                          |
+| parent_id  | int    | bone parent ID                                        |
+| style_idxs | int[]  | Indexes of this bone's assigned styles                |
+| tex_idx    | int    | Bone will use this texture index in styles            |
+| rot        | Vec2   | Rotation of bone                                      |
+| scale      | Vec2   | Scale of bone                                         |
+| pos        | Vec2   | Position of bone                                      |
+| zindex     | int    | Z-index of bone<br>(higher index renders above lower) |
 
 [^1]: Debug field & development aid, not required to be parsed
 
@@ -71,7 +64,7 @@ following data:
 | ---------- | ---------- | --------------------------------------- |
 | frame      | int        | frame of keyframe                       |
 | bone_id    | int        | ID of bone that keyframe refers to      |
-| element    | string[^2] | Element to be animated by this keyframe |
+| \_element  | string[^2] | Element to be animated by this keyframe |
 | element_id | int        | Same as `element`, but as int           |
 | value      | float      | Value to append `element` of bone by    |
 | transition | string[^2] | Transition type (linear, sine, etc)     |
