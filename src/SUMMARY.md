@@ -7,4 +7,4 @@
   - [Loading](./loading.md)
   - [Animating](./animating.md)
   - [Constructing Armature](./constructing_armature.md)
-  - [Rendering](./rendering.md)
+  - [Rendering (API)](./rendering.md)

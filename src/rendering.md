@@ -1,7 +1,28 @@
-# Rendering
+# Rendering (API)
 
-The final step of any runtime is rendering the animation, or simply providing
-the animated bones to the consumer:
+Engine runtimes handle the final rendering process, but are also responsible for
+the user-facing API.
+
+## Table of Contents
+
+- [Function `animate()`](#function-animate)
+
+## Function `animate()`
+
+The main function where bones will be processed.
+
+Required arguments:
+
+- Armature data
+- Texture image data
+- User-defined options
+- Animation frame options (specific & time-based)
+
+Required logic:
+
+- Handle all engine-specific quirks (eg; negative Y, reversed rotations, etc)
+- If animation is invalid, copy armature bones
+- If scale of either axis is negative, reverse rotations
 
 ```go
 type AnimationOptions struct {
