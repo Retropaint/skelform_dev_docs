@@ -1,28 +1,25 @@
 # Constructing Armature
 
 Once the bones have been [animated](./animating.md), they must be constructed
-via inheritance and/or inverse kinematics.
+via inheritance and inverse kinematics.
 
 ## Table of Contents
 
 - [Inheritance](#inheritance)
-- [Inverse Kinematics](#inverse-kinematics)
+- [Inverse Kinematics (IK)](#inverse-kinematics)
   - [Logic](#logic)
   - [Multiple Iterations](#multiple-iterations)
   - [Constraints](#constraints)
 
 ## Inheritance
 
-The properties of bones as laid out in `armature.json` are only local to
-themselves, and do not include the parent.
-
 Child bones must inherit their parent's properties:
 
 ```go
 func inheritance(tempBones []Bone, ik_rots map[int]float) {
    for i := range(tempBones) {
-      if tempBones[i].parent_idx != -1 {
-         parent := tempBones[tempBones[i].parent_idx]
+      if tempBones[i].parent_id != -1 {
+         parent := tempBones[tempBones[i].parent_id]
 
          tempBones[i].rot += parent.rot
 
@@ -46,23 +43,15 @@ func inheritance(tempBones []Bone, ik_rots map[int]float) {
 }
 ```
 
-## Inverse Kinematics
+<h2 id="inverse-kinematics"><a class="header" href="#inverse-kinematics">Inverse Kinematics (IK)</a></h2>
 
-If the armature contains inverse kinematics, construction is done via 3 steps:
-
-1. Inheritance
-2. Inverse kinematics
-3. Inheritance (with rotations from 2nd step)
-
-**Reasoning**:
+IK is done in 3 steps:
 
 1. Inheritance is run once to put all bones in place.
 
-2. Inverse kinematics is run to calculate the new rotations that affected bones
-   will take on.
+2. IK is run to calculate the new rotations that affected bones will take on.
 
-3. The bones are reset, and inheritance runs again with the rotations provided
-   by inverse kinematics.
+3. Bones are reset, and inheritance runs again with rotations provided by IK.
 
 ```go
 inheritedBones := inheritance(animatedBones, [])
@@ -77,15 +66,11 @@ finalBones := inheritance(inheritedBones, ikRots)
 
 ### Logic
 
-Inverse kinematics is entirely non-mutable; it only serves to return the new
-rotations for bones to use in the 2nd inheritance call.
+As described above (step 1), the bones provided must have gone through
+inheritance first.
 
-As described in the steps above, the bones provided must have been constructed
-from forward kinematics.
-
-The following is based on the
-[FABRIK](https://www.youtube.com/watch?v=NfuO66wsuRg) technique, and iterates
-through all IK families:
+The following is based on [FABRIK](https://www.youtube.com/watch?v=NfuO66wsuRg),
+and goes through all IK families:
 
 ```go
 func inverseKinematics(tempBones []Bone, ikFamilies []IkFamily) map[uint]float {
@@ -182,19 +167,18 @@ for i := range(10) {
 
 ### Constraints
 
-For simplicity, the editor provides only 2 constraint types: clockwise and
-counter-clockwise.
+There are 2 constraint types:
+
+- Clockwise
+- Counter-Clockwise
 
 During the forward-reaching step, for each bone:
 
 1. Get angle of line from root to target[^1]
 2. Get angle of line from current and previous bone
 3. Get their difference (2nd - 1st), which gives the bone's 'local' angle
-4. Check if this local angle satisfies the constraint. If it does, do nothing
-5. If it's not satisfied, rotate the current bone against it's local angle twice
-
-The bone should now end up on the opposite side of where it would have been
-without constraints.
+4. Check if local angle satisfies constraint. If it does, do nothing
+5. Otherwise, rotate current bone against it's local angle twice
 
 The inverse kinematics pseudo-code marks where this should go with
 `[constraints]`.

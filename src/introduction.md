@@ -1,12 +1,11 @@
 # Introduction
 
-SkelForm is a collection of software for 2D animation, primarily focused on
-video games. Said set includes the editor, runtimes, and a file specification.
+SkelForm is a 2D skeletal animation editor, designed primarily for games.
 
-SkelForm (and this documentation) is a work in progress.
+These animations require a runtime, ie., a library/framework that processes and
+renders them.
 
-**NOTE:** As of 09/09/25, this doc is heavily outdated (originally written for
-v0.1)
+SkelForm, as well as this documentation, are works in progress.
 
 ## Pseudo Code
 

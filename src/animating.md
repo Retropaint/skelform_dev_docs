@@ -1,7 +1,6 @@
 # Animating
 
-Animating consists of modifying bones based on interpolated values from the
-provided animation and keyframe.
+Bone fields are modified via interpolation of values from animation keyframes.
 
 All of the following logic should be render & engine agnostic.
 
@@ -51,10 +50,7 @@ if isLooped {
 
 ## Interpolation
 
-Interpolation for most bone fields should be _modified_, not _overridden_.
-
-Please see the pseudo-code below for the operation to modify fields
-with.<br>(eg; addition for position, multiplication for scale, etc)
+Interpolation for most bone fields should be _modified_, not _overridden_:
 
 ```go
 frame := 12;
@@ -69,19 +65,14 @@ bone.texIdx = prevKeyframe(frame, "Texture")
 bone.zindex = prevKeyframe(frame, "Zindex")
 ```
 
-Integer values like `bone.tex_idx` or `bone.zindex` must be overriden by the
-most recent keyframe of the current frame.
-
 ### Gathering Keyframe Data
 
-Before interpolation takes place, the proper keyframes and other relevant data
-must be processed:
+Before interpolating, the proper keyframes must be fetched:
 
-- 1: Get most recent keyframe based on requested frame
-- 2: Get next-most keyframe based on request frame
-- 3: Provide safeguards in the case that either or both cannot be gathered
-- 4: Generate frame data relevant only to both keyframes (since interpolation
-  will account only for them)
+- 1: Get most recent keyframe of current frame
+- 2: Get next-most keyframe of current frame
+- 3: Provide safeguards in case either or both are invalid
+- 4: Generate frame data from both keyframes
 
 ```go
 func interpolate(
