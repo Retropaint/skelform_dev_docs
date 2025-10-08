@@ -6,10 +6,11 @@ the user-facing API.
 ## Table of Contents
 
 - [Function `animate()`](#function-animate)
+- [Function `draw()`](#function-draw)
 
 ## Function `animate()`
 
-The main function where bones will be processed.
+The main function where bones will be processed, but _not_ rendered.
 
 Required arguments:
 
@@ -26,12 +27,12 @@ Required logic:
 
 ```go
 type AnimationOptions struct {
-  position_offset Vec2,
-  rotation_offset Vec2,
+  positionOffset Vec2,
+  rotationOffset Vec2,
   // ... and more
 
   speed float,
-  should_loop bool,
+  shouldLoop bool,
 
   // an option can be provided to immediately render the animation,
   // or just provide the bones
@@ -41,37 +42,48 @@ type AnimationOptions struct {
 func animate(
   armature Armature,
   texture TextureImage
-  anim_idx int,
+  animIdx int,
   frame int,
   time Time
   options AnimationOptions
 ) Bone[] {
-  animated_bones := [];
-
   // process bones
-  animated_bones := skelform::animate(armature, anim_idx, frame, speed);
-  animated_bones = skelform::inheritance(animated_bones, armature.ikFamilies, []);
-  ikRot := skelform::inverseKinematics(animated_bones, armature.ikFamilies);
-  animated_bones = skelform::inheritance(animated_bones, armature.ikFamilies, ikRot);
+  animatedBones := skelform::animate(armature, animIdx, frame, speed);
+  inheritedBones = skelform::inheritance(animated_bones, armature.ikFamilies, []);
+  ikRots = make(map[uint]float)
+  for i := range(10) {
+     ikRots = skelform::inverseKinematics(inheritedBones, armature.IkFamilies)
+  }
+  finalBones = skelform::inheritance(animatedBones, armature.ikFamilies, ikRot);
 
   // process user options
-  for bone, _ := range animated_bones {
-    bone.pos += options.position_offset;
-    bone.rot += options.rotation_offset;
+  for bone, _ := range finalBones {
+    bone.pos += options.positionOffset;
+    bone.rot += options.rotationOffset;
   }
 
   // if user chooses to, provide convenient and immediate rendering
   if options.render {
-    render(
-      animated_bones,
-      texture
-    );
+    draw(finalBones, texture);
   }
 
-  // always return animated bones
-  return animated_bones;
+  // always return final bones
+  return finalBones;
 }
+```
 
+## Function `draw()`
+
+Draws the provided bones within the engine.
+
+Required arguments:
+
+- Bones to draw
+- All styles
+- Indexes of all active styles
+- Texture image
+
+```go
 func render(bones []Bone, styles []Style, activeStyles []int, texture TextureImage) {
   for bone, _ ;= bones {
     var texture Texture
@@ -87,6 +99,10 @@ func render(bones []Bone, styles []Style, activeStyles []int, texture TextureIma
       if texture != None {
         break
       }
+    }
+
+    if texture == None {
+      continue
     }
 
     engine.render(bone, texture)
