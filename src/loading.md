@@ -1,11 +1,21 @@
-# Loading
+# Loading (API)
 
-Runtimes need unzip to the `.skf` file and load 2 files:
+Runtimes need to unzip `.skf` files and extract the following:
 
 - `armature.json`
 - `textures.png`
 
-Other files are only relevant to the editor.
+## Table of Contents
+
+- [Function `load()`](#loading)
+
+## Function `load()`
+
+Extract armature and texture data from a `.skf` file.
+
+Required arguments:
+
+- File path
 
 ```go
 type SkelformRoot struct {
@@ -13,7 +23,7 @@ type SkelformRoot struct {
   Textures Image
 }
 
-func load_armature(path String) SkelformRoot {
+func load(path String) SkelformRoot {
   var root SkelformRoot
   zip := zip.open(path)
   for file, _ := range(zip) {
@@ -28,5 +38,3 @@ func load_armature(path String) SkelformRoot {
   return root
 }
 ```
-
-The `root` can then be used to pass around the armature and texture(s).
