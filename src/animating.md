@@ -6,47 +6,8 @@ All of the following logic should be render & engine agnostic.
 
 ## Table of Contents
 
-- [Meta Logic Considerations](#meta-logic-considerations)
 - [Interpolation](#interpolation)
 - [Summary](#summary)
-
-## Meta Logic Considerations
-
-- Animating based on timestamp (eg; 0.4s of an animation)
-- Clamping frame boundaries
-- Looping
-- Playing in reverse
-
-```go
-fps := 60
-time := 0.4
-lastFrame := 60
-
-frametime := 1 / fps
-frame := time / frametime
-
-print(frame) // 24
-
-if isReverse {
-  frame = lastFrame - frame;
-
-  print(frame) // 36
-}
-```
-
-Boundary example (with and without looping):
-
-```go
-if isLooped {
-  if frame < 0 {
-    frame = lastAnimFrame
-  } else if frame > lastAnimFrame {
-    frame = 0
-  }
-} else {
-  frame = clamp(0, lastAnimFrame)
-}
-```
 
 ## Interpolation
 
