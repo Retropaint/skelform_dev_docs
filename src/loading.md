@@ -15,7 +15,7 @@ Extract armature and texture data from a `.skf` file.
 
 Required arguments:
 
-- File path
+- File path, or any kind of IO reader to pass file data to
 
 ```go
 type SkelformRoot struct {
