@@ -12,7 +12,6 @@ The editor exports a unique `.skf` file, which can be unzipped to reveal:
 - [Sample Files](#sample-files)
 - [`armature.json` Structure](#armaturejson-structure)
 - [Bones](#bones)
-  - [Bones Structure](#bones-structure)
 - [Animations](#animations)
   - [Keyframes](#keyframes)
 - [Textures](#Textures)
