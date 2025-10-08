@@ -66,17 +66,17 @@ finalBones := inheritance(inheritedBones, ikRots)
 
 ### Logic
 
-As described above (step 1), the bones provided must have gone through
+As described above (step 1), the provided bones must have gone through
 inheritance first.
 
-The following is based on [FABRIK](https://www.youtube.com/watch?v=NfuO66wsuRg),
-and goes through all IK families:
+The following is based on [FABRIK](https://www.youtube.com/watch?v=NfuO66wsuRg):
 
 ```go
 func inverseKinematics(tempBones []Bone, ikFamilies []IkFamily) map[uint]float {
-   // tempBones should be immutable to IK.
+   // tempBones should be immutable to IK
    bones = copy(tempBones);
 
+   // go thru all IK families
    for i, ikFamily := range(ikFamilies) {
       if ikFamily.targetIdx == -1 {
          continue
@@ -180,8 +180,7 @@ During the forward-reaching step, for each bone:
 4. Check if local angle satisfies constraint. If it does, do nothing
 5. Otherwise, rotate current bone against it's local angle twice
 
-The inverse kinematics pseudo-code marks where this should go with
-`[constraints]`.
+The IK pseudo-code marks where this should go with `[constraints]`.
 
 ```go
 // this goes at the end of the forward-reaching loop
