@@ -7,7 +7,7 @@ Runtimes need to unzip `.skf` files and extract the following:
 
 ## Table of Contents
 
-- [Function `load()`](#loading)
+- [Function `load()`](#function-load)
 
 ## Function `load()`
 
