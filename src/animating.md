@@ -22,8 +22,8 @@ bone.rot     += interpolate(frame, "Rotation")
 bone.scale.x *= interpolate(frame, "ScaleX")
 bone.scale.y *= interpolate(frame, "ScaleY")
 
-bone.texIdx = prevKeyframe(frame, "Texture")
-bone.zindex = prevKeyframe(frame, "Zindex")
+bone.texIdx  =  prevKeyframe(frame, "Texture")
+bone.zindex  =  prevKeyframe(frame, "Zindex")
 ```
 
 ### Gathering Keyframe Data
@@ -32,7 +32,7 @@ Before interpolating, the proper keyframes must be fetched:
 
 - 1: Get most recent keyframe of current frame
 - 2: Get next-most keyframe of current frame
-- 3: Provide safeguards in case either or both are invalid
+- 3: Provide safeguards in case either/both are invalid
 - 4: Generate frame data from both keyframes
 
 ```go
@@ -46,7 +46,7 @@ func interpolate(
   var prevKf Keyframe;
   var nextKf Keyframe;
 
-  // 1: get most recent frame
+  // 1.
   for kf, _ in range(keyframes) {
     if kf.frame < frame && kf.bone_id == bone_id && kf.element == element {
       prevKf = kf
@@ -54,7 +54,7 @@ func interpolate(
     break
   }
 
-  // 2: get next frame
+  // 2.
   for kf, _ in range(keyframes) {
     if kf.frame > frame && kf.bone_id == bone_id && kf.element == element {
       nextKf = kf
@@ -62,22 +62,19 @@ func interpolate(
     }
   }
 
-  // 3: ensure both points are pointing somewhere
+  // 3.
   if prevKf == null {
     prevKf = nextKf
   } else if nextKf == null {
     nextKf = prevKf
   }
-
-  // 3: if both are null, return default value
   if prevKf == null && nextKf == null {
     return default_value
   }
 
-  // 4: get total and current frames in relation to both keyframes
+  // 4.
   totalframes := nextKf.frame - prevKf.frame;
   currentFrame := frame - prevKf.frame;
-
   result := interpolateFloat(
     prevKf.value,
     nextKf.value,
