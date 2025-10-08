@@ -62,7 +62,8 @@ func animate(
     bone.rot += options.rotationOffset;
   }
 
-  // if user chooses to, provide convenient and immediate rendering
+  // if user chooses to, provide convenient and immediate rendering.
+  // see function `draw()` below.
   if options.render {
     draw(finalBones, texture);
   }
