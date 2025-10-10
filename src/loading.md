@@ -1,9 +1,12 @@
-# Loading (API)
+# Loading
 
 Runtimes need to unzip `.skf` files and extract the following:
 
 - `armature.json`
 - `textures.png`
+
+This should ideally be done on the engine, but generic runtimes may have direct
+loading options.
 
 ## Table of Contents
 

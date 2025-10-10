@@ -1,4 +1,4 @@
-# Rendering (API)
+# Rendering
 
 Engine runtimes handle the final rendering process, but are also responsible for
 the user-facing API.

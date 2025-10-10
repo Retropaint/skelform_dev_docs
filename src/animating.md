@@ -6,27 +6,31 @@ All of the following logic should be render & engine agnostic.
 
 ## Table of Contents
 
-- [Interpolation](#interpolation)
-- [Summary](#summary)
+- [Function `animate()`](#function-animate)
+- [Function `interpolate()`](#function-interpolate)
+- [Function `formatFrame()`](#function-formatframe)
+- [Function `timeFrame()`](#function-timeframe)
 
-## Interpolation
+## Function `animate()`
 
 Interpolation for most bone fields should be _modified_, not _overridden_:
 
 ```go
-frame := 12;
+func Animate(bones []Bone, animation Animation, frame int) []Bone {
+	for b := range bones {
+		bone := &bones[b]
+		bone.Rot += interpolate(animation.Keyframes, frame, bone.Id, "Rotation", 0)
+		bone.Scale.X *= interpolate(animation.Keyframes, frame, bone.Id, "ScaleX", 1)
+		bone.Scale.Y *= interpolate(animation.Keyframes, frame, bone.Id, "ScaleY", 1)
+		bone.Pos.X += interpolate(animation.Keyframes, frame, bone.Id, "PositionX", 0)
+		bone.Pos.Y += interpolate(animation.Keyframes, frame, bone.Id, "PositionY", 0)
+	}
 
-bone.pos.x   += interpolate(frame, "PositionX")
-bone.pos.y   += interpolate(frame, "PositionX")
-bone.rot     += interpolate(frame, "Rotation")
-bone.scale.x *= interpolate(frame, "ScaleX")
-bone.scale.y *= interpolate(frame, "ScaleY")
-
-bone.texIdx  =  prevKeyframe(frame, "Texture")
-bone.zindex  =  prevKeyframe(frame, "Zindex")
+	return bones
+}
 ```
 
-### Gathering Keyframe Data
+## Function `interpolate()`
 
 Before interpolating, the proper keyframes must be fetched:
 
@@ -87,38 +91,40 @@ func interpolate(
 }
 ```
 
-## Summary
+## Function `formatFrame()`
+
+Helper function to apply effects (looping, reverse, etc) to an animation frame.
 
 ```go
-func animate(
-  armature Armature,
-  animIndex int,
-  frame int,
-  loop bool,
-  postInterp FnOnce
-) {
-  // do nothing if animation is invalid
-  if animIndex > armature.animations.length - 1 {
-    return
-  }
+func FormatFrame(frame int, animation Animation, reverse bool, loop bool) int {
+	lastKf := len(animation.Keyframes) - 1
+	lastFrame := animation.Keyframes[lastKf].Frame
 
-  // process meta logic (frame boundaries, looping, etc)
-  lastFrame := armature.animations[animIndex].keyframe.last().frame;
-  if isLoop {
-    if frame < 0 {
-      frame = last_frame;
-    } else if frame > last_frame {
-      frame = 0
-    }
-  } else {
-    frame = clamp(0, last_frame);
-  }
+	if loop {
+		frame %= animation.Keyframes[lastKf].Frame
+	}
 
-  // interpolate values and modify bones
-  for bone, _ := range(armature.bones) {
-    bone.last().pos.x += interpolate(bone, "PositionX")
-    bone.last().pos.y += interpolate(bone, "PositionY")
-    bone.last().rot   += interpolate(bone, "Rotation")
-  }
+	if reverse {
+		frame = lastFrame - frame
+	}
+
+	return frame
+}
+```
+
+## Function `timeFrame()`
+
+Helper function to provide the appropriate animation frame based on time.
+
+```go
+func TimeFrame(time time.Duration, animation Animation, reverse bool, loop bool) int {
+	fps := animation.Fps
+
+	var frametime float32 = 1 / float32(fps)
+	frame := int(float32(time.Milliseconds()) / frametime / 1000)
+
+	frame = FormatFrame(animation, frame, reverse, loop)
+
+	return frame
 }
 ```
