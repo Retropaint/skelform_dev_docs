@@ -19,11 +19,11 @@ Interpolation for most bone fields should be _modified_, not _overridden_:
 func Animate(bones []Bone, animation Animation, frame int) []Bone {
 	for b := range bones {
 		bone := &bones[b]
-		bone.Rot += interpolate(animation.Keyframes, frame, bone.Id, "Rotation", 0)
+		bone.Rot     += interpolate(animation.Keyframes, frame, bone.Id, "Rotation", 0)
 		bone.Scale.X *= interpolate(animation.Keyframes, frame, bone.Id, "ScaleX", 1)
 		bone.Scale.Y *= interpolate(animation.Keyframes, frame, bone.Id, "ScaleY", 1)
-		bone.Pos.X += interpolate(animation.Keyframes, frame, bone.Id, "PositionX", 0)
-		bone.Pos.Y += interpolate(animation.Keyframes, frame, bone.Id, "PositionY", 0)
+		bone.Pos.X   += interpolate(animation.Keyframes, frame, bone.Id, "PositionX", 0)
+		bone.Pos.Y   += interpolate(animation.Keyframes, frame, bone.Id, "PositionY", 0)
 	}
 
 	return bones
@@ -93,7 +93,7 @@ func interpolate(
 
 ## Function `formatFrame()`
 
-Helper function to apply effects (looping, reverse, etc) to an animation frame.
+Helper function to apply effects to an animation frame (looping, reverse, etc).
 
 ```go
 func FormatFrame(frame int, animation Animation, reverse bool, loop bool) int {
