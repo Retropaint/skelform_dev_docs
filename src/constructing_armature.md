@@ -1,17 +1,17 @@
-# Constructing Armature
+# Constructing
 
 Once the bones have been [animated](./animating.md), they must be constructed
 via inheritance and inverse kinematics.
 
 ## Table of Contents
 
-- [Inheritance](#inheritance)
-- [Inverse Kinematics (IK)](#inverse-kinematics)
+- [Function `inheritance()`](#function-inheritance)
+- [Function `inverseKinematics()`](#function-inverse_kinematics)
   - [Logic](#logic)
   - [Multiple Iterations](#multiple-iterations)
   - [Constraints](#constraints)
 
-## Inheritance
+## Function `inheritance()`
 
 Child bones must inherit their parent's properties:
 
@@ -43,7 +43,7 @@ func inheritance(tempBones []Bone, ik_rots map[int]float) {
 }
 ```
 
-<h2 id="inverse-kinematics"><a class="header" href="#inverse-kinematics">Inverse Kinematics (IK)</a></h2>
+## Function `inverse_kinematics()`
 
 IK is done in 3 steps:
 

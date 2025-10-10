@@ -3,8 +3,9 @@
 [Introduction](./introduction.md)
 
 - [File Structure](./file_specs.md)
-- [Runtimes](./runtime_spec.md)
-  - [Loading (API)](./loading.md)
+- [Generic Runtimes](./generic_runtimes.md)
   - [Animating](./animating.md)
-  - [Constructing Armature](./constructing_armature.md)
-  - [Rendering (API)](./rendering.md)
+  - [Constructing](./constructing_armature.md)
+- [Engine Runtimes](./engine_runtimes.md)
+  - [Loading](./loading.md)
+  - [Rendering](./rendering.md)
