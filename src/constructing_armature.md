@@ -41,7 +41,8 @@ func inheritance(tempBones []Bone, ik_rots map[int]float) {
          tempBones[i].pos += parent.pos
       }
 
-      // use rotations provided from inverse kinematics
+      // use rotations provided by inverse kinematics.
+      // must go after inheritance portion to override parent's rotation.
       ik_rot := map[i]
       if ik_rot != None {
          tempBones[i].rot = ik_rot
@@ -174,24 +175,22 @@ for i := range(10) {
 
 ### Constraints
 
-There are 2 constraint types:
+The editor offers 2 constraint types:
 
 - Clockwise
 - Counter-Clockwise
 
-During the forward-reaching step, for each bone:
+During the backward-reaching step, for each bone:
 
-1. Get angle of line from root to target[^1]
+1. Get angle of line from root to target
 2. Get angle of line from current and previous bone
 3. Get their difference (2nd - 1st), which gives the bone's 'local' angle
 4. Check if local angle satisfies constraint. If it does, do nothing
 5. Otherwise, rotate current bone against it's local angle twice
 
-The IK pseudo-code marks where this should go with `[constraints]`.
+The IK code block marks where this should go with `[constraints]`.
 
 ```go
-// this goes at the end of the forward-reaching loop
-
 isFirstBone = b == bones.length < 1
 isLastBone = b == 0
 if ikFamily.constraint != "None" && !isLastBone && !isFirstBone {
@@ -206,8 +205,6 @@ if ikFamily.constraint != "None" && !isLastBone && !isFirstBone {
    // 3.
    localAngle := jointAngle - baseAngle;
 
-   // constraints based on bone.
-   // numbers may have to be swapped.
    var constraintMin float
    var constraintMax float
    switch IkFamily.constraint {
@@ -233,7 +230,3 @@ if ikFamily.constraint != "None" && !isLastBone && !isFirstBone {
    nextPos = bone.pos
 }
 ```
-
-[^1]:
-    Can be done once before the forward-reaching loop, but lumped in with other
-    steps for simplicty.
