@@ -134,7 +134,7 @@ Helper function to provide the appropriate animation frame based on time.
 func TimeFrame(time time.Duration, animation Animation, reverse bool, loop bool) int {
 	fps := animation.Fps
 
-	var frametime float32 = 1 / float32(fps)
+	frametime := 1. / float32(fps)
 	frame := int(float32(time.Milliseconds()) / frametime / 1000)
 
 	frame = FormatFrame(animation, frame, reverse, loop)
