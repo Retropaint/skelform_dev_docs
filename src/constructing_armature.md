@@ -1,4 +1,5 @@
 # Constructing
+
 Once the bones have been [animated](./animating.md), they must be constructed
 via inheritance and inverse kinematics.
 
@@ -12,7 +13,14 @@ via inheritance and inverse kinematics.
 
 ## Function `inheritance()`
 
-Child bones must inherit their parent's properties:
+Bones with a `parent_id` of 0 or higher are children, and need to inherit their
+parent's properties.
+
+The bone array is ordered such that children are _below_ their parent, making
+nested inheritance easy via a simple for-loop.
+
+This function must also handle rotations provided by
+[inverse kinematics](#function-inverse_kinematics) (step 3).
 
 ```go
 func inheritance(tempBones []Bone, ik_rots map[int]float) {
