@@ -1,5 +1,4 @@
 # Constructing
-
 Once the bones have been [animated](./animating.md), they must be constructed
 via inheritance and inverse kinematics.
 
