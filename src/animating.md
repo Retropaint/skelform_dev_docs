@@ -1,36 +1,43 @@
 # Animating
 
-Bone fields are modified via interpolation of values from animation keyframes.
+Bone fields are overridden via interpolation of values from animation keyframes.
 
 All of the following logic should be render & engine agnostic.
 
 ## Table of Contents
 
 - [Function `animate()`](#function-animate)
-- [Function `interpolate()`](#function-interpolate)
+- [Function `interpolateKeyframes()`](#function-interpolatekeyframes)
+  - [Blending](#blending)
 - [Function `formatFrame()`](#function-formatframe)
 - [Function `timeFrame()`](#function-timeframe)
 
 ## Function `animate()`
 
-Interpolation for most bone fields should be _modified_, not _overridden_:
+Bone fields are overidden by interpolating their respective values from
+keyframes.
+
+Keyframes only store float values, so each field is interpolated down to a float
+value (eg; X and Y of a vec2).
 
 ```go
 func Animate(bones []Bone, animation Animation, frame int) []Bone {
+	boilerplate := {animation.Keyframes, frame, bone.Id, blendFrames}
+
 	for b := range bones {
 		bone := &bones[b]
-		bone.Rot     += interpolate(animation.Keyframes, frame, bone.Id, "Rotation", 0)
-		bone.Scale.X *= interpolate(animation.Keyframes, frame, bone.Id, "ScaleX", 1)
-		bone.Scale.Y *= interpolate(animation.Keyframes, frame, bone.Id, "ScaleY", 1)
-		bone.Pos.X   += interpolate(animation.Keyframes, frame, bone.Id, "PositionX", 0)
-		bone.Pos.Y   += interpolate(animation.Keyframes, frame, bone.Id, "PositionY", 0)
+		interpolateKeyframes(&bone.Rot,     "Rotation",  ..boilerplate)
+		interpolateKeyframes(&bone.Scale.X, "ScaleX",    ..boilerplate)
+		interpolateKeyframes(&bone.Scale.X, "ScaleY",    ..boilerplate)
+		interpolateKeyframes(&bone.Pos.X,   "PositionX", ..boilerplate)
+		interpolateKeyframes(&bone.Pos.X,   "PositionY", ..boilerplate)
 	}
 
 	return bones
 }
 ```
 
-## Function `interpolate()`
+## Function `interpolateKeyframes()`
 
 Before interpolating, the proper keyframes must be fetched:
 
@@ -40,56 +47,63 @@ Before interpolating, the proper keyframes must be fetched:
 - 4: Generate frame data from both keyframes
 
 ```go
-func interpolate(
-  keyframes Keyframe[],
-  frame int,
-  boneId int,
-  element Element,
-  defaultValue float,
-) float {
-  var prevKf Keyframe;
-  var nextKf Keyframe;
+func interpolateKeyframes(
+	field *float32,
+	element string,
+	keyframes []Keyframe,
+	frame int,
+	boneId int,
+	blendFrames int,
+) {
+	var prevKf Keyframe
+	var nextKf Keyframe
+	prevKf.Frame = -1
+	nextKf.Frame = -1
 
-  // 1.
-  for kf, _ in range(keyframes) {
-    if kf.frame < frame && kf.bone_id == bone_id && kf.element == element {
-      prevKf = kf
-    }
-    break
-  }
+	for _, kf := range keyframes {
+		if kf.Frame < frame && kf.Bone_id == boneId && kf.Element == element {
+			prevKf = kf
+		}
+	}
 
-  // 2.
-  for kf, _ in range(keyframes) {
-    if kf.frame > frame && kf.bone_id == bone_id && kf.element == element {
-      nextKf = kf
-      break
-    }
-  }
+	for _, kf := range keyframes {
+		if kf.Frame >= frame && kf.Bone_id == boneId && kf.Element == element {
+			nextKf = kf
+			break
+		}
+	}
 
-  // 3.
-  if prevKf == null {
-    prevKf = nextKf
-  } else if nextKf == null {
-    nextKf = prevKf
-  }
-  if prevKf == null && nextKf == null {
-    return default_value
-  }
+	if prevKf.Frame == -1 {
+		prevKf = nextKf
+	} else if nextKf.Frame == -1 {
+		nextKf = prevKf
+	}
 
-  // 4.
-  totalframes := nextKf.frame - prevKf.frame;
-  currentFrame := frame - prevKf.frame;
-  result := interpolateFloat(
-    prevKf.value,
-    nextKf.value,
-    currentFrame,
-    totalFrames
-  );
+	if prevKf.Frame == -1 && nextKf.Frame == -1 {
+		return
+	}
 
-  // always return interpolated value
-  return result
+	totalFrames := nextKf.Frame - prevKf.Frame
+	currentFrame := frame - prevKf.Frame
+
+	// assume a generic interpolate() func that takes
+	// (currentStep, maxStep, startValue, endValue)
+	result := interpolate(currentFrame, totalFrames, prevKf.Value, nextKf.Value)
+	blend := interpolate(currentFrame, blendFrames, *field, result)
+
+	*field = blend
 }
 ```
+
+### Blending
+
+As shown above, the resulting interpolation is 'blended'.
+
+Blending allows for smoother movement & changes, often used for animation
+transitions .
+
+It only requires generic interpolation, from the starting value to the raw
+interpolated value.
 
 ## Function `formatFrame()`
 
@@ -101,7 +115,7 @@ func FormatFrame(frame int, animation Animation, reverse bool, loop bool) int {
 	lastFrame := animation.Keyframes[lastKf].Frame
 
 	if loop {
-		frame %= animation.Keyframes[lastKf].Frame
+		frame %= lastFrame
 	}
 
 	if reverse {
