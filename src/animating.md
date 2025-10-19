@@ -28,9 +28,9 @@ func Animate(bones []Bone, animation Animation, frame int) []Bone {
 		bone := &bones[b]
 		interpolateKeyframes(&bone.Rot,     "Rotation",  ..boilerplate)
 		interpolateKeyframes(&bone.Scale.X, "ScaleX",    ..boilerplate)
-		interpolateKeyframes(&bone.Scale.X, "ScaleY",    ..boilerplate)
+		interpolateKeyframes(&bone.Scale.Y, "ScaleY",    ..boilerplate)
 		interpolateKeyframes(&bone.Pos.X,   "PositionX", ..boilerplate)
-		interpolateKeyframes(&bone.Pos.X,   "PositionY", ..boilerplate)
+		interpolateKeyframes(&bone.Pos.Y,   "PositionY", ..boilerplate)
 	}
 
 	return bones
@@ -45,6 +45,9 @@ Before interpolating, the proper keyframes must be fetched:
 - 2: Get next-most keyframe of current frame
 - 3: Provide safeguards in case either/both are invalid
 - 4: Generate frame data from both keyframes
+
+Once generated, the values from both keyframes are interpolated and
+returned/assigned.
 
 ```go
 func interpolateKeyframes(
@@ -86,7 +89,7 @@ func interpolateKeyframes(
 	totalFrames := nextKf.Frame - prevKf.Frame
 	currentFrame := frame - prevKf.Frame
 
-	// assume a generic interpolate() func that takes
+	// assume a generic, linear interpolate() func that takes
 	// (currentStep, maxStep, startValue, endValue)
 	result := interpolate(currentFrame, totalFrames, prevKf.Value, nextKf.Value)
 	blend := interpolate(currentFrame, blendFrames, *field, result)
@@ -100,10 +103,9 @@ func interpolateKeyframes(
 As shown above, the resulting interpolation is 'blended'.
 
 Blending allows for smoother movement & changes, often used for animation
-transitions .
+transitions.
 
-It only requires generic interpolation, from the starting value to the raw
-interpolated value.
+It only requires generic interpolation, from the starting value to the result.
 
 ## Function `formatFrame()`
 
@@ -129,6 +131,9 @@ func FormatFrame(frame int, animation Animation, reverse bool, loop bool) int {
 ## Function `timeFrame()`
 
 Helper function to provide the appropriate animation frame based on time.
+
+**Recommended**: include `FormatFrame()` and it's options, to reduce verbosity
+in user code.
 
 ```go
 func TimeFrame(time time.Duration, animation Animation, reverse bool, loop bool) int {
