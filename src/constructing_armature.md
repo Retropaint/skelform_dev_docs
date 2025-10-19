@@ -77,7 +77,15 @@ finalBones := inheritance(inheritedBones, ikRots)
 As described above (step 1), the provided bones must have gone through
 inheritance first.
 
-The following is based on [FABRIK](https://www.youtube.com/watch?v=NfuO66wsuRg):
+The following is based on the
+[FABRIK](https://www.youtube.com/watch?v=NfuO66wsuRg) technique. In our case,
+bone positions should be interpreted as vectors.
+
+For all IK families:
+
+1. Run forward-reaching
+2. Run backward-reaching (with [constraints](#constraints))
+3. Get and save rotations of bone vectors. Used later in 3rd IK step.
 
 ```go
 func inverseKinematics(tempBones []Bone, ikFamilies []IkFamily) map[uint]float {
