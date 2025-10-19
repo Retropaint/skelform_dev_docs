@@ -1,7 +1,6 @@
 # Summary
 
-[Introduction](./introduction.md)
-
+- [Introduction](./introduction.md)
 - [File Structure](./file_specs.md)
 - [Generic Runtimes](./generic_runtimes.md)
   - [Animating](./animating.md)
