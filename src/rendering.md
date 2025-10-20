@@ -40,21 +40,21 @@ type AnimationOptions struct {
 }
 
 func animate(
-  armature Armature,
-  texture TextureImage
-  animIdx int,
-  frame int,
-  time Time
-  options AnimationOptions
+  armature *skelform_go.Armature,
+  animations []skelform_go.Animation,
+  frames []int,
+  animOptions AnimOptions,
 ) Bone[] {
-  // process bones
   animatedBones := skelform::animate(armature, animIdx, frame, speed);
+
   inheritedBones = skelform::inheritance(animated_bones, armature.ikFamilies, []);
   ikRots = make(map[uint]float)
   for i := range(10) {
      ikRots = skelform::inverseKinematics(inheritedBones, armature.IkFamilies)
   }
   finalBones = skelform::inheritance(animatedBones, armature.ikFamilies, ikRot);
+
+  skelform::resetBones(armature.Bones, animations, frames[0], animOptions.BlendFrames);
 
   // process user options
   for bone, _ := range finalBones {

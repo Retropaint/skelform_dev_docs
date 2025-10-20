@@ -9,6 +9,7 @@ All of the following logic should be render & engine agnostic.
 - [Function `animate()`](#function-animate)
 - [Function `interpolateKeyframes()`](#function-interpolatekeyframes)
   - [Blending](#blending)
+- [Function `resetBones()`](#function-resetbones)
 - [Function `formatFrame()`](#function-formatframe)
 - [Function `timeFrame()`](#function-timeframe)
 
@@ -106,6 +107,54 @@ Blending allows for smoother movement & changes, often used for animation
 transitions.
 
 It only requires generic interpolation, from the starting value to the result.
+
+## Function `resetBones()`
+
+Reset bone elements to their default values if they haven't been animated.
+
+Must take blending into account.
+
+```go
+func ResetBones(bones []Bone, anims []Animation, frame int, blendFrames int) {
+	boilerplate = {bone.Id, frame, blendFrames, anims}
+
+	for b := range bones {
+		bone := &bones[b]
+		resetBoneElement(&bone.Pos.X,   bone.Init_pos.X,   0, ...boilerplate)
+		resetBoneElement(&bone.Pos.Y,   bone.Init_pos.Y,   1, ...boilerplate)
+		resetBoneElement(&bone.Rot,     bone.Init_rot,     2, ...boilerplate)
+		resetBoneElement(&bone.Scale.X, bone.Init_scale.X, 3, ...boilerplate)
+		resetBoneElement(&bone.Scale.Y, bone.Init_scale.Y, 4, ...boilerplate)
+	}
+}
+
+func resetBoneElement(
+	value *float32,
+	init float32,
+	el int,
+	bone_id int,
+	frame int,
+	blendFrames int,
+	anims []Animation)
+{
+	shouldReset := true
+	for a := range anims {
+		anim := &anims[a]
+		for _, kf := range anim.Keyframes {
+			if kf.Bone_id == bone_id && kf.Element_id == el {
+				shouldReset = false
+				break
+			}
+		}
+		if !shouldReset {
+			break
+		}
+	}
+	if shouldReset {
+		*value = interpolate(frame, blendFrames, *value, init)
+	}
+}
+```
 
 ## Function `formatFrame()`
 
