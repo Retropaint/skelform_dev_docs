@@ -5,8 +5,51 @@ the user-facing API.
 
 ## Table of Contents
 
+- [Function `formatFrame()`](#function-formatframe)
+- [Function `timeFrame()`](#function-timeframe)
 - [Function `animate()`](#function-animate)
 - [Function `draw()`](#function-draw)
+
+## Function `formatFrame()`
+
+Helper function to apply effects to an animation frame (looping, reverse, etc).
+
+```go
+func FormatFrame(frame int, animation Animation, reverse bool, loop bool) int {
+	lastKf := len(animation.Keyframes) - 1
+	lastFrame := animation.Keyframes[lastKf].Frame
+
+	if loop {
+		frame %= lastFrame
+	}
+
+	if reverse {
+		frame = lastFrame - frame
+	}
+
+	return frame
+}
+```
+
+## Function `timeFrame()`
+
+Helper function to provide the appropriate animation frame based on time.
+
+**Recommended**: include `FormatFrame()` and it's options, to reduce verbosity
+in user code.
+
+```go
+func TimeFrame(time time.Duration, animation Animation, reverse bool, loop bool) int {
+	fps := animation.Fps
+
+	frametime := 1. / float32(fps)
+	frame := int(float32(time.Milliseconds()) / frametime / 1000)
+
+	frame = FormatFrame(animation, frame, reverse, loop)
+
+	return frame
+}
+```
 
 ## Function `animate()`
 
