@@ -8,4 +8,4 @@ title = "SkelForm Developer Documentation"
 theme = "skelform"
 default-theme = "skelform"
 preferred-dark-theme = "skelform"
-
+sidebar-header-nav = false
