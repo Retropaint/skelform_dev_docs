@@ -1,7 +1,7 @@
 # Engine Runtimes
 
-Engine runtimes handle specific environments such as [loading](./loading.md) and
-[rendering](./rendering.md), and must have a friendly user-facing API.
+Engine runtimes handle specific environments such as [loading](./load-engine.md) and
+[drawing](./draw-engine.md), and must have a friendly user-facing API.
 
 These runtimes may depend on a generic one to do the heavy lifting, leaving it
 to handle features that are best dealt with the engine (eg; rendering).

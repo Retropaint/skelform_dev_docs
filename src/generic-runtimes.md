@@ -1,7 +1,7 @@
 # Generic Runtimes
 
-Generic runtimes handle [animations](./animating.md) and
-[armature construction](./constructing_armature.md).
+Generic runtimes handle [animations](./animate-generic.md) and
+[armature construction](./construct-generic.md).
 
 These runtimes should be engine & render agnostic, with the 'generic' nature
 allowing it to be expandable to other environments.
