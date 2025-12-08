@@ -22,3 +22,10 @@ intended (interpolates bones & resets them if needed).
 The `Animate()` function's implementation is covered in its own section, and the
 functions within do not need to be public nor even implemented. All that matters
 is `Animate()` working as intended.
+
+## Pseudo Code
+
+All code shown on this document is not meant to be run directly.
+
+The base language is C, but will be bent often for simplicity. In particular, no
+end-of-line semicolons.
