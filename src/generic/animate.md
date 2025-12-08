@@ -4,7 +4,7 @@ Interpolates bone fields based on provided animation data, as well as initial
 states for non-animated fields.
 
 ```c
-void Animate(Bone *bones[], Animation anims[], int frames[], int smoothFrames[]) {
+void Animate(Bone[]* bones, Animation[] anims, int[] frames, int[] smoothFrames) {
     for a in range(anims) {
         for bone in bones {
             interpolateBone(
@@ -25,8 +25,8 @@ Interpolates one bone's fields based on provided animation data.
 
 ```c
 void interpolateBone(
-    Bone *bone,
-    Keyframe keyframes[],
+    Bone* bone,
+    Keyframe[] keyframes,
     int bone_id,
     int frame,
     int blend_frame,
@@ -47,7 +47,7 @@ void interpolateBone(
 Interpolates one bone's fields to their initial values if not being animated.
 
 ```c
-void resetBone(Bone *bone, int frame, int smooth_frame, Animation anims[]) {
+void resetBone(Bone* bone, int frame, int smooth_frame, Animation[] anims) {
     if !isAnimated("PositionX", ...)
         interpolate(bone.pos.x, bone.init_pos.x, ...)
 
@@ -80,8 +80,8 @@ smoothing.
 ```c
 void interpolateKeyframes(
     Enum element,
-    float *field,
-    Keyframe keyframes[],
+    float* field,
+    Keyframe[] keyframes,
     int id,
     int frame,
     int smooth_frame,
@@ -117,7 +117,7 @@ void interpolateKeyframes(
 Returns true if a particular element is part of the provided animations.
 
 ```c
-bool isAnimated(int bone_id, Enum element, Animation animations[]) {
+bool isAnimated(int bone_id, Enum element, Animation[] animations) {
     for anim in anims {
         for kf in anim.keyframes {
             if kf.bone_id == bone_id && kf.element == element {
