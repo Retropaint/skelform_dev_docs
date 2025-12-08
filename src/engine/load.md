@@ -2,34 +2,24 @@
 
 Reads a SkelForm file (`.skf`) and loads its armature and textures.
 
-```rust
-/// Load a SkelForm armature.
-/// The file to load is the zip that is provided by SkelForm export.
-pub fn load(zip_path: &str) -> (Armature, Vec<Texture2D>) {
-    let file = std::fs::File::open(zip_path).unwrap();
-    let mut zip = zip::ZipArchive::new(file).unwrap();
-    let mut armature_json = String::new();
-    zip.by_name("armature.json")
-        .unwrap()
-        .read_to_string(&mut armature_json)
-        .unwrap();
+The below example assumes `Texture2D` is the engine-specific texture object.
 
-    let armature: Armature = serde_json::from_str(&armature_json).unwrap();
+```c
+(Armature, Texture2D[]) load(string zip_path) {
+    let file = file::open(zip_path).unwrap()
+    let mut zip = zip::new(file).unwrap()
+    let mut armature_json = String::new()
+    armature_json = zip.byName("armature.json")
 
-    let mut texes = vec![];
+    Armature armature = json::new(&armature_json)
 
-    for atlas in &armature.atlases {
-        let mut img = vec![];
-        zip.by_name(&atlas.filename.to_string())
-            .unwrap()
-            .read_to_end(&mut img)
-            .unwrap();
-        texes.push(Texture2D::from_file_with_format(
-            &img,
-            Some(ImageFormat::Png),
-        ));
+    Texture2D textures[]
+    for atlas in armature.atlases {
+        Image img = []
+        img = zip.byName(atlas.filename)
+        textures.push(Texture2D(img))
     }
 
-    (armature.clone(), texes)
-
+    return (armature, textures)
+}
 ```

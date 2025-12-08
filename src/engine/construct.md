@@ -12,30 +12,30 @@ options and engine quirks.
 
 - Constructed bones, to be used later for `Draw()`.
 
-```rust
-pub fn construct(armature: &Armature, options: ConstructOptions) -> Vec<Bone> {
-    let mut final_bones = generic_runtime::construct(armature);
+```c
+Bone[] construct(Armature *armature, ConstructOptions options) {
+    Bone[] finalBones = generic_runtime::construct(armature);
 
-    for bone in &mut final_bones {
+    for bone in finalBones {
         // engine quirks like negative Y or reversed rotations can be applied here
-        bone.pos.y = -bone.pos.y;
-        bone.rot = -bone.rot;
+        bone.pos.y = -bone.pos.y
+        bone.rot   = -bone.rot
 
         // apply user options
-        bone.scale *= Vec2::new(options.scale.x, options.scale.y);
-        bone.pos *= Vec2::new(options.scale.x, options.scale.y);
-        bone.pos += Vec2::new(options.position.x, options.position.y);
+        bone.scale *= options.scale
+        bone.pos   *= options.scale
+        bone.pos   += options.position
 
-        generic_runtime::check_flip(bone);
+        generic_runtime::check_flip(bone)
 
         // engine quirks & user options applied to vertices
-        for vert in &mut bone.vertices {
-            vert.pos.y = -vert.pos.y;
-            vert.pos *= Vec2::new(options.scale.x, options.scale.y);
-            vert.pos += Vec2::new(options.position.x, options.position.y);
+        for vert in bone.vertices {
+            vert.pos.y = -vert.pos.y
+            vert.pos   *= options.scale
+            vert.pos   += options.position
         }
     }
 
-    final_bones
+    finalBones
 }
 ```
