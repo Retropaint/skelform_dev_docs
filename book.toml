@@ -9,3 +9,6 @@ theme = "skelform"
 default-theme = "skelform"
 preferred-dark-theme = "skelform"
 sidebar-header-nav = false
+
+[build]
+create-missing = false
