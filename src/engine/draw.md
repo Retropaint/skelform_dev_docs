@@ -16,7 +16,7 @@ Draw(bones: Bone[]*, textures: Texture2D[], styles: Style[]) {
 
         // render bone as mesh
         if bone.vertices.len() > 0 {
-            drawMesh(createMesh(bone, bone.finalTex, texes[bone.finalTex.atlasIdx))
+            drawMesh(bone, bone.finalTex, texes[bone.finalTex.atlasIdx)
             continue
         }
 
