@@ -4,7 +4,13 @@ Interpolates bone fields based on provided animation data, as well as initial
 states for non-animated fields.
 
 ```c
-void Animate(Bone[]* bones, Animation[] anims, int[] frames, int[] smoothFrames) {
+Animate(
+    bones: Bone[]*,
+    anims: Animation[],
+    frames: int[],
+    smoothFrames: int[]
+) {
+    // interpolate bone fields
     for a in range(anims) {
         for bone in bones {
             interpolateBone(
@@ -13,6 +19,7 @@ void Animate(Bone[]* bones, Animation[] anims, int[] frames, int[] smoothFrames)
         }
     }
 
+    // interpolate bone resets
     for bone in bones {
         resetBone(bone, ...)
     }
@@ -24,21 +31,21 @@ void Animate(Bone[]* bones, Animation[] anims, int[] frames, int[] smoothFrames)
 Interpolates one bone's fields based on provided animation data.
 
 ```c
-void interpolateBone(
-    Bone* bone,
-    Keyframe[] keyframes,
-    int bone_id,
-    int frame,
-    int blend_frame,
+interpolateBone(
+    bone: Bone*,
+    keyframes: Keyframe[],
+    boneId: int,
+    frame: int,
+    blendFrame: int,
 ) {
-    interpolate_keyframes("PositionX", &bone.pos.x,   ...)
-    interpolate_keyframes("PositionY", &bone.pos.y,   ...)
-    interpolate_keyframes("Rotation",  &bone.rot,     ...)
-    interpolate_keyframes("ScaleX",    &bone.scale.x, ...)
-    interpolate_keyframes("ScaleX",    &bone.scale.y, ...)
+    interpolateKeyframes("PositionX", &bone.pos.x,   ...)
+    interpolateKeyframes("PositionY", &bone.pos.y,   ...)
+    interpolateKeyframes("Rotation",  &bone.rot,     ...)
+    interpolateKeyframes("ScaleX",    &bone.scale.x, ...)
+    interpolateKeyframes("ScaleX",    &bone.scale.y, ...)
 
-    bone.tex = get_prev_frame("Texture" ...)
-    bone.ik_constraint = get_prev_frame("IkConstraint", ...)
+    bone.tex = getPrevFrame("Texture" ...)
+    bone.ikConstraint = getPrevFrame("IkConstraint", ...)
 }
 ```
 
@@ -47,25 +54,25 @@ void interpolateBone(
 Interpolates one bone's fields to their initial values if not being animated.
 
 ```c
-void resetBone(Bone* bone, int frame, int smooth_frame, Animation[] anims) {
+resetBone(bone: Bone*, frame: int, smoothFrame: int, anims: Animation[]) {
     if !isAnimated("PositionX", ...)
-        interpolate(bone.pos.x, bone.init_pos.x, ...)
+        interpolate(bone.pos.x, bone.initPos.x, ...)
 
     if !isAnimated("PositionY", ...)
-        interpolate(bone.pos.y, bone.init_pos.y, ...)
+        interpolate(bone.pos.y, bone.initPos.y, ...)
 
     if !isAnimated("Rotation", ...)
-        interpolate(bone.rot, bone.init_rot, ...)
+        interpolate(bone.rot, bone.initRot, ...)
 
     if !isAnimated("ScaleX", ...)
-        interpolate(bone.scale.x, bone.init_scale.x, ...)
+        interpolate(bone.scale.x, bone.initScale.x, ...)
 
     if !isAnimated("ScaleY", ...)
-        interpolate(bone.scale.y, bone.init_scale.y, ...)
+        interpolate(bone.scale.y, bone.initScale.y, ...)
 
     // non-interpolated fields are set immediately
     if !isAnimated("IkConstraint", ...)
-        bone.ik_constraint = bone.init_ik_constraint
+        bone.ikConstraint = bone.initIkConstraint
 }
 ```
 
@@ -78,16 +85,16 @@ The resulting interpolation from the keyframes is interpolated again for
 smoothing.
 
 ```c
-void interpolateKeyframes(
-    Enum element,
-    float* field,
-    Keyframe[] keyframes,
-    int id,
-    int frame,
-    int smooth_frame,
+interpolateKeyframes(
+    element: enum,
+    field: float*,
+    keyframes: Keyframe[],
+    id: int,
+    frame: int,
+    smoothFrame: int,
 ) {
-    int prev = getPrevFrame(...)
-    int next = getNextFrame(...)
+    prev = getPrevFrame(...)
+    next = getNextFrame(...)
 
     // ensure both frames are pointing somewhere
     if prev == -1 {
@@ -100,15 +107,15 @@ void interpolateKeyframes(
     if prev == -1 && next == -1
         return
 
-    int total_frames = keyframes[next].frame - keyframes[prev].frame
-    int current_frame = frame - keyframes[prev].frame
+    totalFrames = keyframes[next].frame - keyframes[prev].frame
+    currentFrame = frame - keyframes[prev].frame
 
-    float result = interpolate(
-        current_frame, total_frames, keyframes[prev].value, keyframes[next].value
+    result = interpolate(
+        currentFrame, totalFrames, keyframes[prev].value, keyframes[next].value
     )
 
     // result is smoothed
-    *field = interpolate(current_frame, smooth_frame, *field, result)
+    *field = interpolate(currentFrame, smoothFrame, *field, result)
 }
 ```
 
@@ -116,8 +123,8 @@ void interpolateKeyframes(
 
 Returns true if a particular element is part of the provided animations.
 
-```c
-bool isAnimated(int bone_id, Enum element, Animation[] animations) {
+```c-like
+isAnimated(bone_id: int, element: enum, animations: Animation[]): bool {
     for anim in anims {
         for kf in anim.keyframes {
             if kf.bone_id == bone_id && kf.element == element {
@@ -134,13 +141,13 @@ bool isAnimated(int bone_id, Enum element, Animation[] animations) {
 Generic linear interpolation.
 
 ```c
-float interpolate(int current, int max, float start_val, float end_val) {
+interpolate(current: int, max: int, start_val: float, end_val: float): float {
     if max == 0 || current >= max {
         return end_val
     }
-    float interp = current as float / max as float
-    float end = end_val - start_val
-    float result = start_val + (end * interp)
+    interp = current / max
+    end = end_val - start_val
+    result = start_val + (end * interp)
 
     return result
 }

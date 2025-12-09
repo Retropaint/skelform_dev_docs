@@ -13,14 +13,8 @@ Simply calls `Animate()` from the generic runtime.
 
 - Void
 
-```rust
-/// Process bones to be used for animation(s).
-pub fn animate(
-    bones: &mut Vec<Bone>,
-    animations: &Vec<&Animation>,
-    frames: &Vec<i32>,
-    smooth_frames: &Vec<i32>,
-) {
-    generic_runtime::animate(bones, animations, frames, smooth_frames);
+```c
+Animate(bones: Bone[]*, animations: Animation[], frames: int[], smoothFrames: int[]) {
+    GenericRuntime::Animate(bones, animations, frames, smoothFrames)
 }
 ```

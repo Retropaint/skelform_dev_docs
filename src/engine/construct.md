@@ -13,8 +13,8 @@ options and engine quirks.
 - Constructed bones, to be used later for `Draw()`.
 
 ```c
-Bone[] construct(Armature *armature, ConstructOptions options) {
-    Bone[] finalBones = generic_runtime::construct(armature);
+Construct(armature: Armature*, options: ConstructOptions): Bone[] {
+    finalBones: Bone[] = GenericRuntime::Construct(armature)
 
     for bone in finalBones {
         // engine quirks like negative Y or reversed rotations can be applied here
@@ -26,7 +26,7 @@ Bone[] construct(Armature *armature, ConstructOptions options) {
         bone.pos   *= options.scale
         bone.pos   += options.position
 
-        generic_runtime::check_flip(bone)
+        GenericRuntime::checkFlip(bone)
 
         // engine quirks & user options applied to vertices
         for vert in bone.vertices {
@@ -36,6 +36,6 @@ Bone[] construct(Armature *armature, ConstructOptions options) {
         }
     }
 
-    finalBones
+    return finalBones
 }
 ```
