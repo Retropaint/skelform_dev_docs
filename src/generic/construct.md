@@ -246,3 +246,69 @@ arcIk(bones: Bone[]*, root: Vec2, target: Vec2) {
     }
 }
 ```
+
+## `ConstructVerts()`
+
+Constructs vertices, for bones with mesh data.
+
+```c
+constructVerts(bones: *Bone[]) {
+    for b in range(bones) {
+        bone: Bone = clone(bones[b])
+
+        // Move vertex to main bone.
+        // This will be overridden if vertex has a bind.
+        for vert in bones.vertices {
+            vert.pos = inheritVert(vert.pos, bone)
+        }
+
+        for bi in range(bones[b].binds) {
+            let boneId = bones[b].binds[bi].bone_id
+            if boneId == -1 {
+                continue
+            }
+            bindBone: Bone = clone(bones.find(|bone| bone.id == b_id)))
+            bind: Bind = clone(bones[b].binds[bi])
+            for v in 0..bind.verts.len() {
+                id: int = bind.verts[v].id
+
+                if !bind.isPath {
+                    // weights
+                    vert: Vertex = bones[b].vertices[id]
+                    weight: float = bind.verts[v].weight
+                    endpos: Vec2 = inheritVert(vert.initPos, bindBone) - vert.pos
+                    vert.pos += endPos * weight
+                    continue
+                }
+
+                // pathing:
+                // Bone binds are treated as one continuous line.
+                // Vertices will follow along this path.
+
+                // get previous and next bone
+                binds: Bind[] = bones[b].binds
+                prev: int = if bi > 0 { bi - 1 } else { bi }
+                next: int = (bi + 1).min(binds.len() - 1)
+                prevBone: Bone = bones.find(|bone| bone.id == binds[prev].boneId)
+                nextBone: Bone = bones.find(|bone| bone.id == binds[next].boneId)
+
+                // get the average of normals between previous bone, 
+                // this bone, and next bone
+                prevDir: Vec2 = bindBone.pos - prevBone.pos
+                nextDir: Vec2 = nextBone.pos - bindBone.pos
+                prevNormal: Vec2 = normalize(Vec2::new(-prevDir.y, prevDir.x))
+                nextNormal: Vec2 = normalize(Vec2::new(-nextDir.y, nextDir.x))
+                average: Vec2 = prev_normal + next_normal
+                normalAngle: float = atan2(average.y, average.x)
+
+                // move vertex to bind bone, then just adjust it to 
+                // 'bounce' off the line's surface
+                vert: Vertex = *bones[b].vertices[id]
+                vert.pos = vert.initPos + bindBone.pos
+                rotated: Vec2 = rotate(vert.pos - bindBone.pos, normalAngle)
+                vert.pos = bindBone.pos + (rotated * bind.verts[v].weight)
+            }
+        }
+    }
+}
+```
