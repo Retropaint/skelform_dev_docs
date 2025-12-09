@@ -3,15 +3,6 @@
 Calls `Construct()` from the generic runtime, then modifies bones based on user
 options and engine quirks.
 
-**Parameters**:
-
-- Armature
-- User options
-
-**Returns**:
-
-- Constructed bones, to be used later for `Draw()`.
-
 ```c
 Construct(armature: Armature*, options: ConstructOptions): Bone[] {
     finalBones: Bone[] = GenericRuntime::Construct(armature)

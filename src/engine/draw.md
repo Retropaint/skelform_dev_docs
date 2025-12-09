@@ -2,16 +2,6 @@
 
 Uses the bones from `Construct()` to render the armature.
 
-**Parameters**:
-
-- Bones
-- Textures
-- Styles
-
-**Returns**:
-
-- Void
-
 ```c
 Draw(bones: Bone[]*, textures: Texture2D[], styles: Style[]) {
     // bones with higher zindex should render first
