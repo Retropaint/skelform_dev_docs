@@ -5,9 +5,14 @@ Constructs the armature's bones with inheritance and inverse kinematics.
 ```c
 Construct(armature: Armature): Bone[] {
     inhBones: Bone[] = clone(armature.bones)
+    // inheritance is run once to put bones in place,
+    // for inverse kinematics to properly determine rotations
     inheritance(*inhBones, HashMap::new())
-    ikRots: HashMap<int, float> = inverse_kinematics(*inhBones, armature.ikRootIds)
 
+    // inverse kinematics will return which bones' rotations should be overridden
+    ikRots: HashMap<int, float> = inverseKinematics(*inhBones, armature.ikRootIds)
+
+    // inheritance is run again on a fresh clone of bones, this time with the IK rotations
     finalBones: Bone[] = clone(armature.bones)
     inheritance(*finalBones, ikRots)
 
