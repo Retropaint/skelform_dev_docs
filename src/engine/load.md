@@ -9,7 +9,7 @@ Load(zipPath: string): (Armature, Texture2D[]) {
     zip: Zip = ZipLib::open(zipPath)
     armatureJson: string = zip.byName("armature.json")
 
-    armature: Armature = json::new(&armatureJson)
+    armature: Armature = Json::new(&armatureJson)
 
     textures: Texture2D[]
     for atlas in armature.atlases {
