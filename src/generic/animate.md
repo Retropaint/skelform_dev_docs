@@ -5,7 +5,7 @@ states for non-animated fields.
 
 ```c
 Animate(
-    bones: Bone[]*,
+    bones: *Bone[],
     anims: Animation[],
     frames: int[],
     smoothFrames: int[]
@@ -32,7 +32,7 @@ Interpolates one bone's fields based on provided animation data.
 
 ```c
 interpolateBone(
-    bone: Bone*,
+    bone: *Bone,
     keyframes: Keyframe[],
     boneId: int,
     frame: int,
@@ -87,7 +87,7 @@ smoothing.
 ```c
 interpolateKeyframes(
     element: enum,
-    field: float*,
+    field: *float,
     keyframes: Keyframe[],
     id: int,
     frame: int,
