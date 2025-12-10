@@ -17,7 +17,7 @@ Construct(armature: Armature*, options: ConstructOptions): Bone[] {
         bone.pos   *= options.scale
         bone.pos   += options.position
 
-        GenericRuntime::CheckBoneFlip(bone)
+        GenericRuntime::CheckBoneFlip(bone, options.scale)
 
         // engine quirks & user options applied to vertices
         for vert in bone.vertices {
