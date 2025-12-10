@@ -31,7 +31,7 @@ The base language is C, but 'universally' bastardized with the following:
 
 - No end-of-line semicolons
 - Variable type follows name (`varName: Type` instead of `Type varName`)
-- Arrays are **passed by value** unless followed by a `*` (PBR: `value: int[]`,
-  PBV: `value: int[]*`)
+- Arrays are **passed by value** unless preceded by a `*` (PBR: `value: int[]`,
+  PBV: `value: *int[]`)
 - `void` return type is implicit
 - Tuples occasionally used
