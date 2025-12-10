@@ -3,7 +3,7 @@
 The editor exports a unique `.skf` file, which can be unzipped to reveal:
 
 - `armature.json` - Armature data (bones, animations, etc)
-- `atlasX.png` - Texture atlas(es), X being idx (0, 1, etc)
+- `atlasX.png` - Texture atlas(es), X being index (0, 1, etc)
 - `editor.json` - Editor-only data
 - `thumbnail.png` - Armature preview image
 - `readme.md` - Little note for runtime devs
