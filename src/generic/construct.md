@@ -10,7 +10,7 @@ Construct(armature: Armature): Bone[] {
     inheritance(*inhBones, HashMap::new())
 
     // inverse kinematics will return which bones' rotations should be overridden
-    ikRots: HashMap<int, float> = inverseKinematics(*inhBones, armature.ikRootIds)
+    ikRots: Map<int, float> = inverseKinematics(*inhBones, armature.ikRootIds)
 
     // inheritance is run again on a fresh clone of bones, this time with the IK rotations
     finalBones: Bone[] = clone(armature.bones)

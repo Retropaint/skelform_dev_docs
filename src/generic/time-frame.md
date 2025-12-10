@@ -8,7 +8,12 @@ environment, but any conventional method should do.
 If better suited, this function can be re-implemented for engine runtimes.
 
 ```c
-TimeFrame(time: Time, animation: Animation, reverse: bool, isLoop: bool): int {
+TimeFrame(
+    time: Time, 
+    animation: Animation, 
+    reverse: bool, 
+    isLoop: bool
+): int {
     elapsed: float = time.asMillis() / 1e3
     frametime: float = 1. / animation.fps
 
