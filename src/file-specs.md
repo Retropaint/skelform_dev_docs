@@ -16,6 +16,10 @@ This section will only cover the content in `armature.json`.
 - [Bones](#bones)
   - [Initial Fields](#initial-fields)
   - [Inverse Kinematics](#inverse-kinematics)
+- [Bone Meshes](#bone-meshes)
+  - [Vertex](#vertex)
+  - [Bind](#bind)
+  - [BindVert](#bindvert)
 - [Animations](#animations)
   - [Keyframes](#keyframes)
 - [Textures](#Textures)
@@ -30,6 +34,9 @@ Primarily consists of an `armature` object with the following data:
 - `animations` - Array of all animation data, including keyframes
 - `atlases` - Array of texture atlases
 - `styles` - Array of style data, including texture coordinates
+
+All fields below can be parsed and used as needed for runtime APIs. However, it
+is not mandatory to parse _all_ fields.
 
 ## Bones
 
@@ -67,15 +74,49 @@ Inverse kinematics is stored in the root (first) bone of each set of IK bones.
 
 Other bones will only have `ik_family_id`, which is -1 by default.
 
-| Key               | Type   | Data                                     |
-| ----------------- | ------ | ---------------------------------------- |
-| ik_family_id      | int    | The ID of family this bone is in         |
-| ik_constraint     | int    | This family's constraint                 |
-| ik_constraint_str | string | This family's constraint (as string)     |
-| ik_mode           | int    | This family's mode (0 = FABRIK, 1 = Arc) |
-| ik_mode_str       | string | This family's mode (as string)           |
-| ik_target_id      | int    | This set's target bone ID                |
-| ik_bone_ids       | int[]  | This set's ID of bones                   |
+| Key               | Type   | Data                                             |
+| ----------------- | ------ | ------------------------------------------------ |
+| ik_family_id      | int    | The ID of family this bone is in (-1 by default) |
+| ik_constraint     | int    | This family's constraint                         |
+| ik_constraint_str | string | This family's constraint (as string)             |
+| ik_mode           | int    | This family's mode (0 = FABRIK, 1 = Arc)         |
+| ik_mode_str       | string | This family's mode (as string)                   |
+| ik_target_id      | int    | This set's target bone ID                        |
+| ik_bone_ids       | int[]  | This set's ID of bones                           |
+
+## Bone Meshes
+
+Bones with texture meshes have quite a bit of data:
+
+| Key      | Type     | Data                                                                |
+| -------- | -------- | ------------------------------------------------------------------- |
+| indices  | int[]    | Array of indices pointing to a vert. Every 3 indices is 1 triangle. |
+| vertices | Vertex[] | Array of vertices                                                   |
+| binds    | Bind[]   | Array of bone binds                                                 |
+
+### Vertex
+
+| Key      | Type | Data                               |
+| -------- | ---- | ---------------------------------- |
+| id       | int  | ID of vertex                       |
+| pos      | Vec2 | Position of vertex                 |
+| uv       | Vec2 | UV of vertex                       |
+| init_pos | int  | Helper for initial vertex position |
+
+### Bind
+
+| Key     | Type       | Data                                         |
+| ------- | ---------- | -------------------------------------------- |
+| id      | int        | ID of bind                                   |
+| is_path | int        | Should this bind behave like a path?         |
+| verts   | BindVert[] | Array of vertex data associated to this bind |
+
+### BindVert
+
+| Key    | Type | Data                           |
+| ------ | ---- | ------------------------------ |
+| id     | int  | ID of vertex                   |
+| weight | int  | Weight assigned to this vertex |
 
 ## Animations
 

@@ -1,6 +1,6 @@
 # `Draw()`
 
-Uses the bones from `Construct()` to render the armature.
+Uses the bones from `Construct()` to draw the armature.
 
 ```c
 Draw(bones: Bone[]*, textures: Texture2D[], styles: Style[]) {
