@@ -16,7 +16,7 @@ Construct(armature: Armature): Bone[] {
     finalBones: Bone[] = clone(armature.bones)
     inheritance(*finalBones, ikRots)
 
-    constructVerts(&mut final_bones)
+    constructVerts(*finalBones)
 
     return finalBones
 }
@@ -86,8 +86,9 @@ inverseKinematics(bones: Bone[]*, ikRootIds: int[]): HashMap<int, float> {
         }
         root: Vec2 = bones[family.ikBoneIds[0]].pos
         target: Vec2 = bones[family.ikTargetId].pos
-        familyBones: Bone[] = bones
-            .filter(|bone| family.ikBoneIds.contains(bone.id))
+        familyBones: Bone[] = bones.filter(|bone|
+            family.ikBoneIds.contains(bone.id)
+        )
 
         // determine which IK mode to use
         switch(family.ikMode) {
@@ -109,7 +110,7 @@ inverseKinematics(bones: Bone[]*, ikRootIds: int[]): HashMap<int, float> {
             if b == family.ikBoneIds.len() - 1 {
                 continue
             }
-            ikRot.insert(family.ikBoneIds[b], bones[family.ikBoneIds[b]].rot)
+            ikRot.push(<family.ikBoneIds[b], bones[family.ikBoneIds[b]].rot>)
         }
     }
 
@@ -292,7 +293,7 @@ constructVerts(bones: *Bone[]) {
                 prevBone: Bone = bones.find(|bone| bone.id == binds[prev].boneId)
                 nextBone: Bone = bones.find(|bone| bone.id == binds[next].boneId)
 
-                // get the average of normals between previous bone, 
+                // get the average of normals between previous bone,
                 // this bone, and next bone
                 prevDir: Vec2 = bindBone.pos - prevBone.pos
                 nextDir: Vec2 = nextBone.pos - bindBone.pos
@@ -301,7 +302,7 @@ constructVerts(bones: *Bone[]) {
                 average: Vec2 = prev_normal + next_normal
                 normalAngle: float = atan2(average.y, average.x)
 
-                // move vertex to bind bone, then just adjust it to 
+                // move vertex to bind bone, then just adjust it to
                 // 'bounce' off the line's surface
                 vert: Vertex = *bones[b].vertices[id]
                 vert.pos = vert.initPos + bindBone.pos

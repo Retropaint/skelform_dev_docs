@@ -6,6 +6,7 @@ the provided styles.
 ```c
 SetupBoneTextures(bones: *Bone[], styles: Style[]): Map<int, Texture> {
     finalTextures: Map<int, Texture>
+
     for bone in bones {
         for style in styles {
             tex: Texture = style.textures.find(|tex| tex.name == bone.tex)
@@ -15,6 +16,7 @@ SetupBoneTextures(bones: *Bone[], styles: Style[]): Map<int, Texture> {
             }
         }
     }
+
     return finalTextures
 }
 ```
