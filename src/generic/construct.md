@@ -27,7 +27,7 @@ Construct(armature: Armature): Bone[] {
 Child bones need to inherit their parent.
 
 ```c
-inheritance(bones: Bone[]*, ik_rots: HashMap<i32, f32>) {
+inheritance(bones: Bone[]*, ikRots: HashMap<i32, f32>) {
     for b in range(bones) {
         if bones[b].parentId != -1 {
             parent: Bone = clone(bones[bones[b].parentId]);
@@ -97,7 +97,7 @@ inverseKinematics(bones: Bone[]*, ikRootIds: int[]): HashMap<int, float> {
                     fabrik(*familyBones, root, target)
                 }
             case 1:
-                arcIk(*family_bones, root, target)
+                arcIk(*familyBones, root, target)
         }
 
         pointBones(*bones, family)
@@ -134,7 +134,7 @@ pointBones(bones: Bone[]*, family: Bone) {
         }
         bone = *bones[family.ikBoneIds[i]]
 
-        dir: Vec2 = tip_pos - bone.pos
+        dir: Vec2 = tipPos - bone.pos
         bone.rot = atan2(dir.y, dir.x)
         tipPos = bone.pos
     }
@@ -182,7 +182,7 @@ fabrik(bones: Bone[]*, root: Vec2, target: Vec2) {
     nextPos: Vec2 = target
     nextLength: float = 0.
     for b in range(bones).reverse() {
-        length: Vec2 = normalize(next_pos - bones[b].pos) * next_length
+        length: Vec2 = normalize(nextPos - bones[b].pos) * nextLength
         if isNaN(length) {
             length = Vec2::new(0., 0.)
         }
@@ -264,11 +264,11 @@ constructVerts(bones: *Bone[]) {
         }
 
         for bi in range(bones[b].binds) {
-            let boneId = bones[b].binds[bi].bone_id
+            let boneId = bones[b].binds[bi].boneId
             if boneId == -1 {
                 continue
             }
-            bindBone: Bone = clone(bones.find(|bone| bone.id == b_id)))
+            bindBone: Bone = clone(bones.find(|bone| bone.id == bId)))
             bind: Bind = clone(bones[b].binds[bi])
             for v in 0..bind.verts.len() {
                 id: int = bind.verts[v].id
@@ -299,7 +299,7 @@ constructVerts(bones: *Bone[]) {
                 nextDir: Vec2 = nextBone.pos - bindBone.pos
                 prevNormal: Vec2 = normalize(Vec2::new(-prevDir.y, prevDir.x))
                 nextNormal: Vec2 = normalize(Vec2::new(-nextDir.y, nextDir.x))
-                average: Vec2 = prev_normal + next_normal
+                average: Vec2 = prevNormal + nextNormal
                 normalAngle: float = atan2(average.y, average.x)
 
                 // move vertex to bind bone, then just adjust it to

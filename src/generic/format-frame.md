@@ -17,7 +17,7 @@ FormatFrame(
     }
 
     if reverse {
-        frame = last_frame - frame
+        frame = lastFrame - frame
     }
 
     return frame

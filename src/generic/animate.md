@@ -14,7 +14,7 @@ Animate(
     for a in range(anims) {
         for bone in bones {
             interpolateBone(
-                &bone, anims[a].keyframes, bone.id, frames[a], smooth_frames[a]
+                &bone, anims[a].keyframes, bone.id, frames[a], smoothFrames[a]
             )
         }
     }
@@ -124,10 +124,10 @@ interpolateKeyframes(
 Returns true if a particular element is part of the provided animations.
 
 ```c-like
-isAnimated(bone_id: int, element: enum, animations: Animation[]): bool {
+isAnimated(boneId: int, element: enum, animations: Animation[]): bool {
     for anim in anims {
         for kf in anim.keyframes {
-            if kf.bone_id == bone_id && kf.element == element {
+            if kf.boneId == boneId && kf.element == element {
                 return true
             }
         }
@@ -141,13 +141,13 @@ isAnimated(bone_id: int, element: enum, animations: Animation[]): bool {
 Generic linear interpolation.
 
 ```c
-interpolate(current: int, max: int, start_val: float, end_val: float): float {
+interpolate(current: int, max: int, startVal: float, endVal: float): float {
     if max == 0 || current >= max {
-        return end_val
+        return endVal
     }
     interp = current / max
-    end = end_val - start_val
-    result = start_val + (end * interp)
+    end = endVal - startVal
+    result = startVal + (end * interp)
 
     return result
 }
