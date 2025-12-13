@@ -36,7 +36,7 @@ interpolateBone(
     keyframes: Keyframe[],
     boneId: int,
     frame: int,
-    blendFrame: int,
+    smoothFrame: int,
 ) {
     interpolateKeyframes("PositionX", &bone.pos.x,   ...)
     interpolateKeyframes("PositionY", &bone.pos.y,   ...)
