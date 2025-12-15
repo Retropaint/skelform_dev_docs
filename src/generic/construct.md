@@ -282,19 +282,21 @@ constructVerts(bones: *Bone[]) {
                     continue
                 }
 
-                // pathing:
-                // Bone binds are treated as one continuous line.
-                // Vertices will follow along this path.
+                // pathing
 
-                // get previous and next bone
+                // Check out the 'Pathing Explained' section below for a
+                // comprehensive explanation.
+
+                // 1.
+                // get previous and next bind
                 binds: Bind[] = bones[b].binds
                 prev: int = if bi > 0 { bi - 1 } else { bi }
                 next: int = (bi + 1).min(binds.len() - 1)
                 prevBone: Bone = bones.find(|bone| bone.id == binds[prev].boneId)
                 nextBone: Bone = bones.find(|bone| bone.id == binds[next].boneId)
 
-                // get the average of normals between previous bone,
-                // this bone, and next bone
+                // 2.
+                // get the average of normals between previous and next bind
                 prevDir: Vec2 = bindBone.pos - prevBone.pos
                 nextDir: Vec2 = nextBone.pos - bindBone.pos
                 prevNormal: Vec2 = normalize(Vec2::new(-prevDir.y, prevDir.x))
@@ -302,8 +304,8 @@ constructVerts(bones: *Bone[]) {
                 average: Vec2 = prevNormal + nextNormal
                 normalAngle: float = atan2(average.y, average.x)
 
-                // move vertex to bind bone, then just adjust it to
-                // 'bounce' off the line's surface
+                // 3.
+                // move vert to bind, then rotate it around bind by normalAngle
                 vert: Vertex = *bones[b].vertices[id]
                 vert.pos = vert.initPos + bindBone.pos
                 rotated: Vec2 = rotate(vert.pos - bindBone.pos, normalAngle)
@@ -313,3 +315,45 @@ constructVerts(bones: *Bone[]) {
     }
 }
 ```
+
+## Pathing Explained
+
+Instead of inheriting binds directly, vertices can be set to follow its bind
+like a line forming a path:
+
+<img src="pathing.png" alt="pathing example" width="300"/>
+
+- Green - bind bone
+- Orange - vertices
+- Red - imaginary line from bind to bind
+- Blue - Normal surface of imaginary line
+
+Vertices will follow the path, distancing from the bind based on its surface
+angle and initial position from vertex to bind.
+
+The following steps can be iterated per bind:
+
+### 1. Get Adjacent Binds
+
+To form the imaginary line, get the adjacent binds just before and just after
+the current bind. In particular:
+
+- If current bind is first: get only next bind
+- If current bind is last: get only previous bind
+- If current bind is neither: get both previous and next bind
+
+### 2. Get Average Normal Angle
+
+Notice that in the diagram, the middle bind's surface is at a 45° angle.
+
+To do so:
+
+1. Get line from previous to current bind
+2. Get line from current to next bind
+3. Add up both lines
+4. Get angle of combined line
+
+### 3. Rotate Vertices
+
+1. Reset vertex position to it's initial position + bind position
+2. Rotate vertex around bind with angle from 2nd step
