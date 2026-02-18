@@ -3,8 +3,8 @@
 Provides the appropriate frame based on the animation, along with looping and
 reverse options.
 
-```c
-FormatFrame(
+```typescript
+function FormatFrame(
     frame: int, 
     animation: Animation, 
     reverse: bool, 
@@ -12,11 +12,11 @@ FormatFrame(
 ): int {
     lastFrame: int = animation.keyframes.last().frame
 
-    if isLoop {
+    if(isLoop) {
         frame %= lastFrame + 1
     }
 
-    if reverse {
+    if(reverse) {
         frame = lastFrame - frame
     }
 

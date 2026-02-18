@@ -2,14 +2,14 @@
 
 Uses the bones from `Construct()` to draw the armature.
 
-```c
-Draw(bones: Bone[]*, textures: Texture2D[], styles: Style[]) {
+```typescript
+function Draw(bones: Bone[], textures: Texture2D[], styles: Style[]) {
     // bones with higher zindex should render first
     sort(&bones, zindex)
 
     finalTextures = SetupBoneTextures(bones, styles)
 
-    for bone in bones {
+    for(let bone of bones) {
         if !finalTextures.has(bone.id) {
             continue
         }
@@ -18,7 +18,7 @@ Draw(bones: Bone[]*, textures: Texture2D[], styles: Style[]) {
         tex = finalTextures.get(bone.id)
 
         // render bone as mesh
-        if bone.vertices.len() > 0 {
+        if(bone.vertices.len() > 0) {
             drawMesh(bone, tex, texes[bone.finalTex.atlasIdx)
             continue
         }
@@ -29,7 +29,7 @@ Draw(bones: Bone[]*, textures: Texture2D[], styles: Style[]) {
         pushCenter: Vec2 = tex.size / 2. * bone.scale
 
         // render bone as regular rect
-        drawTexture(tex, bone.pos - pushCenter);
+        drawTexture(tex, bone.pos - pushCenter)
     }
 }
 ```

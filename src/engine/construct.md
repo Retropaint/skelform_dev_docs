@@ -3,11 +3,11 @@
 Calls `Construct()` from the generic runtime, then modifies bones based on user
 options and engine quirks.
 
-```c
-Construct(armature: Armature*, options: ConstructOptions): Bone[] {
+```typescript
+function Construct(armature: Armature*, options: ConstructOptions): Bone[] {
     finalBones: Bone[] = GenericRuntime::Construct(armature)
 
-    for bone in finalBones {
+    for(let bone of finalBones) {
         // engine quirks like negative Y or reversed rotations can be applied here
         bone.pos.y = -bone.pos.y
         bone.rot   = -bone.rot
@@ -17,10 +17,10 @@ Construct(armature: Armature*, options: ConstructOptions): Bone[] {
         bone.pos   *= options.scale
         bone.pos   += options.position
 
-        GenericRuntime::CheckBoneFlip(bone, options.scale)
+        GenericRuntime.CheckBoneFlip(bone, options.scale)
 
         // engine quirks & user options applied to vertices
-        for vert in bone.vertices {
+        for(let vert of bone.vertices) {
             vert.pos.y = -vert.pos.y
             vert.pos   *= options.scale
             vert.pos   += options.position
