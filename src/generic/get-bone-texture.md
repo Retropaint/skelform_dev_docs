@@ -1,7 +1,7 @@
 # `SetupBoneTextures()`
 
-Helper function to provide the final `Texture` that the bones will use, based on
-the provided styles.
+Helper function to provide the final `Texture` that a bone will use, based on
+the provided tex name and styles.
 
 ```typescript
 GetBoneTexture(boneTex: string, styles: Style[]): Texture {

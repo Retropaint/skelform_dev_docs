@@ -5,7 +5,7 @@
 - [Generic Runtimes](./generic-runtimes.md)
   - [`Animate()`](./generic/animate.md)
   - [`Construct()`](./generic/construct.md)
-  - [`SetupBoneTextures()`](./generic/setup-bone-textures.md)
+  - [`GetBoneTexture()`](./generic/get-bone-texture.md)
   - [`FormatFrame()`](./generic/format-frame.md)
   - [`TimeFrame()`](./generic/time-frame.md)
   - [`CheckBoneFlip()`](./generic/check-bone-flip.md)
