@@ -2,13 +2,9 @@
 
 Simply calls `Animate()` from the generic runtime.
 
-```c
-Animate(
-    bones: Bone[]*,
-    animations: Animation[], 
-    frames: int[], 
-    smoothFrames: int[]
-) {
-    GenericRuntime::Animate(bones, animations, frames, smoothFrames)
+```javascript
+function animate(bones: Bone[], animations: Animation[], frames: int[], smoothFrames: int[]) {
+    GenericRuntime.animate(bones, animations, frames, smoothFrames)
 }
+
 ```

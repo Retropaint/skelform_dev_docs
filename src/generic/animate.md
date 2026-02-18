@@ -3,25 +3,20 @@
 Interpolates bone fields based on provided animation data, as well as initial
 states for non-animated fields.
 
-```c
-Animate(
-    bones: *Bone[],
-    anims: Animation[],
-    frames: int[],
-    smoothFrames: int[]
+```typescript
+function animate(
+    bones: Bone[], anims: Animation[], frames: int[], smoothFrames: int[]
 ) {
-    // interpolate bone fields
-    for a in range(anims) {
-        for bone in bones {
+    for (let a = 0; a < anims.length; a++) {
+        for (let b = 0; b < bones.length; b++) {
             interpolateBone(
-                &bone, anims[a].keyframes, bone.id, frames[a], smoothFrames[a]
+                bones[b], anims[a].keyframes, bones[b].id, frames[a], smoothFrames[a]
             )
         }
     }
 
-    // interpolate bone resets
-    for bone in bones {
-        resetBone(bone, ...)
+    for (let b = 0; b < bones.length; b++) {
+        resetBone(bones[b], ...)
     }
 }
 ```
@@ -30,19 +25,15 @@ Animate(
 
 Interpolates one bone's fields based on provided animation data.
 
-```c
+```typescript
 interpolateBone(
-    bone: *Bone,
-    keyframes: Keyframe[],
-    boneId: int,
-    frame: int,
-    smoothFrame: int,
+    bone: Bone, keyframes: Keyframe[], boneId: int, frame: int, smoothFrame: int
 ) {
-    interpolateKeyframes("PositionX", &bone.pos.x,   ...)
-    interpolateKeyframes("PositionY", &bone.pos.y,   ...)
-    interpolateKeyframes("Rotation",  &bone.rot,     ...)
-    interpolateKeyframes("ScaleX",    &bone.scale.x, ...)
-    interpolateKeyframes("ScaleX",    &bone.scale.y, ...)
+    interpolateKeyframes("PositionX", bone.pos.x,   ...)
+    interpolateKeyframes("PositionY", bone.pos.y,   ...)
+    interpolateKeyframes("Rotation",  bone.rot,     ...)
+    interpolateKeyframes("ScaleX",    bone.scale.x, ...)
+    interpolateKeyframes("ScaleX",    bone.scale.y, ...)
 
     bone.tex = getPrevFrame("Texture" ...)
     bone.ikConstraint = getPrevFrame("IkConstraint", ...)
@@ -53,25 +44,25 @@ interpolateBone(
 
 Interpolates one bone's fields to their initial values if not being animated.
 
-```c
-resetBone(bone: Bone*, frame: int, smoothFrame: int, anims: Animation[]) {
-    if !isAnimated("PositionX", ...)
+```typescript
+function resetBone(bone: Bone, frame: int, smoothFrame: int, anims: Animation[]) {
+    if(!isAnimated("PositionX", ...))
         interpolate(bone.pos.x, bone.initPos.x, ...)
 
-    if !isAnimated("PositionY", ...)
+    if(!isAnimated("PositionY", ...))
         interpolate(bone.pos.y, bone.initPos.y, ...)
 
-    if !isAnimated("Rotation", ...)
+    if(!isAnimated("Rotation", ...))
         interpolate(bone.rot, bone.initRot, ...)
 
-    if !isAnimated("ScaleX", ...)
+    if(!isAnimated("ScaleX", ...))
         interpolate(bone.scale.x, bone.initScale.x, ...)
 
-    if !isAnimated("ScaleY", ...)
+    if(!isAnimated("ScaleY", ...))
         interpolate(bone.scale.y, bone.initScale.y, ...)
 
     // non-interpolated fields are set immediately
-    if !isAnimated("IkConstraint", ...)
+    if(!isAnimated("IkConstraint", ...))
         bone.ikConstraint = bone.initIkConstraint
 }
 ```
