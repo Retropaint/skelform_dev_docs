@@ -1,4 +1,4 @@
-# `SetupBoneTextures()`
+# `GetBoneTexture()`
 
 Helper function to provide the final `Texture` that a bone will use, based on
 the provided tex name and styles.
