@@ -7,10 +7,9 @@ function Draw(bones: Bone[], textures: Texture2D[], styles: Style[]) {
     // bones with higher zindex should render first
     sort(&bones, zindex)
 
-    finalTextures = SetupBoneTextures(bones, styles)
-
     for(let bone of bones) {
-        if !finalTextures.has(bone.id) {
+        let tex = GenericRuntime.getBoneTexture(bone.tex, styles)
+        if !tex {
             continue
         }
 
