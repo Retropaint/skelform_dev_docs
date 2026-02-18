@@ -138,17 +138,78 @@ isAnimated(boneId: int, element: enum, animations: Animation[]): bool {
 
 ## `interpolate()`
 
-Generic linear interpolation.
+Interpolation uses a modified bezier spline (explanation below):
 
 ```c
-interpolate(current: int, max: int, startVal: float, endVal: float): float {
+interpolate(
+    current: int,
+    max: int,
+    startVal: float,
+    endVal: float,
+    startHandle: float,
+    endHandle: float
+): float {
+    // snapping behavior for None transition preset
+    if startHandle == 999.0 && endHandle == 999.0 {
+        return startVal;
+    }
     if max == 0 || current >= max {
         return endVal
     }
-    interp = current / max
-    end = endVal - startVal
-    result = startVal + (end * interp)
 
-    return result
+    t: float = current / max
+    h10: float = 3 * (1 - t)^2 * t
+    h01: float = 3 * (1 - t) * t^2
+    h11: float = t^3
+    progress: float = h10 * startHandle + h01 * endHandle + h11
+
+    return startVal + (endVal - endVal) * progress
 }
+```
+
+## Bezier Explanation
+
+[A Primer on Bezier Curves](https://pomax.github.io/bezierinfo/#explanation)
+
+The bezier spline uses the following polynomial:
+
+```
+value =
+    a * (1 - t)^3 +
+    b * 3 * (1 - t)^2 * t +
+    c * 3 * (1 - t) * t^2 +
+    d * t^3
+```
+
+This can be simplified into 4 points:
+
+|     | Formula             | Coefficient (a, b, c, d) |
+| --- | ------------------- | ------------------------ |
+| h00 | (1 - t)^3           | startVal                 |
+| h01 | 3 \* (1 - t)^2 \* t | startHandle              |
+| h10 | 3 \* (1 - t) \* t^2 | endHandle                |
+| h11 | t^3                 | endVal                   |
+
+The above is for a generic bezier spline, however.
+
+In interpolation, it’s best to treat startVal and endVal as 0 and 1 respectively
+to represent going from 0% to 100% of the end value. This allows the algorithm
+to have a persistent curve, regardless of the actual values being interpolated.
+
+Simplified points:
+
+|     | Formula           | Coefficient (b, c, d) |
+| --- | ----------------- | --------------------- |
+| h01 | 3 _ (1 - t)^2 _ t | startHandle           |
+| h10 | 3 _ (1 -t) _ t^2  | endHandle             |
+| h11 | t^3               | 1                     |
+
+Notice that h00 is now gone, as its coefficient (startVal) is always 0 and would
+have no effect on the algorithm.
+
+The actual start and end values are applied at the end:
+
+```
+progress = h10 * startHandle + h01 * endHandle + h11
+value = start + (end - start) * progress
 ```
