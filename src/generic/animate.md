@@ -75,27 +75,27 @@ field by.
 The resulting interpolation from the keyframes is interpolated again for
 smoothing.
 
-```c
-interpolateKeyframes(
+```typescript
+function interpolateKeyframes(
     element: enum,
-    field: *float,
+    field: float,
     keyframes: Keyframe[],
     id: int,
     frame: int,
     smoothFrame: int,
-) {
+): float {
     prev = getPrevFrame(...)
     next = getNextFrame(...)
 
     // ensure both frames are pointing somewhere
-    if prev == -1 {
+    if(prev == -1) {
         prev = next
-    } else if next == -1 {
+    } else if(next == -1) {
         next = prev
     }
 
     // if both are -1, then the frame doesn't exist. Do nothing
-    if prev == -1 && next == -1
+    if(prev == -1 && next == -1)
         return
 
     totalFrames = keyframes[next].frame - keyframes[prev].frame
@@ -106,7 +106,7 @@ interpolateKeyframes(
     )
 
     // result is smoothed
-    *field = interpolate(currentFrame, smoothFrame, *field, result)
+    return interpolate(currentFrame, smoothFrame, field, result)
 }
 ```
 
@@ -114,16 +114,16 @@ interpolateKeyframes(
 
 Returns true if a particular element is part of the provided animations.
 
-```c-like
-isAnimated(boneId: int, element: enum, animations: Animation[]): bool {
-    for anim in anims {
-        for kf in anim.keyframes {
-            if kf.boneId == boneId && kf.element == element {
-                return true
+```typescript
+function isAnimated(boneId: int, element: enum, animations: Animation[]): bool {
+    for (let anim of anims) {
+        for (let kf of anim.keyframes) {
+            if (kf.boneId == boneId && kf.element == element) {
+                return true;
             }
         }
     }
-    return false
+    return false;
 }
 ```
 
@@ -131,28 +131,23 @@ isAnimated(boneId: int, element: enum, animations: Animation[]): bool {
 
 Interpolation uses a modified bezier spline (explanation below):
 
-```c
+```typescript
 interpolate(
-    current: int,
-    max: int,
-    startVal: float,
-    endVal: float,
-    startHandle: float,
-    endHandle: float
+    current: int, max: int, startVal: float, endVal: float, startHandle: float, endHandle: float
 ): float {
     // snapping behavior for None transition preset
-    if startHandle == 999.0 && endHandle == 999.0 {
-        return startVal;
+    if(startHandle == 999.0 && endHandle == 999.0) {
+        return startVal
     }
-    if max == 0 || current >= max {
+    if max == 0 || current >= max) {
         return endVal
     }
 
-    t: float = current / max
-    h10: float = 3 * (1 - t)^2 * t
-    h01: float = 3 * (1 - t) * t^2
-    h11: float = t^3
-    progress: float = h10 * startHandle + h01 * endHandle + h11
+    t = current / max
+    h10 = 3 * (1 - t)^2 * t
+    h01 = 3 * (1 - t) * t^2
+    h11 = t^3
+    progress = h10 * startHandle + h01 * endHandle + h11
 
     return startVal + (endVal - endVal) * progress
 }
