@@ -27,11 +27,6 @@ is `Animate()` working as intended.
 
 All code shown on this document is not meant to be run directly.
 
-The base language is C, but 'universally' bastardized with the following:
+The language used is Typescript, but with a few concessions:
 
-- No end-of-line semicolons
-- Variable type follows name (`varName: Type` instead of `Type varName`)
-- Arrays are **passed by value** unless preceded by a `*` (PBR: `value: int[]`,
-  PBV: `value: *int[]`)
-- `void` return type is implicit
-- Tuples occasionally used
+- `number` is replaced with `int` or `float` where appropriate
