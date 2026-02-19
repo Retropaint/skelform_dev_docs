@@ -178,20 +178,20 @@ This can be simplified into 4 points:
 
 The above is for a generic bezier spline, however.
 
-In interpolation, it’s best to treat startVal and endVal as 0 and 1 respectively
-to represent going from 0% to 100% of the end value. This allows the algorithm
-to have a persistent curve, regardless of the actual values being interpolated.
+In interpolation, `startVal` and `endVal` should be 0 and 1 respectively to
+represent 0% to 100% of the end value. This allows the algorithm to have a
+persistent curve regardless of the actual values being interpolated.
 
 Simplified points:
 
-|     | Formula           | Coefficient (b, c, d) |
-| --- | ----------------- | --------------------- |
-| h01 | 3 _ (1 - t)^2 _ t | startHandle           |
-| h10 | 3 _ (1 -t) _ t^2  | endHandle             |
-| h11 | t^3               | 1                     |
+|     | Formula             | Coefficient (b, c, d) |
+| --- | ------------------- | --------------------- |
+| h01 | 3 \* (1 - t)^2 \* t | startHandle           |
+| h10 | 3 \* (1 -t) \* t^2  | endHandle             |
+| h11 | t^3                 | 1                     |
 
-Notice that h00 is now gone, as its coefficient (startVal) is always 0 and would
-have no effect on the algorithm.
+Notice that `h00` is now gone, as its coefficient, `startVal`, is always 0 and
+would have no effect on the algorithm.
 
 The actual start and end values are applied at the end:
 
