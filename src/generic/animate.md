@@ -116,44 +116,75 @@ Returns true if a particular element is part of the provided animations.
 
 ```typescript
 function isAnimated(boneId: int, element: enum, animations: Animation[]): bool {
-    for (let anim of anims) {
-        for (let kf of anim.keyframes) {
-            if (kf.boneId == boneId && kf.element == element) {
-                return true;
-            }
-        }
+  for (let anim of anims) {
+    for (let kf of anim.keyframes) {
+      if (kf.boneId == boneId && kf.element == element) {
+        return true;
+      }
     }
-    return false;
+  }
+  return false;
 }
 ```
 
 ## `interpolate()`
 
-Interpolation uses a modified bezier spline (explanation below):
+Interpolation uses a modified bezier spline (explanation below).
+
+Note that 2 helper functions are included below the main function.
 
 ```typescript
-interpolate(
-    current: int, max: int, startVal: float, endVal: float, startHandle: float, endHandle: float
+function interp(
+    current: int,
+    max: int,
+    start_val: float,
+    end_val: float,
+    start_handle: Vec2,
+    end_handle: Vec2,
 ): float {
     // snapping behavior for None transition preset
-    if(startHandle == 999.0 && endHandle == 999.0) {
-        return startVal
+    if(start_handle.y == 999.0 && end_handle.y == 999.0) {
+        return start_val;
     }
-    if max == 0 || current >= max) {
-        return endVal
+    if(max == 0 || current >= max) {
+        return end_val;
     }
 
-    t = current / max
-    h10 = 3 * (1 - t)^2 * t
-    h01 = 3 * (1 - t) * t^2
-    h11 = t^3
-    progress = h10 * startHandle + h01 * endHandle + h11
+    // solve for time (x axis) with Newton-Raphson
+    let initial = current / max
+    let t = initial
+    for(let i = 0; i < 5; i++) {
+        let x = cubic_bezier(t, start_handle.x, end_handle.x)
+        let dx = cubic_bezier_derivative(t, start_handle.x, end_handle.x)
+        if(abs(dx) < 1e-5 {
+            break
+        }
+        t -= (x - initial) / dx
+        t = clamp(t, 0.0, 1.0)
+    }
 
-    return startVal + (endVal - endVal) * progress
+    let progress = cubic_bezier(t, start_handle.y, end_handle.y)
+    return start_val + (end_val - start_val) * progress
+}
+
+// for both functions below, p0 and p3 are always 0 and 1 respectively
+
+function cubicBezier(t: float, p1: float, p2: float): float {
+    let u = 1. - t
+    return 3. * u * u * t * p1 + 3. * u * t * t * p2 + t * t * t
+}
+
+function cubicBezierDerivative(t: float, p1: float, p2: float): float {
+    let u = 1. - t
+    return 3. * u * u * p1 + 6. * u * t * (p2 - p1) + 3. * t * t * (1. - p2)
 }
 ```
 
 ## Bezier Explanation
+
+_Note: the following explanation is incomplete, as it doesn't include
+Newton-Rapshon. However, understanding this is not required to implement the
+code above._
 
 [A Primer on Bezier Curves](https://pomax.github.io/bezierinfo/#explanation)
 
