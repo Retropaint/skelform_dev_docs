@@ -47,19 +47,19 @@ Interpolates one bone's fields to their initial values if not being animated.
 ```typescript
 function resetBone(bone: Bone, frame: int, smoothFrame: int, anims: Animation[]) {
     if(!isAnimated("PositionX", ...))
-        interpolate(bone.pos.x, bone.initPos.x, ...)
+        interpolate(frame, smoothFrame, bone.pos.x, bone.initPos.x, Vec2(0, 0), Vec2(0, 0))
 
     if(!isAnimated("PositionY", ...))
-        interpolate(bone.pos.y, bone.initPos.y, ...)
+        interpolate(frame, smoothFrame, bone.pos.y, bone.initPos.y, Vec2(0, 0), Vec2(0, 0))
 
     if(!isAnimated("Rotation", ...))
-        interpolate(bone.rot, bone.initRot, ...)
+        interpolate(frame, smoothFrame, bone.rot, bone.initRot, Vec2(0, 0), Vec2(0, 0))
 
     if(!isAnimated("ScaleX", ...))
-        interpolate(bone.scale.x, bone.initScale.x, ...)
+        interpolate(frame, smoothFrame, bone.scale.x, bone.initScale.x, Vec2(0, 0), Vec2(0, 0))
 
     if(!isAnimated("ScaleY", ...))
-        interpolate(bone.scale.y, bone.initScale.y, ...)
+        interpolate(frame, smoothFrame, bone.scale.y, bone.initScale.y, Vec2(0, 0), Vec2(0, 0))
 
     // non-interpolated fields are set immediately
     if(!isAnimated("IkConstraint", ...))
@@ -102,11 +102,16 @@ function interpolateKeyframes(
     currentFrame = frame - keyframes[prev].frame
 
     result = interpolate(
-        currentFrame, totalFrames, keyframes[prev].value, keyframes[next].value
+        currentFrame, 
+        totalFrames, 
+        keyframes[prev].value, 
+        keyframes[next].value, 
+        keyframes[next].start_handle, 
+        keyframes[next].end_handle
     )
 
     // result is smoothed
-    return interpolate(currentFrame, smoothFrame, field, result)
+    return interpolate(currentFrame, smoothFrame, field, result, Vec2(0, 0), Vec2(0, 0))
 }
 ```
 
