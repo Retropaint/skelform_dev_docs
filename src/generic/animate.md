@@ -116,14 +116,14 @@ Returns true if a particular element is part of the provided animations.
 
 ```typescript
 function isAnimated(boneId: int, element: enum, animations: Animation[]): bool {
-  for (let anim of anims) {
-    for (let kf of anim.keyframes) {
-      if (kf.boneId == boneId && kf.element == element) {
-        return true;
-      }
+    for (let anim of anims) {
+        for (let kf of anim.keyframes) {
+            if (kf.boneId == boneId && kf.element == element) {
+                return true;
+            }
+        }
     }
-  }
-  return false;
+    return false;
 }
 ```
 
@@ -150,7 +150,7 @@ function interp(
         return end_val;
     }
 
-    // solve for time (x axis) with Newton-Raphson
+    // solve for t with Newton-Raphson
     let initial = current / max
     let t = initial
     for(let i = 0; i < 5; i++) {

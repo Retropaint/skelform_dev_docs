@@ -148,15 +148,15 @@ Applies constraints to bone rotations (clockwise or counter-clockwise).
 
 ```typescript
 function applyConstraints(bones: Bone[], family: Bone) {
-    jointDir:  Vec2 = normalize(bones[family.ikBoneIds[1]].pos - root)
-    baseDir:   Vec2 = normalize(target - root)
-    dir:       float = jointDir.x * baseDir.y - baseDir.x * jointDir.y
-    baseAngle: float = atan2(baseDir.y, baseDir.x)
-    cw:        bool = family.ikConstraint == 1 && dir > 0.
-    ccw:       bool = family.ikConstraint == 2 && dir < 0.
-    if(cww || cw) {
-        for(let id of family.ikBoneIds) {
-            bones[id].rot = -bones[id].rot + baseAngle * 2.
+    jointDir: Vec2 = normalize(bones[family.ikBoneIds[1]].pos - root);
+    baseDir: Vec2 = normalize(target - root);
+    dir: float = jointDir.x * baseDir.y - baseDir.x * jointDir.y;
+    baseAngle: float = atan2(baseDir.y, baseDir.x);
+    cw: bool = family.ikConstraint == 1 && dir > 0;
+    ccw: bool = family.ikConstraint == 2 && dir < 0;
+    if (cww || cw) {
+        for (let id of family.ikBoneIds) {
+            bones[id].rot = -bones[id].rot + baseAngle * 2;
         }
     }
 }
@@ -175,29 +175,26 @@ Source for algorithm:
 ```typescript
 function fabrik(bones: Bone[], root: Vec2, target: Vec2) {
     // forward-reaching
-    nextPos: Vec2 = target
-    nextLength: float = 0.0
-    for(let b = bones.length - 1; b > 0; b--) {
-        length: Vec2 = normalize(nextPos - bones[b].pos) * nextLength
-        if(isNaN(length))
-            length = new Vec2(0, 0)
-        if(b != 0)
-            nextLength = magnitude(bones[b].pos - bones[b - 1].pos)
-        bones[b].pos = nextPos - length
-        nextPos = bones[b].pos
+    nextPos: Vec2 = target;
+    nextLength: float = 0.0;
+    for (let b = bones.length - 1; b > 0; b--) {
+        length: Vec2 = normalize(nextPos - bones[b].pos) * nextLength;
+        if (isNaN(length)) length = new Vec2(0, 0);
+        if (b != 0) nextLength = magnitude(bones[b].pos - bones[b - 1].pos);
+        bones[b].pos = nextPos - length;
+        nextPos = bones[b].pos;
     }
 
     // backward-reaching
-    prevPos: Vec2 = root
-    prevLength: float = 0.0
-    for(let b = 0; b < bones.length; b++) {
-        length: Vec2 = normalize(prevPos - bones[b].pos) * prevLength
-        if(isNaN(length))
-            length = new Vec2(0, 0)
-        if(b != bones.len() - 1)
-            prevLength = magnitude(bones[b].pos - bones[b + 1].pos)
-        bones[b].pos = prevPos - length
-        prevPos = bones[b].pos
+    prevPos: Vec2 = root;
+    prevLength: float = 0.0;
+    for (let b = 0; b < bones.length; b++) {
+        length: Vec2 = normalize(prevPos - bones[b].pos) * prevLength;
+        if (isNaN(length)) length = new Vec2(0, 0);
+        if (b != bones.len() - 1)
+            prevLength = magnitude(bones[b].pos - bones[b + 1].pos);
+        bones[b].pos = prevPos - length;
+        prevPos = bones[b].pos;
     }
 }
 ```
@@ -243,6 +240,8 @@ function arcIk(bones: Bone[], root: Vec2, target: Vec2) {
 
 Constructs vertices, for bones with mesh data.
 
+Note: a helper function (`inheritVert()`) is included in the code block below
+
 ```typescript
 function constructVerts(bones: Bone[]) {
     for(let b = 0; b < bones.length; b++) {
@@ -282,7 +281,7 @@ function constructVerts(bones: Bone[]) {
                 // get previous and next bind
                 binds: Bind[] = bones[b].binds
                 prev: int = bi > 0 ? bi - 1 : bi
-                next: int = (bi + 1).min(binds.len() - 1)
+                next: int = min((bi + 1, binds.length - 1)
                 prevBone: Bone = bones.find(|bone| bone.id == binds[prev].boneId)
                 nextBone: Bone = bones.find(|bone| bone.id == binds[next].boneId)
 
@@ -290,8 +289,8 @@ function constructVerts(bones: Bone[]) {
                 // get the average of normals between previous and next bind
                 prevDir: Vec2 = bindBone.pos - prevBone.pos
                 nextDir: Vec2 = nextBone.pos - bindBone.pos
-                prevNormal: Vec2 = normalize(Vec2::new(-prevDir.y, prevDir.x))
-                nextNormal: Vec2 = normalize(Vec2::new(-nextDir.y, nextDir.x))
+                prevNormal: Vec2 = normalize(Vec2.new(-prevDir.y, prevDir.x))
+                nextNormal: Vec2 = normalize(Vec2.new(-nextDir.y, nextDir.x))
                 average: Vec2 = prevNormal + nextNormal
                 normalAngle: float = atan2(average.y, average.x)
 
@@ -305,6 +304,13 @@ function constructVerts(bones: Bone[]) {
             }
         }
     }
+}
+
+function inheritVert(pos: Vec2, bone: Bone): Vec2 {
+    pos *= bone.scale
+    pos = utils.rotate(&pos, bone.rot)
+    pos += bone.pos
+    return pos
 }
 ```
 
@@ -347,5 +353,5 @@ To do so:
 
 ### 3. Rotate Vertices
 
-1. Reset vertex position to it's initial position + bind position
+1. Reset vertex position to its initial position + bind position
 2. Rotate vertex around bind with angle from 2nd step
