@@ -33,10 +33,18 @@ interpolateBone(
     interpolateKeyframes("PositionY", bone.pos.y,   ...)
     interpolateKeyframes("Rotation",  bone.rot,     ...)
     interpolateKeyframes("ScaleX",    bone.scale.x, ...)
-    interpolateKeyframes("ScaleX",    bone.scale.y, ...)
+    interpolateKeyframes("ScaleY",    bone.scale.y, ...)
+    interpolateKeyframes("TintR",     bone.tint.r,  ...)
+    interpolateKeyframes("TintG",     bone.tint.g,  ...)
+    interpolateKeyframes("TintB",     bone.tint.b,  ...)
+    interpolateKeyframes("TintA",     bone.tint.a,  ...)
 
-    bone.tex = getPrevFrame("Texture" ...)
-    bone.ikConstraint = getPrevFrame("IkConstraint", ...)
+    bone.zindex = ("Zindex", ...).value
+
+    // these use the value_str field of the keyframe
+    bone.tex = getPrevFrame("Texture", ...).value
+    bone.ik_constraint = getPrevFrame("IkConstraint", ...).value_str
+    bone.ik_mode = getPrevFrame("IkMode", ...).value_str
 }
 ```
 
@@ -47,23 +55,33 @@ Interpolates one bone's fields to their initial values if not being animated.
 ```typescript
 function resetBone(bone: Bone, frame: int, smoothFrame: int, anims: Animation[]) {
     if(!isAnimated("PositionX", ...))
-        interpolate(frame, smoothFrame, bone.pos.x, bone.initPos.x, Vec2(0, 0), Vec2(0, 0))
-
+        interpolate(frame, smoothFrame, bone.pos.x, bone.init_pos.x, Vec2(0, 0), Vec2(0, 0))
     if(!isAnimated("PositionY", ...))
-        interpolate(frame, smoothFrame, bone.pos.y, bone.initPos.y, Vec2(0, 0), Vec2(0, 0))
-
+        interpolate(frame, smoothFrame, bone.pos.y, bone.init_pos.y, Vec2(0, 0), Vec2(0, 0))
     if(!isAnimated("Rotation", ...))
-        interpolate(frame, smoothFrame, bone.rot, bone.initRot, Vec2(0, 0), Vec2(0, 0))
-
+        interpolate(frame, smoothFrame, bone.rot, bone.init_rot, Vec2(0, 0), Vec2(0, 0))
     if(!isAnimated("ScaleX", ...))
-        interpolate(frame, smoothFrame, bone.scale.x, bone.initScale.x, Vec2(0, 0), Vec2(0, 0))
-
+        interpolate(frame, smoothFrame, bone.scale.x, bone.init_scale.x, Vec2(0, 0), Vec2(0, 0))
     if(!isAnimated("ScaleY", ...))
-        interpolate(frame, smoothFrame, bone.scale.y, bone.initScale.y, Vec2(0, 0), Vec2(0, 0))
+        interpolate(frame, smoothFrame, bone.scale.y, bone.init_scale.y, Vec2(0, 0), Vec2(0, 0))
+    if(!isAnimated("TintR", ...))
+        interpolate(frame, smoothFrame, bone.tint.r, bone.init_tint.r, Vec2(0, 0), Vec2(0, 0))
+    if(!isAnimated("TintG", ...))
+        interpolate(frame, smoothFrame, bone.tint.g, bone.init_tint.g, Vec2(0, 0), Vec2(0, 0))
+    if(!isAnimated("TintB", ...))
+        interpolate(frame, smoothFrame, bone.tint.b, bone.init_tint.b, Vec2(0, 0), Vec2(0, 0))
+    if(!isAnimated("TintA", ...))
+        interpolate(frame, smoothFrame, bone.tint.a, bone.init_tint.a, Vec2(0, 0), Vec2(0, 0))
 
     // non-interpolated fields are set immediately
+    if(!isAnimated("Zindex", ...))
+        bone.zindex = bone.init_zindex
+    if(!isAnimated("Texture", ...))
+        bone.tex = bone.init_tex
+    if(!isAnimated("IkMode", ...))
+        bone.ik_constraint = bone.init_ik_constraint
     if(!isAnimated("IkConstraint", ...))
-        bone.ikConstraint = bone.initIkConstraint
+        bone.ik_mode = bone.init_ik_mode
 }
 ```
 
@@ -84,34 +102,60 @@ function interpolateKeyframes(
     frame: int,
     smoothFrame: int,
 ): float {
-    prev = getPrevFrame(...)
-    next = getNextFrame(...)
+    prev = getPrevKeyframe(...)
+    next = getNextKeyframe(...)
 
     // ensure both frames are pointing somewhere
-    if(prev == -1) {
+    if(prev == undefined) {
         prev = next
-    } else if(next == -1) {
+    } else if(next == undefined) {
         next = prev
     }
 
     // if both are -1, then the frame doesn't exist. Do nothing
-    if(prev == -1 && next == -1)
+    if(prev == undefined && next == undefined)
         return
 
-    totalFrames = keyframes[next].frame - keyframes[prev].frame
-    currentFrame = frame - keyframes[prev].frame
+    totalFrames = next.frame - prev.frame
+    currentFrame = frame - prev.frame
 
     result = interpolate(
-        currentFrame, 
-        totalFrames, 
-        keyframes[prev].value, 
-        keyframes[next].value, 
-        keyframes[next].start_handle, 
-        keyframes[next].end_handle
+        currentFrame,
+        totalFrames,
+        prev.value,
+        prev.value,
+        next.start_handle,
+        next.end_handle
     )
 
     // result is smoothed
     return interpolate(currentFrame, smoothFrame, field, result, Vec2(0, 0), Vec2(0, 0))
+}
+```
+
+## `getPrevKeyframe()` & `getNextKeyframe()`
+
+Helpers to get the closest keyframe behind or ahead of the provided frame.
+
+```typescript
+function getPrevKeyframe(frame: i32, kfs: Keyframe[], bone_id: i32, el: AnimElement): Keyframe {
+    for(let i = kfs.length - 1; i > 0; i--)
+        if kfs[i].frame <= frame && kfs[i].bone_id == bone_id && kfs[i].element == el {
+            return kfs[i]
+        }
+    }
+    return undefined
+}
+```
+
+```typescript
+function getNextKeyframe(frame: i32, kfs: Keyframe[], bone_id: i32, el: AnimElement): Keyframe {
+    for(let i = 0; i < kfs.length; i++)
+        if kfs[i].frame > frame && kfs[i].bone_id == bone_id && kfs[i].element == el {
+            return kfs[i]
+        }
+    }
+    return undefined
 }
 ```
 
