@@ -13,9 +13,6 @@ function Draw(bones: Bone[], textures: Texture2D[], styles: Style[]) {
             continue
         }
 
-        // retrieve final textures based on bone id
-        tex = finalTextures.get(bone.id)
-
         // render bone as mesh
         if(bone.vertices.len() > 0) {
             drawMesh(bone, tex, texes[bone.finalTex.atlasIdx)
