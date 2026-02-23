@@ -14,14 +14,14 @@ This section will only cover the content in `armature.json`.
 
 - [`armature.json`](#armaturejson)
 - [Bones](#bones)
-  - [Initial Fields](#initial-fields)
-  - [Inverse Kinematics](#inverse-kinematics)
+    - [Initial Fields](#initial-fields)
+    - [Inverse Kinematics](#inverse-kinematics)
 - [Bone Meshes](#bone-meshes)
-  - [Vertex](#vertex)
-  - [Bind](#bind)
-  - [BindVert](#bindvert)
+    - [Vertex](#vertex)
+    - [Bind](#bind)
+    - [BindVert](#bindvert)
 - [Animations](#animations)
-  - [Keyframes](#keyframes)
+    - [Keyframes](#keyframes)
 - [Textures](#Textures)
 
 ## `armature.json`
@@ -44,12 +44,14 @@ is not mandatory to parse _all_ fields.
 | --------- | ------ | -------------------------------------------------- |
 | id        | int    | Bone ID                                            |
 | name      | string | Name of bone                                       |
-| parent_id | int    | Bone parent ID (-1 if none)                        |
-| tex       | string | Name of texture to use                             |
+| pos       | Vec2   | Position of bone                                   |
 | rot       | Vec2   | Rotation of bone                                   |
 | scale     | Vec2   | Scale of bone                                      |
-| pos       | Vec2   | Position of bone                                   |
+| parent_id | int    | Bone parent ID (-1 if none)                        |
+| tex       | string | Name of texture to use                             |
 | zindex    | int    | Z-index of bone (higher index renders above lower) |
+| hidden    | bool   | Whether this bone is hidden                        |
+| tint      | Vec4   | Color ting                                         |
 
 ### Initial Fields
 
@@ -59,13 +61,16 @@ work.
 If a bone field is not being animated, it needs to go back to its initial state
 with initial fields (starting with `init_`).
 
+`bool` fields use `int` initial fields, as animations cannot store boolean
+values (but can still represent them as `0` and `1`)
+
 _The following is **not** an exhaustive list._
 
 | Key        | Type |
 | ---------- | ---- |
+| init_pos   | Vec2 |
 | init_rot   | Vec2 |
 | init_scale | Vec2 |
-| init_pos   | Vec2 |
 | ...        | ...  |
 
 ### Inverse Kinematics
@@ -77,10 +82,8 @@ Other bones will only have `ik_family_id`, which is -1 by default.
 | Key               | Type   | Data                                             |
 | ----------------- | ------ | ------------------------------------------------ |
 | ik_family_id      | int    | The ID of family this bone is in (-1 by default) |
-| ik_constraint     | int    | This family's constraint                         |
-| ik_constraint_str | string | This family's constraint (as string)             |
-| ik_mode           | int    | This family's mode (0 = FABRIK, 1 = Arc)         |
-| ik_mode_str       | string | This family's mode (as string)                   |
+| ik_constraint[^1] | string | This family's constraint                         |
+| ik_mode[^1]       | string | This family's mode (0 = FABRIK, 1 = Arc)         |
 | ik_target_id      | int    | This set's target bone ID                        |
 | ik_bone_ids       | int[]  | This set's ID of bones                           |
 
@@ -129,14 +132,15 @@ Bones with texture meshes have quite a bit of data:
 
 ### Keyframes
 
-| Key        | Type       | Data                                    |
-| ---------- | ---------- | --------------------------------------- |
-| frame      | int        | frame of keyframe                       |
-| bone_id    | int        | ID of bone that keyframe refers to      |
-| element    | string[^2] | Element to be animated by this keyframe |
-| element_id | int        | Same as `element`, but as int           |
-| value      | float      | Value to append `element` of bone by    |
-| transition | string[^2] | Transition type (linear, sine, etc)     |
+| Key          | Type       | Data                                     |
+| ------------ | ---------- | ---------------------------------------- |
+| frame        | int        | frame of keyframe                        |
+| bone_id      | int        | ID of bone that keyframe refers to       |
+| element      | string[^1] | Element to be animated by this keyframe  |
+| value        | float      | Value to set `element` of bone to        |
+| value_str    | string     | String variant of value                  |
+| start_handle | float      | Handle to use for start of interpolation |
+| end_handle   | float      | Handle to use for end of interpolation   |
 
 ## Atlases
 
@@ -164,4 +168,4 @@ Note: Coordinates are in pixels.
 | size      | Vec2   | Append to `offset` to get bottom-right corner of texture |
 | atlas_idx | int    | Index of atlas that this texture lives in                |
 
-[^2]: Can be treated as enum
+[^1]: Can be treated as enum
