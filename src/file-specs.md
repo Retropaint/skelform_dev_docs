@@ -42,7 +42,7 @@ is not mandatory to parse _all_ fields.
 
 | Key       | Type   | Data                                               |
 | --------- | ------ | -------------------------------------------------- |
-| id        | int    | Bone ID                                            |
+| id        | uint   | Bone ID                                            |
 | name      | string | Name of bone                                       |
 | pos       | Vec2   | Position of bone                                   |
 | rot       | Vec2   | Rotation of bone                                   |
@@ -81,11 +81,11 @@ Other bones will only have `ik_family_id`, which is -1 by default.
 
 | Key               | Type   | Data                                             |
 | ----------------- | ------ | ------------------------------------------------ |
-| ik_family_id      | int    | The ID of family this bone is in (-1 by default) |
+| ik_family_id      | uint   | The ID of family this bone is in (-1 by default) |
 | ik_constraint[^1] | string | This family's constraint                         |
 | ik_mode[^1]       | string | This family's mode (0 = FABRIK, 1 = Arc)         |
-| ik_target_id      | int    | This set's target bone ID                        |
-| ik_bone_ids       | int[]  | This set's ID of bones                           |
+| ik_target_id      | uint   | This set's target bone ID                        |
+| ik_bone_ids       | uint[] | This set's ID of bones                           |
 
 ## Bone Meshes
 
@@ -93,7 +93,7 @@ Bones with texture meshes have quite a bit of data:
 
 | Key      | Type     | Data                                                                |
 | -------- | -------- | ------------------------------------------------------------------- |
-| indices  | int[]    | Array of indices pointing to a vert. Every 3 indices is 1 triangle. |
+| indices  | uint[]   | Array of indices pointing to a vert. Every 3 indices is 1 triangle. |
 | vertices | Vertex[] | Array of vertices                                                   |
 | binds    | Bind[]   | Array of bone binds                                                 |
 
@@ -101,7 +101,7 @@ Bones with texture meshes have quite a bit of data:
 
 | Key      | Type | Data                               |
 | -------- | ---- | ---------------------------------- |
-| id       | int  | ID of vertex                       |
+| id       | uint | ID of vertex                       |
 | pos      | Vec2 | Position of vertex                 |
 | uv       | Vec2 | UV of vertex                       |
 | init_pos | int  | Helper for initial vertex position |
@@ -111,15 +111,15 @@ Bones with texture meshes have quite a bit of data:
 | Key     | Type       | Data                                         |
 | ------- | ---------- | -------------------------------------------- |
 | id      | int        | ID of bind                                   |
-| is_path | int        | Should this bind behave like a path?         |
+| is_path | bool       | Should this bind behave like a path?         |
 | verts   | BindVert[] | Array of vertex data associated to this bind |
 
 ### BindVert
 
-| Key    | Type | Data                           |
-| ------ | ---- | ------------------------------ |
-| id     | int  | ID of vertex                   |
-| weight | int  | Weight assigned to this vertex |
+| Key    | Type  | Data                           |
+| ------ | ----- | ------------------------------ |
+| id     | uint  | ID of vertex                   |
+| weight | float | Weight assigned to this vertex |
 
 ## Animations
 
@@ -127,15 +127,15 @@ Bones with texture meshes have quite a bit of data:
 | --------- | --------- | ---------------------------------- |
 | id        | string    | ID of animation                    |
 | name      | string    | Name of animation                  |
-| fps       | int       | Frames per second of animation     |
+| fps       | uint      | Frames per second of animation     |
 | keyframes | see below | Data of all keyframes of animation |
 
 ### Keyframes
 
 | Key          | Type       | Data                                     |
 | ------------ | ---------- | ---------------------------------------- |
-| frame        | int        | frame of keyframe                        |
-| bone_id      | int        | ID of bone that keyframe refers to       |
+| frame        | uint       | frame of keyframe                        |
+| bone_id      | uint       | ID of bone that keyframe refers to       |
 | element      | string[^1] | Element to be animated by this keyframe  |
 | value        | float      | Value to set `element` of bone to        |
 | value_str    | string     | String variant of value                  |
@@ -153,7 +153,7 @@ Bones with texture meshes have quite a bit of data:
 
 | Key      | Type    | Data              |
 | -------- | ------- | ----------------- |
-| id       | int     | ID of style       |
+| id       | uint    | ID of style       |
 | name     | string  | Name of style     |
 | textures | Texture | Array of textures |
 
@@ -166,6 +166,6 @@ Note: Coordinates are in pixels.
 | name      | string | Name of texture                                          |
 | offset    | Vec2   | Top-left corner of texture in the atlas                  |
 | size      | Vec2   | Append to `offset` to get bottom-right corner of texture |
-| atlas_idx | int    | Index of atlas that this texture lives in                |
+| atlas_idx | uint   | Index of atlas that this texture lives in                |
 
 [^1]: Can be treated as enum
