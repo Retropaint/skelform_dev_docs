@@ -45,7 +45,7 @@ is not mandatory to parse _all_ fields.
 | id        | uint   | Bone ID                                            |
 | name      | string | Name of bone                                       |
 | pos       | Vec2   | Position of bone                                   |
-| rot       | Vec2   | Rotation of bone                                   |
+| rot       | float  | Rotation of bone                                   |
 | scale     | Vec2   | Scale of bone                                      |
 | parent_id | int    | Bone parent ID (-1 if none)                        |
 | tex       | string | Name of texture to use                             |
