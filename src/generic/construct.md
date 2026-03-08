@@ -152,9 +152,9 @@ function applyConstraints(bones: Bone[], family: Bone) {
     baseDir: Vec2 = normalize(target - root);
     dir: float = jointDir.x * baseDir.y - baseDir.x * jointDir.y;
     baseAngle: float = atan2(baseDir.y, baseDir.x);
-    cw: bool = family.ikConstraint == 1 && dir > 0;
-    ccw: bool = family.ikConstraint == 2 && dir < 0;
-    if (cww || cw) {
+    cw: bool = family.ikConstraint == "Clockwise" && dir > 0;
+    ccw: bool = family.ikConstraint == "CounterClockwise" && dir < 0;
+    if (ccw || cw) {
         for (let id of family.ikBoneIds) {
             bones[id].rot = -bones[id].rot + baseAngle * 2;
         }
