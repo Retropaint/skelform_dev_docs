@@ -226,7 +226,7 @@ function arcIk(bones: Bone[], root: Vec2, target: Vec2) {
     valley: float = baseMag / maxLength
     for(let b = 1; b < bones.length; b++) {
         bones[b].pos = new Vec2(
-            root.x - (root.x - bones[b].pos.x) * valley,
+            bones[b].pos.x * valley,
             root.y + (1.0 - peak) * sin(dist[b] * PI) * baseMag,
         )
 
