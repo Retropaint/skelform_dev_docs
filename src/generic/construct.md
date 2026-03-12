@@ -92,11 +92,11 @@ function inverseKinematics(bones: Bone[], ikRootIds: int[]): Object {
 
         // determine which IK mode to use
         switch(family.ikMode) {
-            case 0:
+            case "FABRIK":
                 for range(10) {
                     fabrik(*familyBones, root, target)
                 }
-            case 1:
+            case "Arc":
                 arcIk(*familyBones, root, target)
         }
 
