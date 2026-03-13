@@ -4,21 +4,46 @@ Constructs the armature's bones with inheritance and inverse kinematics.
 
 ```typescript
 function Construct(armature: Armature): Bone[] {
-    inhBones: Bone[] = clone(armature.bones)
+    // initialize cached_bones
+    if (armature.cached_bones == undefined) {
+        armature.cached_bones = clone(armature.bones);
+    }
+
     // inheritance is run once to put bones in place,
     // for inverse kinematics to properly determine rotations
-    inheritance(inhBones, {})
+    resetInheritance(aramture.cached_bones, armature.bones);
+    inheritance(armature.cached_bones, {});
 
     // inverse kinematics will return which bones' rotations should be overridden
-    ikRots: Object = inverseKinematics(inhBones, armature.ikRootIds)
+    ikRots: Object = inverseKinematics(
+        armature.cached_bones,
+        armature.ikRootIds,
+    );
 
-    // inheritance is run again on a fresh clone of bones, this time with the IK rotations
-    finalBones: Bone[] = clone(armature.bones)
-    inheritance(finalBones, ikRots)
+    // inheritance is run again, this time with the IK rotations
+    resetInheritance(aramture.cached_bones, armature.bones);
+    inheritance(armature.cached_bones, ikRots);
 
-    constructVerts(finalBones)
+    // mesh deformation
+    constructVerts(armature.cached_bones);
 
-    return finalBones
+    return armature.cached_bones;
+}
+```
+
+## `resetInheritance()`
+
+Resets the provided `cached_bones` to their original transforms.
+
+Must always be called before `inheritance()`.
+
+```typescript
+resetInheritance(cached_bones: Bone[], bones: Bone[]) {
+    for(let b = 0; b < bones.length; b++) {
+        cached_bones[b].pos = bones[b].pos
+        cached_bones[b].rot = bones[b].rot
+        cached_bones[b].scale = bones[b].scale
+    }
 }
 ```
 
@@ -30,7 +55,7 @@ Child bones need to inherit their parent.
 inheritance(bones: Bone[], ikRots: Object) {
     for(let b = 0; b < bones.length; b++) {
         if(bones[b].parentId != -1) {
-            parent: Bone = clone(bones[bones[b].parentId]);
+            parent: Bone = bones[bones[b].parentId];
 
             bones[b].rot += parent.rot
             bones[b].scale *= parent.scale
@@ -78,7 +103,7 @@ function inverseKinematics(bones: Bone[], ikRootIds: int[]): Object {
     ikRot: Object = {}
 
     for(let rootId of ikRootIds) {
-        family: Bone[] = clone(bones[rootId])
+        family: Bone[] = bones[rootId]
 
         // get relevant bones from the same set
         if(family.ikTargetId == - 1) {
@@ -245,7 +270,7 @@ Note: a helper function (`inheritVert()`) is included in the code block below
 ```typescript
 function constructVerts(bones: Bone[]) {
     for(let b = 0; b < bones.length; b++) {
-        bone: Bone = clone(bones[b])
+        bone: Bone = bones[b]
 
         // Move vertex to main bone.
         // This will be overridden if vertex has a bind.
@@ -258,8 +283,8 @@ function constructVerts(bones: Bone[]) {
             if boneId == -1 {
                 continue
             }
-            bindBone: Bone = clone(bones.find(|bone| bone.id == bId)))
-            bind: Bind = clone(bones[b].binds[bi])
+            bindBone: Bone = bones.find(|bone| bone.id == bId))
+            bind: Bind = bones[b].binds[bi]
             for(let v = 0; v < bind.verts.length; v++) {
                 id: int = bind.verts[v].id
 

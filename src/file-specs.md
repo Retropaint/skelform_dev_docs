@@ -23,20 +23,21 @@ This section will only cover the content in `armature.json`.
 - [Animations](#animations)
     - [Keyframes](#keyframes)
 - [Textures](#Textures)
+- [Cached Bones](#cached-bones)
 
 ## `armature.json`
 
-Primarily consists of an `armature` object with the following data:
-
-- `version` - SkelForm editor version used to export this file
-- `bones` - Data of all bones
-- `ik_root_ids` - Array of bone IDs that contain inverse kinematics data
-- `animations` - Array of all animation data, including keyframes
-- `atlases` - Array of texture atlases
-- `styles` - Array of style data, including texture coordinates
-
-All fields below can be parsed and used as needed for runtime APIs. However, it
-is not mandatory to parse _all_ fields.
+| Key                  | Type        | Data                                         |
+| -------------------- | ----------- | -------------------------------------------- |
+| version              | string      | Editor version that exported this file       |
+| ik_root_ids          | int[]       | ID of every inverse kinematics root bone     |
+| baked_ik             | bool        | Was this file exported with baked IK frames? |
+| img_format           | string      | Exported atlas image format (PNG, JPG, etc)  |
+| clear_color          | Color       | Exported clear color of atlas images         |
+| bones                | Bone[]      | Array of all bones                           |
+| animations           | Animation[] | Array of all animations                      |
+| atlases              | Atlas[]     | Array of all atlases                         |
+| styles               | Style[]     | Array of all styles                          |
 
 ## Bones
 
@@ -169,3 +170,8 @@ Note: Coordinates are in pixels.
 | atlas_idx | uint   | Index of atlas that this texture lives in                |
 
 [^1]: Can be treated as enum
+
+## Cached Bones
+
+An extra set of bones is recommended for optimization in the `Construct()`
+generic function. This is essentially a clone of the original bone array.
