@@ -31,22 +31,6 @@ function Construct(armature: Armature): Bone[] {
 }
 ```
 
-## `resetInheritance()`
-
-Resets the provided `cached_bones` to their original transforms.
-
-Must always be called before `inheritance()`.
-
-```typescript
-resetInheritance(cached_bones: Bone[], bones: Bone[]) {
-    for(let b = 0; b < bones.length; b++) {
-        cached_bones[b].pos = bones[b].pos
-        cached_bones[b].rot = bones[b].rot
-        cached_bones[b].scale = bones[b].scale
-    }
-}
-```
-
 ## `inheritance()`
 
 Child bones need to inherit their parent.
@@ -73,6 +57,22 @@ inheritance(bones: Bone[], ikRots: Object) {
         if ikRots[b] {
             bones[b].rot = ikRots[b]
         }
+    }
+}
+```
+
+## `resetInheritance()`
+
+Resets the provided `cached_bones` to their original transforms.
+
+Must always be called before `inheritance()`.
+
+```typescript
+resetInheritance(cached_bones: Bone[], bones: Bone[]) {
+    for(let b = 0; b < bones.length; b++) {
+        cached_bones[b].pos = bones[b].pos
+        cached_bones[b].rot = bones[b].rot
+        cached_bones[b].scale = bones[b].scale
     }
 }
 ```
