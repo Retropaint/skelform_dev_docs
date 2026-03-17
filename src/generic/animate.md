@@ -15,50 +15,47 @@
 Interpolates bone fields based on provided animation data, as well as initial
 states for non-animated fields.
 
-```typescript
-function animate(
+<pre> <code class="language-typescript hljs">function animate(
     bones: Bone[], anims: Animation[], frames: int[], smoothFrames: int[]
 ) {
     for (let a = 0; a < anims.length; a++) {
         for (let b = 0; b < bones.length; b++) {
-            interpolateBone(
+            <a href="#interpolatebone">interpolateBone</a>(
                 bones[b], anims[a].keyframes, bones[b].id, frames[a], smoothFrames[a]
             )
         }
     }
 
     for (let b = 0; b < bones.length; b++) {
-        resetBone(bones[b], ...)
+        <a href="#resetbone">resetBone</a>(bones[b], ...)
     }
 }
-```
+</code> </pre>
 
 ## `interpolateBone()`
 
 Interpolates one bone's fields based on provided animation data.
 
-```typescript
-function interpolateBone(
+<pre> <code class="language-typescript hljs">function interpolateBone(
     bone: Bone, keyframes: Keyframe[], boneId: int, frame: int, smoothFrame: int
 ) {
-    interpolateKeyframes("PositionX", bone.pos.x,   ...)
-    interpolateKeyframes("PositionY", bone.pos.y,   ...)
-    interpolateKeyframes("Rotation",  bone.rot,     ...)
-    interpolateKeyframes("ScaleX",    bone.scale.x, ...)
-    interpolateKeyframes("ScaleY",    bone.scale.y, ...)
-    interpolateKeyframes("TintR",     bone.tint.r,  ...)
-    interpolateKeyframes("TintG",     bone.tint.g,  ...)
-    interpolateKeyframes("TintB",     bone.tint.b,  ...)
-    interpolateKeyframes("TintA",     bone.tint.a,  ...)
+    <a href="#interpolatekeyframes">interpolateKeyframes</a>("PositionX", bone.pos.x,   ...)
+    <a href="#interpolatekeyframes">interpolateKeyframes</a>("PositionY", bone.pos.y,   ...)
+    <a href="#interpolatekeyframes">interpolateKeyframes</a>("Rotation",  bone.rot,     ...)
+    <a href="#interpolatekeyframes">interpolateKeyframes</a>("ScaleX",    bone.scale.x, ...)
+    <a href="#interpolatekeyframes">interpolateKeyframes</a>("ScaleY",    bone.scale.y, ...)
+    <a href="#interpolatekeyframes">interpolateKeyframes</a>("TintR",     bone.tint.r,  ...)
+    <a href="#interpolatekeyframes">interpolateKeyframes</a>("TintG",     bone.tint.g,  ...)
+    <a href="#interpolatekeyframes">interpolateKeyframes</a>("TintB",     bone.tint.b,  ...)
+    <a href="#interpolatekeyframes">interpolateKeyframes</a>("TintA",     bone.tint.a,  ...)
 
     bone.zindex = ("Zindex", ...).value
 
     // these use the value_str field of the keyframe
-    bone.tex = getPrevKeyframe("Texture", ...).value
-    bone.ik_constraint = getPrevKeyframe("IkConstraint", ...).value_str
-    bone.ik_mode = getPrevKeyframe("IkMode", ...).value_str
-}
-```
+    bone.tex = <a href="#getprevkeyframe">getPrevKeyframe</a>("Texture", ...).value
+    bone.ik_constraint = <a href="#getprevkeyframe">getPrevKeyframe</a>("IkConstraint", ...).value_str
+    bone.ik_mode = <a href="#getprevkeyframe">getPrevKeyframe</a>("IkMode", ...).value_str
+}</code> </pre>
 
 ## `interpolateKeyframes()`
 
@@ -68,8 +65,7 @@ field by.
 The resulting interpolation from the keyframes is interpolated again for
 smoothing.
 
-```typescript
-function interpolateKeyframes(
+<pre> <code class="language-typescript hljs">function interpolateKeyframes(
     element: enum,
     field: float,
     keyframes: Keyframe[],
@@ -77,8 +73,8 @@ function interpolateKeyframes(
     frame: int,
     smoothFrame: int,
 ): float {
-    prev = getPrevKeyframe(...)
-    next = getNextKeyframe(...)
+    prev = <a href="#getprevkeyframe">getPrevKeyframe</a>(...)
+    next = <a href="#getnextkeyframe">getNextKeyframe</a>(...)
 
     // ensure both frames are pointing somewhere
     if(prev == undefined) {
@@ -94,7 +90,7 @@ function interpolateKeyframes(
     totalFrames = next.frame - prev.frame
     currentFrame = frame - prev.frame
 
-    result = interpolate(
+    result = <a href="#interpolate">interpolate</a>(
         currentFrame,
         totalFrames,
         prev.value,
@@ -104,16 +100,19 @@ function interpolateKeyframes(
     )
 
     // result is smoothed
-    return interpolate(currentFrame, smoothFrame, field, result, Vec2(0, 0), Vec2(0, 0))
+    let zero = Vec2(0, 0);
+    return <a href="#interpolate">interpolate</a>(currentFrame, smoothFrame, field, result, zero, zero)
 }
-```
+</code> </pre>
 
 ## `getPrevKeyframe()`
 
 Helper to get the closest keyframe behind, or directly on, the provided frame.
 
 ```typescript
-function getPrevKeyframe(frame: i32, kfs: Keyframe[], bone_id: i32, el: AnimElement): Keyframe {
+function getPrevKeyframe(
+    frame: i32, kfs: Keyframe[], bone_id: i32, el: AnimElement
+): Keyframe {
     for(let i = kfs.length - 1; i > 0; i--)
         if kfs[i].frame <= frame && kfs[i].bone_id == bone_id && kfs[i].element == el {
             return kfs[i]
@@ -128,7 +127,9 @@ function getPrevKeyframe(frame: i32, kfs: Keyframe[], bone_id: i32, el: AnimElem
 Helper to get the closest keyframe ahead of the provided frame.
 
 ```typescript
-function getNextKeyframe(frame: i32, kfs: Keyframe[], bone_id: i32, el: AnimElement): Keyframe {
+function getNextKeyframe(
+    frame: i32, kfs: Keyframe[], bone_id: i32, el: AnimElement
+): Keyframe {
     for(let i = 0; i < kfs.length; i++)
         if kfs[i].frame > frame && kfs[i].bone_id == bone_id && kfs[i].element == el {
             return kfs[i]
@@ -142,39 +143,38 @@ function getNextKeyframe(frame: i32, kfs: Keyframe[], bone_id: i32, el: AnimElem
 
 Interpolates one bone's fields to their initial values if not being animated.
 
-```typescript
-function resetBone(bone: Bone, frame: int, smoothFrame: int, anims: Animation[]) {
+<pre> <code class="language-typescript hljs">function resetBone(bone: Bone, frame: int, smoothFrame: int, anims: Animation[]) {
     let zero = Vec2(0, 0)
-    if(!isAnimated("PositionX", ...))
-        interpolate(frame, smoothFrame, bone.pos.x, bone.init_pos.x, zero, zero)
-    if(!isAnimated("PositionY", ...))
-        interpolate(frame, smoothFrame, bone.pos.y, bone.init_pos.y, zero, zero)
-    if(!isAnimated("Rotation", ...))
-        interpolate(frame, smoothFrame, bone.rot, bone.init_rot, zero, zero)
-    if(!isAnimated("ScaleX", ...))
-        interpolate(frame, smoothFrame, bone.scale.x, bone.init_scale.x, zero, zero)
-    if(!isAnimated("ScaleY", ...))
-        interpolate(frame, smoothFrame, bone.scale.y, bone.init_scale.y, zero, zero)
-    if(!isAnimated("TintR", ...))
-        interpolate(frame, smoothFrame, bone.tint.r, bone.init_tint.r, zero, zero)
-    if(!isAnimated("TintG", ...))
-        interpolate(frame, smoothFrame, bone.tint.g, bone.init_tint.g, zero, zero)
-    if(!isAnimated("TintB", ...))
-        interpolate(frame, smoothFrame, bone.tint.b, bone.init_tint.b, zero, zero))
-    if(!isAnimated("TintA", ...))
-        interpolate(frame, smoothFrame, bone.tint.a, bone.init_tint.a, zero, zero)
+    if(!<a href="#isanimated">isAnimated</a>("PositionX", ...))
+        <a href="#interpolate">interpolate</a>(frame, smoothFrame, bone.pos.x, bone.init_pos.x, zero, zero)
+    if(!<a href="#isanimated">isAnimated</a>("PositionY", ...))
+        <a href="#interpolate">interpolate</a>(frame, smoothFrame, bone.pos.y, bone.init_pos.y, zero, zero)
+    if(!<a href="#isanimated">isAnimated</a>("Rotation", ...))
+        <a href="#interpolate">interpolate</a>(frame, smoothFrame, bone.rot, bone.init_rot, zero, zero)
+    if(!<a href="#isanimated">isAnimated</a>("ScaleX", ...))
+        <a href="#interpolate">interpolate</a>(frame, smoothFrame, bone.scale.x, bone.init_scale.x, zero, zero)
+    if(!<a href="#isanimated">isAnimated</a>("ScaleY", ...))
+        <a href="#interpolate">interpolate</a>(frame, smoothFrame, bone.scale.y, bone.init_scale.y, zero, zero)
+    if(!<a href="#isanimated">isAnimated</a>("TintR", ...))
+        <a href="#interpolate">interpolate</a>(frame, smoothFrame, bone.tint.r, bone.init_tint.r, zero, zero)
+    if(!<a href="#isanimated">isAnimated</a>("TintG", ...))
+        <a href="#interpolate">interpolate</a>(frame, smoothFrame, bone.tint.g, bone.init_tint.g, zero, zero)
+    if(!<a href="#isanimated">isAnimated</a>("TintB", ...))
+        <a href="#interpolate">interpolate</a>(frame, smoothFrame, bone.tint.b, bone.init_tint.b, zero, zero))
+    if(!<a href="#isanimated">isAnimated</a>("TintA", ...))
+        <a href="#interpolate">interpolate</a>(frame, smoothFrame, bone.tint.a, bone.init_tint.a, zero, zero)
 
     // non-interpolated fields are set immediately
-    if(!isAnimated("Zindex", ...))
+    if(!<a href="#isanimated">isAnimated</a>("Zindex", ...))
         bone.zindex = bone.init_zindex
-    if(!isAnimated("Texture", ...))
+    if(!<a href="#isanimated">isAnimated</a>("Texture", ...))
         bone.tex = bone.init_tex
-    if(!isAnimated("IkMode", ...))
+    if(!<a href="#isanimated">isAnimated</a>("IkMode", ...))
         bone.ik_constraint = bone.init_ik_constraint
-    if(!isAnimated("IkConstraint", ...))
+    if(!<a href="#isanimated">isAnimated</a>("IkConstraint", ...))
         bone.ik_mode = bone.init_ik_mode
 }
-```
+</code> </pre>
 
 ## `isAnimated()`
 
