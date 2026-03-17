@@ -1,3 +1,17 @@
+## Table of Contents
+
+- [`Construct()`](#construct)
+    - [`inheritance()`](#inheritance)
+        - [`resetInheritance()`](#resetinheritance)
+    - [`rotate()`](#rotate)
+    - [`inverseKinematics()`](#inversekinematics)
+        - [`pointBones()`](#pointbones)
+        - [`applyConstraints()`](#applyconstraints)
+        - [`fabrik()`](#fabrik)
+        - [`arcIk()`](#arcIk)
+    - [`constructVerts()`](#constructverts)
+        - [Pathing Explained](#pathing-explained)
+
 # `Construct()`
 
 Constructs the armature's bones with inheritance and inverse kinematics.
@@ -265,7 +279,7 @@ function arcIk(bones: Bone[], root: Vec2, target: Vec2) {
 }
 ```
 
-## `ConstructVerts()`
+## `constructVerts()`
 
 Constructs vertices, for bones with mesh data.
 

@@ -1,4 +1,15 @@
-# `Animate()` - Generic
+## Table of Contents
+
+- [`Animate()`](#animate)
+    - [`interpolateBone()`](#interpolatebone)
+        - [`interpolateKeyframes()`](#interpolatekeyframes)
+            - [`getPrevKeyframe() & getNextKeyframe()`](#getprevkeyframe--getnextkeyframe)
+    - [`resetBone()`](#resetbone)
+        - [`isAnimated()`](#isanimated)
+    - [`interpolate()`](#interpolate)
+        - [Bezier Explanation](#bezier-explanation)
+
+# `Animate()`
 
 Interpolates bone fields based on provided animation data, as well as initial
 states for non-animated fields.
@@ -26,7 +37,7 @@ function animate(
 Interpolates one bone's fields based on provided animation data.
 
 ```typescript
-interpolateBone(
+function interpolateBone(
     bone: Bone, keyframes: Keyframe[], boneId: int, frame: int, smoothFrame: int
 ) {
     interpolateKeyframes("PositionX", bone.pos.x,   ...)
@@ -45,44 +56,6 @@ interpolateBone(
     bone.tex = getPrevFrame("Texture", ...).value
     bone.ik_constraint = getPrevFrame("IkConstraint", ...).value_str
     bone.ik_mode = getPrevFrame("IkMode", ...).value_str
-}
-```
-
-## `resetBone()`
-
-Interpolates one bone's fields to their initial values if not being animated.
-
-```typescript
-function resetBone(bone: Bone, frame: int, smoothFrame: int, anims: Animation[]) {
-    let zero = Vec2(0, 0)
-    if(!isAnimated("PositionX", ...))
-        interpolate(frame, smoothFrame, bone.pos.x, bone.init_pos.x, zero, zero)
-    if(!isAnimated("PositionY", ...))
-        interpolate(frame, smoothFrame, bone.pos.y, bone.init_pos.y, zero, zero)
-    if(!isAnimated("Rotation", ...))
-        interpolate(frame, smoothFrame, bone.rot, bone.init_rot, zero, zero)
-    if(!isAnimated("ScaleX", ...))
-        interpolate(frame, smoothFrame, bone.scale.x, bone.init_scale.x, zero, zero)
-    if(!isAnimated("ScaleY", ...))
-        interpolate(frame, smoothFrame, bone.scale.y, bone.init_scale.y, zero, zero)
-    if(!isAnimated("TintR", ...))
-        interpolate(frame, smoothFrame, bone.tint.r, bone.init_tint.r, zero, zero)
-    if(!isAnimated("TintG", ...))
-        interpolate(frame, smoothFrame, bone.tint.g, bone.init_tint.g, zero, zero)
-    if(!isAnimated("TintB", ...))
-        interpolate(frame, smoothFrame, bone.tint.b, bone.init_tint.b, zero, zero))
-    if(!isAnimated("TintA", ...))
-        interpolate(frame, smoothFrame, bone.tint.a, bone.init_tint.a, zero, zero)
-
-    // non-interpolated fields are set immediately
-    if(!isAnimated("Zindex", ...))
-        bone.zindex = bone.init_zindex
-    if(!isAnimated("Texture", ...))
-        bone.tex = bone.init_tex
-    if(!isAnimated("IkMode", ...))
-        bone.ik_constraint = bone.init_ik_constraint
-    if(!isAnimated("IkConstraint", ...))
-        bone.ik_mode = bone.init_ik_mode
 }
 ```
 
@@ -157,6 +130,44 @@ function getNextKeyframe(frame: i32, kfs: Keyframe[], bone_id: i32, el: AnimElem
         }
     }
     return undefined
+}
+```
+
+## `resetBone()`
+
+Interpolates one bone's fields to their initial values if not being animated.
+
+```typescript
+function resetBone(bone: Bone, frame: int, smoothFrame: int, anims: Animation[]) {
+    let zero = Vec2(0, 0)
+    if(!isAnimated("PositionX", ...))
+        interpolate(frame, smoothFrame, bone.pos.x, bone.init_pos.x, zero, zero)
+    if(!isAnimated("PositionY", ...))
+        interpolate(frame, smoothFrame, bone.pos.y, bone.init_pos.y, zero, zero)
+    if(!isAnimated("Rotation", ...))
+        interpolate(frame, smoothFrame, bone.rot, bone.init_rot, zero, zero)
+    if(!isAnimated("ScaleX", ...))
+        interpolate(frame, smoothFrame, bone.scale.x, bone.init_scale.x, zero, zero)
+    if(!isAnimated("ScaleY", ...))
+        interpolate(frame, smoothFrame, bone.scale.y, bone.init_scale.y, zero, zero)
+    if(!isAnimated("TintR", ...))
+        interpolate(frame, smoothFrame, bone.tint.r, bone.init_tint.r, zero, zero)
+    if(!isAnimated("TintG", ...))
+        interpolate(frame, smoothFrame, bone.tint.g, bone.init_tint.g, zero, zero)
+    if(!isAnimated("TintB", ...))
+        interpolate(frame, smoothFrame, bone.tint.b, bone.init_tint.b, zero, zero))
+    if(!isAnimated("TintA", ...))
+        interpolate(frame, smoothFrame, bone.tint.a, bone.init_tint.a, zero, zero)
+
+    // non-interpolated fields are set immediately
+    if(!isAnimated("Zindex", ...))
+        bone.zindex = bone.init_zindex
+    if(!isAnimated("Texture", ...))
+        bone.tex = bone.init_tex
+    if(!isAnimated("IkMode", ...))
+        bone.ik_constraint = bone.init_ik_constraint
+    if(!isAnimated("IkConstraint", ...))
+        bone.ik_mode = bone.init_ik_mode
 }
 ```
 
