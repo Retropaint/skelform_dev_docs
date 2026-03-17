@@ -279,6 +279,7 @@ function constructVerts(bones: Bone[]) {
         // Move vertex to main bone.
         // This will be overridden if vertex has a bind.
         for(let v = 0; v < bone.vertices.length; v++) {
+            bone.vertices[v].pos = bone.vertices[v].init_pos;
             bone.vertices[v] = inheritVert(bone.vertices[v].pos, bone)
         }
 
