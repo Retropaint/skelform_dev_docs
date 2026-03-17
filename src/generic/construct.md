@@ -7,6 +7,10 @@ function Construct(armature: Armature): Bone[] {
     // initialize cached_bones
     if (armature.cached_bones == undefined) {
         armature.cached_bones = clone(armature.bones);
+    } else {
+        // cached_bones may have been used later for drawing
+        // which sorts them by zindex, so sort back by id
+        armature.cached_bones.sort((bone) => bone.id);
     }
 
     // inheritance is run once to put bones in place,
