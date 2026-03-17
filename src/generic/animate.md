@@ -3,7 +3,8 @@
 - [`Animate()`](#animate)
     - [`interpolateBone()`](#interpolatebone)
         - [`interpolateKeyframes()`](#interpolatekeyframes)
-            - [`getPrevKeyframe() & getNextKeyframe()`](#getprevkeyframe--getnextkeyframe)
+            - [`getPrevKeyframe()`](#getprevkeyframe)
+            - [`getNextKeyframe()`](#getnextkeyframe)
     - [`resetBone()`](#resetbone)
         - [`isAnimated()`](#isanimated)
     - [`interpolate()`](#interpolate)
@@ -53,9 +54,9 @@ function interpolateBone(
     bone.zindex = ("Zindex", ...).value
 
     // these use the value_str field of the keyframe
-    bone.tex = getPrevFrame("Texture", ...).value
-    bone.ik_constraint = getPrevFrame("IkConstraint", ...).value_str
-    bone.ik_mode = getPrevFrame("IkMode", ...).value_str
+    bone.tex = getPrevKeyframe("Texture", ...).value
+    bone.ik_constraint = getPrevKeyframe("IkConstraint", ...).value_str
+    bone.ik_mode = getPrevKeyframe("IkMode", ...).value_str
 }
 ```
 
@@ -107,9 +108,9 @@ function interpolateKeyframes(
 }
 ```
 
-## `getPrevKeyframe()` & `getNextKeyframe()`
+## `getPrevKeyframe()`
 
-Helpers to get the closest keyframe behind or ahead of the provided frame.
+Helper to get the closest keyframe behind, or directly on, the provided frame.
 
 ```typescript
 function getPrevKeyframe(frame: i32, kfs: Keyframe[], bone_id: i32, el: AnimElement): Keyframe {
@@ -121,6 +122,10 @@ function getPrevKeyframe(frame: i32, kfs: Keyframe[], bone_id: i32, el: AnimElem
     return undefined
 }
 ```
+
+## `getNextKeyframe()`
+
+Helper to get the closest keyframe ahead of the provided frame.
 
 ```typescript
 function getNextKeyframe(frame: i32, kfs: Keyframe[], bone_id: i32, el: AnimElement): Keyframe {
