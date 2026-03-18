@@ -8,7 +8,7 @@
         - [`pointBones()`](#pointbones)
         - [`applyConstraints()`](#applyconstraints)
         - [`fabrik()`](#fabrik)
-        - [`arcIk()`](#arcIk)
+        - [`arcIk()`](#arcik)
     - [`constructVerts()`](#constructverts)
         - [Pathing Explained](#pathing-explained)
 
