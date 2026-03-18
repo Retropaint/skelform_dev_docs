@@ -16,8 +16,7 @@
 
 Constructs the armature's bones with inheritance and inverse kinematics.
 
-```typescript
-function Construct(armature: Armature): Bone[] {
+<pre> <code class="language-typescript hljs">function Construct(armature: Armature): Bone[] {
     // initialize cached_bones
     if (armature.cached_bones == undefined) {
         armature.cached_bones = clone(armature.bones);
@@ -29,25 +28,25 @@ function Construct(armature: Armature): Bone[] {
 
     // inheritance is run once to put bones in place,
     // for inverse kinematics to properly determine rotations
-    resetInheritance(aramture.cached_bones, armature.bones);
-    inheritance(armature.cached_bones, {});
+    <a href="#resetinheritance">resetInheritance</a>(aramture.cached_bones, armature.bones);
+    <a href="#inheritance">inheritance</a>(armature.cached_bones, {});
 
     // inverse kinematics will return which bones' rotations should be overridden
-    ikRots: Object = inverseKinematics(
+    ikRots: Object = <a href="#inversekinematics">inversekinematics</a>(
         armature.cached_bones,
         armature.ikRootIds,
     );
 
     // inheritance is run again, this time with the IK rotations
-    resetInheritance(aramture.cached_bones, armature.bones);
-    inheritance(armature.cached_bones, ikRots);
+    <a href="#resetinheritance">resetInheritance</a>(aramture.cached_bones, armature.bones);
+    <a href="#inheritance">inheritance</a>(armature.cached_bones, ikRots);
 
     // mesh deformation
-    constructVerts(armature.cached_bones);
+    <a href="#constructverts">constructVerts</a>((armature.cached_bones);
 
     return armature.cached_bones;
 }
-```
+</code> </pre>
 
 ## `inheritance()`
 
@@ -116,8 +115,7 @@ later be used by `inheritance()`.
 IK data for each set of bones is stored in the root bone, which can be iterated
 wth `ikRootIds`.
 
-```typescript
-function inverseKinematics(bones: Bone[], ikRootIds: int[]): Object {
+<pre> <code class="language-typescript hljs">function inverseKinematics(bones: Bone[], ikRootIds: int[]): Object {
     ikRot: Object = {}
 
     for(let rootId of ikRootIds) {
@@ -137,15 +135,14 @@ function inverseKinematics(bones: Bone[], ikRootIds: int[]): Object {
         switch(family.ikMode) {
             case "FABRIK":
                 for range(10) {
-                    fabrik(*familyBones, root, target)
+                    <a href="#fabrik">fabrik</a>(*familyBones, root, target)
                 }
             case "Arc":
-                arcIk(*familyBones, root, target)
+                <a href="#arcik">arcIk</a>(*familyBones, root, target)
         }
 
-        pointBones(*bones, family)
-
-        applyConstraints(*bones, family)
+        <a href="#pointbones">pointBones</a>(*bones, family)
+        <a href="#applyconstraints">applyConstraints</a>(*bones, family)
 
         // add rotations to ikRot, with bone ID being the key
         for(let b = 0; b < family.ikBoneIds.length; b++) {
@@ -159,7 +156,8 @@ function inverseKinematics(bones: Bone[], ikRootIds: int[]): Object {
 
     return ikRot
 }
-```
+</code> </pre>
+
 
 ## `pointBones()`
 
