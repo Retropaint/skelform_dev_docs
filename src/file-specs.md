@@ -22,7 +22,9 @@ This section will only cover the content in `armature.json`.
         - [BindVert](#bindvert)
 - [Animations](#animations)
     - [Keyframes](#keyframes)
-- [Textures](#Textures)
+- [Atlases](#atlases)
+- [Styles](#styles)
+    - [Textures](#Textures)
 - [Cached Bones](#cached-bones)
 
 ## `armature.json`
