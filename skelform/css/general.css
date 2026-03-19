@@ -405,3 +405,9 @@ dd > p {
     /* Add some space between the icon and the text. */
     margin-right: 8px;
 }
+
+/* Custom */
+
+.color {
+    font-size: 14px;
+}

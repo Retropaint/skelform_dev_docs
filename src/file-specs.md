@@ -29,32 +29,32 @@ This section will only cover the content in `armature.json`.
 
 ## `armature.json`
 
-| Key         | Type        | Data                                         |
-| ----------- | ----------- | -------------------------------------------- |
-| version     | string      | Editor version that exported this file       |
-| ik_root_ids | int[]       | ID of every inverse kinematics root bone     |
-| baked_ik    | bool        | Was this file exported with baked IK frames? |
-| img_format  | string      | Exported atlas image format (PNG, JPG, etc)  |
-| clear_color | Color       | Exported clear color of atlas images         |
-| bones       | Bone[]      | Array of all bones                           |
-| animations  | Animation[] | Array of all animations                      |
-| atlases     | Atlas[]     | Array of all atlases                         |
-| styles      | Style[]     | Array of all styles                          |
+| Key         | Type        | Data                                         | Default                                     |
+| ----------- | ----------- | -------------------------------------------- | ------------------------------------------- |
+| version     | string      | Editor version that exported this file       | `""`                                        |
+| ik_root_ids | int[]       | ID of every inverse kinematics root bone     | `[]`                                        |
+| baked_ik    | bool        | Was this file exported with baked IK frames? | `false`                                     |
+| img_format  | string      | Exported atlas image format (PNG, JPG, etc)  | `"PNG"`                                     |
+| clear_color | Color[^1]   | Exported clear color of atlas images         | <span class="color">`(0, 0, 0, 255)`</span> |
+| bones       | Bone[]      | Array of all bones                           | `[]`                                        |
+| animations  | Animation[] | Array of all animations                      | `[]`                                        |
+| atlases     | Atlas[]     | Array of all atlases                         | `[]`                                        |
+| styles      | Style[]     | Array of all styles                          | `[]`                                        |
 
 ## Bones
 
-| Key       | Type   | Data                                               |
-| --------- | ------ | -------------------------------------------------- |
-| id        | uint   | Bone ID                                            |
-| name      | string | Name of bone                                       |
-| pos       | Vec2   | Position of bone                                   |
-| rot       | float  | Rotation of bone                                   |
-| scale     | Vec2   | Scale of bone                                      |
-| parent_id | int    | Bone parent ID (-1 if none)                        |
-| tex       | string | Name of texture to use                             |
-| zindex    | int    | Z-index of bone (higher index renders above lower) |
-| hidden    | bool   | Whether this bone is hidden                        |
-| tint      | Vec4   | Color ting                                         |
+| Key       | Type      | Data                                               | Default                                           |
+| --------- | --------- | -------------------------------------------------- | ------------------------------------------------- |
+| id        | uint      | Bone ID                                            | `0`                                               |
+| name      | string    | Name of bone                                       | `""`                                              |
+| pos       | Vec2      | Position of bone                                   | `(0, 0)`                                          |
+| rot       | float     | Rotation of bone                                   | `0`                                               |
+| scale     | Vec2      | Scale of bone                                      | `(1, 1)`                                          |
+| parent_id | int       | Bone parent ID (-1 if none)                        | `-1`                                              |
+| tex       | string    | Name of texture to use                             | `""`                                              |
+| zindex    | int       | Z-index of bone (higher index renders above lower) | `0`                                               |
+| hidden    | bool      | Whether this bone is hidden                        | `false`                                           |
+| tint      | Color[^1] | Color tint                                         | <span class="color">`(255, 255, 255, 255)`</span> |
 
 ### Initial Fields
 
@@ -69,12 +69,12 @@ values (but can still represent them as `0` and `1`)
 
 _The following is **not** an exhaustive list._
 
-| Key        | Type  |
-| ---------- | ----- |
-| init_pos   | Vec2  |
-| init_rot   | float |
-| init_scale | Vec2  |
-| ...        | ...   |
+| Key        | Type  | Default      |
+| ---------- | ----- | ------------ |
+| init_pos   | Vec2  | `bone.pos`   |
+| init_rot   | float | `bone.rot`   |
+| init_scale | Vec2  | `bone.scale` |
+| ...        | ...   | ...          |
 
 ### Inverse Kinematics
 
@@ -82,13 +82,13 @@ Inverse kinematics is stored in the root (first) bone of each set of IK bones.
 
 Other bones will only have `ik_family_id`, which is -1 by default.
 
-| Key           | Type   | Data                                             |
-| ------------- | ------ | ------------------------------------------------ |
-| ik_family_id  | uint   | The ID of family this bone is in (-1 by default) |
-| ik_constraint | string | This family's constraint                         |
-| ik_mode       | string | This family's mode (FABRIK, Arc)                 |
-| ik_target_id  | uint   | This set's target bone ID                        |
-| ik_bone_ids   | uint[] | This set's ID of bones                           |
+| Key           | Type   | Data                                             | Default    |
+| ------------- | ------ | ------------------------------------------------ | ---------- |
+| ik_family_id  | uint   | The ID of family this bone is in (-1 by default) | `-1`       |
+| ik_constraint | string | This family's constraint                         | `"None"`   |
+| ik_mode       | string | This family's mode (FABRIK, Arc)                 | `"FABRIK"` |
+| ik_target_id  | uint   | This set's target bone ID                        | `-1`       |
+| ik_bone_ids   | uint[] | This set's ID of bones                           | `[]`       |
 
 ### Meshes
 
@@ -97,52 +97,52 @@ Only bones that explicitly contain a mesh, will have building data on it.
 Bones with a regular texture rect will omit this, as the building data can be
 inferred through `Texture` instead.
 
-| Key      | Type     | Data                                                   |
-| -------- | -------- | ------------------------------------------------------ |
-| vertices | Vertex[] | Array of vertices                                      |
-| indices  | uint[]   | Each index is vertex ID. Every 3 IDs forms 1 triangle. |
-| binds    | Bind[]   | Array of bone binds                                    |
+| Key      | Type     | Data                                                   | Default |
+| -------- | -------- | ------------------------------------------------------ | ------- |
+| vertices | Vertex[] | Array of vertices                                      | `[]`    |
+| indices  | uint[]   | Each index is vertex ID. Every 3 IDs forms 1 triangle. | `[]`    |
+| binds    | Bind[]   | Array of bone binds                                    | `[]`    |
 
 #### Vertex
 
 A mesh is defined by its vertices, which describe how each point is positioned,
 as well as how the texture is mapped (UV).
 
-| Key      | Type | Data                               |
-| -------- | ---- | ---------------------------------- |
-| id       | uint | ID of vertex                       |
-| pos      | Vec2 | Position of vertex                 |
-| uv       | Vec2 | UV of vertex                       |
-| init_pos | int  | Helper for initial vertex position |
+| Key      | Type | Data                               | Default  |
+| -------- | ---- | ---------------------------------- | -------- |
+| id       | uint | ID of vertex                       | `0`      |
+| pos      | Vec2 | Position of vertex                 | `(0, 0)` |
+| uv       | Vec2 | UV of vertex                       | `(0, 0)` |
+| init_pos | int  | Helper for initial vertex position | `pos`    |
 
 #### Bind
 
 Meshes can have 'binding' bones to influence a set of vertices. These are the
 primary method of animating vertices.
 
-| Key     | Type       | Data                                         |
-| ------- | ---------- | -------------------------------------------- |
-| id      | int        | ID of bind                                   |
-| is_path | bool       | Should this bind behave like a path?         |
-| verts   | BindVert[] | Array of vertex data associated to this bind |
+| Key     | Type       | Data                                         | Default |
+| ------- | ---------- | -------------------------------------------- | ------- |
+| id      | int        | ID of bind                                   | `-1`    |
+| is_path | bool       | Should this bind behave like a path?         | `false` |
+| verts   | BindVert[] | Array of vertex data associated to this bind | `[]`    |
 
 #### BindVert
 
 Vertices assigned to a bind.
 
-| Key    | Type  | Data                           |
-| ------ | ----- | ------------------------------ |
-| id     | uint  | ID of vertex                   |
-| weight | float | Weight assigned to this vertex |
+| Key    | Type  | Data                           | Default |
+| ------ | ----- | ------------------------------ | ------- |
+| id     | uint  | ID of vertex                   | `0`     |
+| weight | float | Weight assigned to this vertex | `1`     |
 
 ## Animations
 
-| Key       | Type      | Data                               |
-| --------- | --------- | ---------------------------------- |
-| id        | string    | ID of animation                    |
-| name      | string    | Name of animation                  |
-| fps       | uint      | Frames per second of animation     |
-| keyframes | see below | Data of all keyframes of animation |
+| Key       | Type       | Data                               | Default |
+| --------- | ---------- | ---------------------------------- | ------- |
+| id        | string     | ID of animation                    | `0`     |
+| name      | string     | Name of animation                  | `""`    |
+| fps       | uint       | Frames per second of animation     | `0`     |
+| keyframes | Keyframe[] | Data of all keyframes of animation | `[]`    |
 
 ### Keyframes
 
@@ -151,47 +151,49 @@ Keyframes are defined by their `element` (what's animated), as well as either
 
 Eg: `element: PosX` with `value: 20` means 'Position X = 20 at `frame`'
 
-| Key          | Type   | Data                                     |
-| ------------ | ------ | ---------------------------------------- |
-| frame        | uint   | frame of keyframe                        |
-| bone_id      | uint   | ID of bone that keyframe refers to       |
-| element      | string | Element to be animated by this keyframe  |
-| value        | float  | Value to set `element` of bone to        |
-| value_str    | string | String variant of value                  |
-| start_handle | float  | Handle to use for start of interpolation |
-| end_handle   | float  | Handle to use for end of interpolation   |
+| Key          | Type   | Data                                     | Default |
+| ------------ | ------ | ---------------------------------------- | ------- |
+| frame        | uint   | frame of keyframe                        | `0`     |
+| bone_id      | uint   | ID of bone that keyframe refers to       | `0`     |
+| element      | string | Element to be animated by this keyframe  | `""`    |
+| value        | float  | Value to set `element` of bone to        | `0`     |
+| value_str    | string | String variant of value                  | `""`    |
+| start_handle | float  | Handle to use for start of interpolation | `0.333` |
+| end_handle   | float  | Handle to use for end of interpolation   | `0.666` |
 
 ## Atlases
 
 Easily-accessible information about texture atlas files.
 
-| Key      | Type   | Data                        |
-| -------- | ------ | --------------------------- |
-| filename | string | Name of file for this atlas |
-| size     | Vec2   | Size of image (in pixels)   |
+| Key      | Type   | Data                        | Default  |
+| -------- | ------ | --------------------------- | -------- |
+| filename | string | Name of file for this atlas | `""`     |
+| size     | Vec2   | Size of image (in pixels)   | `(0, 0)` |
 
 ## Styles
 
 Groups of textures.
 
-| Key      | Type    | Data              |
-| -------- | ------- | ----------------- |
-| id       | uint    | ID of style       |
-| name     | string  | Name of style     |
-| textures | Texture | Array of textures |
+| Key      | Type    | Data              | Default |
+| -------- | ------- | ----------------- | ------- |
+| id       | uint    | ID of style       | `0`     |
+| name     | string  | Name of style     | `""`    |
+| textures | Texture | Array of textures | `[]`    |
 
 ### Textures
 
 Note: Coordinates are in pixels.
 
-| Key       | Type   | Data                                                     |
-| --------- | ------ | -------------------------------------------------------- |
-| name      | string | Name of texture                                          |
-| offset    | Vec2   | Top-left corner of texture in the atlas                  |
-| size      | Vec2   | Append to `offset` to get bottom-right corner of texture |
-| atlas_idx | uint   | Index of atlas that this texture lives in                |
+| Key       | Type   | Data                                                     | Default  |
+| --------- | ------ | -------------------------------------------------------- | -------- |
+| name      | string | Name of texture                                          | `""`     |
+| offset    | Vec2   | Top-left corner of texture in the atlas                  | `(0, 0)` |
+| size      | Vec2   | Append to `offset` to get bottom-right corner of texture | `(0, 0)` |
+| atlas_idx | uint   | Index of atlas that this texture lives in                | `0`      |
 
 ## Cached Bones
 
 An extra set of bones is recommended for optimization in the `Construct()`
 generic function. This is essentially a clone of the original bone array.
+
+[^1]: A variant of Vec4: `(r, g, b, a)`
