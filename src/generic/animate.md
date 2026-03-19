@@ -208,7 +208,7 @@ function interp(
     start_handle: Vec2,
     end_handle: Vec2,
 ): float {
-    // snapping behavior for None transition preset
+    // snapping behavior for Snap transition preset
     if(start_handle.y == 999.0 && end_handle.y == 999.0) {
         return start_val;
     }
