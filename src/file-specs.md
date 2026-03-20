@@ -35,7 +35,7 @@ This section will only cover the content in `armature.json`.
 | ik_root_ids | int[]       | `[]`                                        | ID of every inverse kinematics root bone     |
 | baked_ik    | bool        | `false`                                     | Was this file exported with baked IK frames? |
 | img_format  | string      | `"PNG"`                                     | Exported atlas image format (PNG, JPG, etc)  |
-| clear_color | Color[^1]   | <span class="color">`(0, 0, 0, 255)`</span> | Exported clear color of atlas images         |
+| clear_color | Color[^1]   | <span class="color">`(0, 0, 0, 0)`</span> | Exported clear color of atlas images         |
 | bones       | Bone[]      | `[]`                                        | Array of all bones                           |
 | animations  | Animation[] | `[]`                                        | Array of all animations                      |
 | atlases     | Atlas[]     | `[]`                                        | Array of all atlases                         |
