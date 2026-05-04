@@ -1,12 +1,7 @@
 ## Table of Contents
 
 - [`Animate()`](#animate)
-    - [`interpolateBone()`](#interpolatebone)
-        - [`interpolateKeyframes()`](#interpolatekeyframes)
-            - [`getPrevKeyframe()`](#getprevkeyframe)
-            - [`getNextKeyframe()`](#getnextkeyframe)
-    - [`resetBone()`](#resetbone)
-        - [`isAnimated()`](#isanimated)
+    - [`interpolateKeyframes()`](#interpolatekeyframes)
     - [`interpolate()`](#interpolate)
         - [Bezier Explanation](#bezier-explanation)
 
@@ -15,46 +10,66 @@
 Interpolates bone fields based on provided animation data, as well as initial
 states for non-animated fields.
 
-<pre> <code class="language-typescript hljs">function animate(
-    bones: Bone[], anims: Animation[], frames: int[], smoothFrames: int[]
-) {
+<pre> <code class="language-typescript hljs">function Animate(bones: Bone[], anims: Animation[], frames: int[], smoothFrames: int[]) {
     for (let a = 0; a < anims.length; a++) {
-        for (let b = 0; b < bones.length; b++) {
-            <a href="#interpolatebone">interpolateBone</a>(
-                bones[b], anims[a].keyframes, bones[b].id, frames[a], smoothFrames[a]
-            )
+        for (k = 0; k < anim.keyframes.length; k++) {
+            let kf = anims[a].keyframes[k];
+
+            // only prev keyframes are considered
+            if (kf.frame > frames[a]) {
+                break;
+            }
+
+            if (kf.next_kf == -1) {
+                kf.next_kf = k;
+            }
+            let nextKf = anims[a].keyframes[kf.next_kf];
+
+            // this is a redundant keyframe if the next one is also before this frame
+            if (nextKf.frame < frames[a] && kf.next_kf != k) {
+                continue;
+            }
+
+            let bone = bones[kf.bone_id]
+
+            let element = kf.element[0]
+            ikf = interpolateKeyframes
+            if (element == "PositionX")
+                interpolateKeyframes(bone.pos.x, kf, nextKf, frames[a], smoothFrames[a])
+            if (element == "PositionY")
+                interpolateKeyframes(bone.pos.y, kf, nextKf, frames[a], smoothFrames[a])
+            if (element == "Rotation")
+                interpolateKeyframes(bone.rot, kf, nextKf, frames[a], smoothFrames[a])
+            if (element == "ScaleX")
+                interpolateKeyframes(bone.scale.x, kf, nextKf, frames[a], smoothFrames[a])
+            if (element == "ScaleY")
+                interpolateKeyframes(bone.scale.y, kf, nextKf, frames[a], smoothFrames[a])
+            if (element == "Hidden")
+                bone.hidden = kf.value == 1;
         }
     }
 
-    for (let b = 0; b < bones.length; b++) {
-        <a href="#resetbone">resetBone</a>(bones[b], ...)
-    }
-}
-</code> </pre>
-
-## `interpolateBone()`
-
-Interpolates one bone's fields based on provided animation data.
-
-<pre> <code class="language-typescript hljs">function interpolateBone(
-    bone: Bone, keyframes: Keyframe[], boneId: int, frame: int, smoothFrame: int
-) {
-    <a href="#interpolatekeyframes">interpolateKeyframes</a>("PositionX", bone.pos.x,   ...)
-    <a href="#interpolatekeyframes">interpolateKeyframes</a>("PositionY", bone.pos.y,   ...)
-    <a href="#interpolatekeyframes">interpolateKeyframes</a>("Rotation",  bone.rot,     ...)
-    <a href="#interpolatekeyframes">interpolateKeyframes</a>("ScaleX",    bone.scale.x, ...)
-    <a href="#interpolatekeyframes">interpolateKeyframes</a>("ScaleY",    bone.scale.y, ...)
-    <a href="#interpolatekeyframes">interpolateKeyframes</a>("TintR",     bone.tint.r,  ...)
-    <a href="#interpolatekeyframes">interpolateKeyframes</a>("TintG",     bone.tint.g,  ...)
-    <a href="#interpolatekeyframes">interpolateKeyframes</a>("TintB",     bone.tint.b,  ...)
-    <a href="#interpolatekeyframes">interpolateKeyframes</a>("TintA",     bone.tint.a,  ...)
-
-    bone.zindex = ("Zindex", ...).value
-
-    // these use the value_str field of the keyframe
-    bone.tex = <a href="#getprevkeyframe">getPrevKeyframe</a>("Texture", ...).value
-    bone.ik_constraint = <a href="#getprevkeyframe">getPrevKeyframe</a>("IkConstraint", ...).value_str
-    bone.ik_mode = <a href="#getprevkeyframe">getPrevKeyframe</a>("IkMode", ...).value_str
+    elementMap = {}
+    anims.forEach(anim => {
+        anim.keyframes.forEach(kf => {
+            elementMap[kf.bone_id].push(kf.element)
+        })
+    })
+    bones.forEach(bone => {
+        if (!elementMap[kf.bone_id]["PositionX"])
+            interpolate(frames[0], smoothFrames[0], bone.pos.X, bone.init_pos.X, z, z)
+        if (!elementMap[kf.bone_id]["PositionY"])
+            interpolate(frames[0], smoothFrames[0], bone.pos.Y, bone.init_pos.Y, z, z)
+        if (!elementMap[kf.bone_id]["Rotation"])
+            interpolate(frames[0], smoothFrames[0], bone.rot, bone.init_rot, z, z)
+        if (!elementMap[kf.bone_id]["ScaleX"])
+            interpolate(frames[0], smoothFrames[0], bone.scale.X, bone.init_scale.X, z, z)
+        if (!elementMap[kf.bone_id]["ScaleY"])
+            interpolate(frames[0], smoothFrames[0], bone.scale.Y, bone.init_scale.X, z, z)
+        if (!elementMap[kf.bone_id]["Hidden"])
+            bone.hidden = bone.init_hidden
+    })
+    
 }</code> </pre>
 
 ## `interpolateKeyframes()`
@@ -66,132 +81,22 @@ The resulting interpolation from the keyframes is interpolated again for
 smoothing.
 
 <pre> <code class="language-typescript hljs">function interpolateKeyframes(
-    element: enum,
-    field: float,
-    keyframes: Keyframe[],
-    id: int,
-    frame: int,
-    smoothFrame: int,
+    field: float, prevKf: Keyframe, nextKf: Keyframe, frame: int, smoothFrame: int
 ): float {
-    prev = <a href="#getprevkeyframe">getPrevKeyframe</a>(...)
-    next = <a href="#getnextkeyframe">getNextKeyframe</a>(...)
-
-    // ensure both frames are pointing somewhere
-    if(prev == undefined) {
-        prev = next
-    } else if(next == undefined) {
-        next = prev
-    }
-
-    // if both are -1, then the frame doesn't exist. Do nothing
-    if(prev == undefined && next == undefined)
-        return
-
-    totalFrames = next.frame - prev.frame
-    currentFrame = frame - prev.frame
-
-    result = <a href="#interpolate">interpolate</a>(
+    const totalFrames = nextKf.frame - prevKf.frame
+    const currentFrame = frame - prevKf.frame
+    const result = interpolate(
         currentFrame,
         totalFrames,
-        prev.value,
-        prev.value,
-        next.start_handle,
-        next.end_handle
+        prevKf.value,
+        nextKf.value,
+        nextKf.start_handle,
+        nextKf.end_handle
     )
-
-    // result is smoothed
-    let zero = Vec2(0, 0);
-    return <a href="#interpolate">interpolate</a>(currentFrame, smoothFrame, field, result, zero, zero)
+    let z = { x: 0, y: 0 }
+    return interpolate(currentFrame, smoothFrame, field, result, z, z)
 }
 </code> </pre>
-
-## `getPrevKeyframe()`
-
-Helper to get the closest keyframe behind, or directly on, the provided frame.
-
-```typescript
-function getPrevKeyframe(
-    frame: i32, kfs: Keyframe[], bone_id: i32, el: AnimElement
-): Keyframe {
-    for(let i = kfs.length - 1; i > 0; i--)
-        if kfs[i].frame <= frame && kfs[i].bone_id == bone_id && kfs[i].element == el {
-            return kfs[i]
-        }
-    }
-    return undefined
-}
-```
-
-## `getNextKeyframe()`
-
-Helper to get the closest keyframe ahead of the provided frame.
-
-```typescript
-function getNextKeyframe(
-    frame: i32, kfs: Keyframe[], bone_id: i32, el: AnimElement
-): Keyframe {
-    for(let i = 0; i < kfs.length; i++)
-        if kfs[i].frame > frame && kfs[i].bone_id == bone_id && kfs[i].element == el {
-            return kfs[i]
-        }
-    }
-    return undefined
-}
-```
-
-## `resetBone()`
-
-Interpolates one bone's fields to their initial values if not being animated.
-
-<pre> <code class="language-typescript hljs">function resetBone(bone: Bone, frame: int, smoothFrame: int, anims: Animation[]) {
-    let zero = Vec2(0, 0)
-    if(!<a href="#isanimated">isAnimated</a>("PositionX", ...))
-        <a href="#interpolate">interpolate</a>(frame, smoothFrame, bone.pos.x, bone.init_pos.x, zero, zero)
-    if(!<a href="#isanimated">isAnimated</a>("PositionY", ...))
-        <a href="#interpolate">interpolate</a>(frame, smoothFrame, bone.pos.y, bone.init_pos.y, zero, zero)
-    if(!<a href="#isanimated">isAnimated</a>("Rotation", ...))
-        <a href="#interpolate">interpolate</a>(frame, smoothFrame, bone.rot, bone.init_rot, zero, zero)
-    if(!<a href="#isanimated">isAnimated</a>("ScaleX", ...))
-        <a href="#interpolate">interpolate</a>(frame, smoothFrame, bone.scale.x, bone.init_scale.x, zero, zero)
-    if(!<a href="#isanimated">isAnimated</a>("ScaleY", ...))
-        <a href="#interpolate">interpolate</a>(frame, smoothFrame, bone.scale.y, bone.init_scale.y, zero, zero)
-    if(!<a href="#isanimated">isAnimated</a>("TintR", ...))
-        <a href="#interpolate">interpolate</a>(frame, smoothFrame, bone.tint.r, bone.init_tint.r, zero, zero)
-    if(!<a href="#isanimated">isAnimated</a>("TintG", ...))
-        <a href="#interpolate">interpolate</a>(frame, smoothFrame, bone.tint.g, bone.init_tint.g, zero, zero)
-    if(!<a href="#isanimated">isAnimated</a>("TintB", ...))
-        <a href="#interpolate">interpolate</a>(frame, smoothFrame, bone.tint.b, bone.init_tint.b, zero, zero))
-    if(!<a href="#isanimated">isAnimated</a>("TintA", ...))
-        <a href="#interpolate">interpolate</a>(frame, smoothFrame, bone.tint.a, bone.init_tint.a, zero, zero)
-
-    // non-interpolated fields are set immediately
-    if(!<a href="#isanimated">isAnimated</a>("Zindex", ...))
-        bone.zindex = bone.init_zindex
-    if(!<a href="#isanimated">isAnimated</a>("Texture", ...))
-        bone.tex = bone.init_tex
-    if(!<a href="#isanimated">isAnimated</a>("IkMode", ...))
-        bone.ik_constraint = bone.init_ik_constraint
-    if(!<a href="#isanimated">isAnimated</a>("IkConstraint", ...))
-        bone.ik_mode = bone.init_ik_mode
-}
-</code> </pre>
-
-## `isAnimated()`
-
-Returns true if a particular element is part of the provided animations.
-
-```typescript
-function isAnimated(boneId: int, element: enum, animations: Animation[]): bool {
-    for (let anim of anims) {
-        for (let kf of anim.keyframes) {
-            if (kf.boneId == boneId && kf.element == element) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-```
 
 ## `interpolate()`
 
