@@ -18,43 +18,39 @@
 Constructs the armature's bones with inheritance and inverse kinematics.
 
 <pre> <code class="language-typescript hljs">function Construct(armature: Armature): Bone[] {
-    // initialize cached_bones
-    if (armature.cached_bones == undefined) {
-        armature.cached_bones = clone(armature.bones);
+    // initialize constructed_bones
+    if (armature.constructed_bones == undefined) {
+        armature.constructed_bones = clone(armature.bones);
     } else {
-        // cached_bones may have been used later for drawing
+        // constructed_bones may have been used later for drawing
         // which sorts them by zindex, so sort back by id
-        armature.cached_bones.sort((bone) => bone.id);
+        armature.constructed_bones.sort((bone) => bone.id);
     }
 
     // inheritance is run once to put bones in place,
     // for inverse kinematics to properly determine rotations
-    <a href="#resetinheritance">resetInheritance</a>(aramture.cached_bones, armature.bones);
-    <a href="#inheritance">inheritance</a>(armature.cached_bones, {}, {});
+    <a href="#resetinheritance">resetInheritance</a>(aramture.constructed_bones, armature.bones);
+    <a href="#inheritance">inheritance</a>(armature.constructed_bones, {}, {});
 
     // inverse kinematics will return which bones' rotations should be overridden
     ikRots: Object = <a href="#inversekinematics">inversekinematics</a>(
-        armature.cached_bones,
+        armature.constructed_bones,
         armature.ikRootIds,
     );
 
     // run inheritance again for IK rotations
-    <a href="#resetinheritance">resetInheritance</a>(aramture.cached_bones, armature.bones);
-    <a href="#inheritance">inheritance</a>(armature.cached_bones, ikRots, {});
+    <a href="#resetinheritance">resetInheritance</a>(aramture.constructed_bones, armature.bones);
+    <a href="#inheritance">inheritance</a>(armature.constructed_bones, ikRots, {});
 
     // process physics
-    simulate_physics(armature.bones, armature.cached_bones)
+    simulate_physics(armature.bones, armature.constructed_bones)
 
     // run inheritance again for physics
-    <a href="#resetinheritance">resetInheritance</a>(aramture.cached_bones, armature.bones);
-    <a href="#inheritance">inheritance</a>(armature.cached_bones, ikRots, armature.bones);
+    <a href="#resetinheritance">resetInheritance</a>(aramture.constructed_bones, armature.bones);
+    <a href="#inheritance">inheritance</a>(armature.constructed_bones, ikRots, armature.bones);
 
     // mesh deformation
-    <a href="#constructverts">constructVerts</a>((armature.cached_bones);
-
-    // return both the original bones, and cached bones to be used later for drawing.
-    // returning armature.bones is mandatory for physics (updating global fields)
-    return (armature.bones, armature.cached_bones);
+    <a href="#constructverts">constructVerts</a>((armature.constructed_bones);
 }
 </code> </pre>
 
@@ -109,16 +105,13 @@ inheritance(bones: Bone[], ikRots: Object, armature_bones: Bone[]) {
 
 ## `resetInheritance()`
 
-Resets the provided `cached_bones` to their original transforms.
+Resets the provided `constructed_bones` to their original transforms.
 
 Must always be called before `inheritance()`.
 
 ```typescript
-resetInheritance(cached_bones: Bone[], bones: Bone[]) {
+resetInheritance(constructed_bones: Bone[], bones: Bone[]) {
     for(let b = 0; b < bones.length; b++) {
-        cached_bones[b].pos = bones[b].pos
-        cached_bones[b].rot = bones[b].rot
-        cached_bones[b].scale = bones[b].scale
     }
 }
 ```

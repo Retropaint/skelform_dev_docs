@@ -25,7 +25,7 @@ This section will only cover the content in `armature.json`.
 - [Atlases](#atlases)
 - [Styles](#styles)
     - [Textures](#Textures)
-- [Cached Bones](#cached-bones)
+- [Constructed Bones](#constructed-bones)
 
 ## `armature.json`
 
@@ -192,9 +192,10 @@ Note: Coordinates are in pixels.
 | size      | Vec2   | `(0, 0)` | Append to `offset` to get bottom-right corner of texture |
 | atlas_idx | uint   | `0`      | Index of atlas that this texture lives in                |
 
-## Cached Bones
+## Constructed Bones
 
 An extra set of bones is recommended for optimization in the `Construct()`
-generic function. This is essentially a clone of the original bone array.
+generic function. This is a clone of the bones array, but with construction
+applied to it for use later with `Draw()`.
 
 [^1]: A variant of Vec4: `(r, g, b, a)`
