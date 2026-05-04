@@ -29,17 +29,17 @@ This section will only cover the content in `armature.json`.
 
 ## `armature.json`
 
-| Key         | Type        | Default                                     | Description                                  |
-| ----------- | ----------- | ------------------------------------------- | -------------------------------------------- |
-| version     | string      | `""`                                        | Editor version that exported this file       |
-| ik_root_ids | int[]       | `[]`                                        | ID of every inverse kinematics root bone     |
-| baked_ik    | bool        | `false`                                     | Was this file exported with baked IK frames? |
-| img_format  | string      | `"PNG"`                                     | Exported atlas image format (PNG, JPG, etc)  |
+| Key         | Type        | Default                                   | Description                                  |
+| ----------- | ----------- | ----------------------------------------- | -------------------------------------------- |
+| version     | string      | `""`                                      | Editor version that exported this file       |
+| ik_root_ids | int[]       | `[]`                                      | ID of every inverse kinematics root bone     |
+| baked_ik    | bool        | `false`                                   | Was this file exported with baked IK frames? |
+| img_format  | string      | `"PNG"`                                   | Exported atlas image format (PNG, JPG, etc)  |
 | clear_color | Color[^1]   | <span class="color">`(0, 0, 0, 0)`</span> | Exported clear color of atlas images         |
-| bones       | Bone[]      | `[]`                                        | Array of all bones                           |
-| animations  | Animation[] | `[]`                                        | Array of all animations                      |
-| atlases     | Atlas[]     | `[]`                                        | Array of all atlases                         |
-| styles      | Style[]     | `[]`                                        | Array of all styles                          |
+| bones       | Bone[]      | `[]`                                      | Array of all bones                           |
+| animations  | Animation[] | `[]`                                      | Array of all animations                      |
+| atlases     | Atlas[]     | `[]`                                      | Array of all atlases                         |
+| styles      | Style[]     | `[]`                                      | Array of all styles                          |
 
 ## Bones
 
@@ -158,6 +158,7 @@ Eg: `element: PosX` with `value: 20` means 'Position X = 20 at `frame`'
 | element      | string | `""`    | Element to be animated by this keyframe  |
 | value        | float  | `0`     | Value to set `element` of bone to        |
 | value_str    | string | `""`    | String variant of value                  |
+| next_kf      | int    | `-1`    | Index of the next associated keyframe    |
 | start_handle | float  | `0.333` | Handle to use for start of interpolation |
 | end_handle   | float  | `0.666` | Handle to use for end of interpolation   |
 
