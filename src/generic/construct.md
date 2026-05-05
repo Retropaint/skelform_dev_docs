@@ -340,7 +340,7 @@ Processes all physics:
 
             // ratio
             if(arm_bone.phys_scale_ratio < 0) {
-                damping.y *= 1. - arm_bone.phys_scale_ratio.abs()
+                damping.y *= 1. - Math.abs(arm_bone.phys_scale_ratio)
             } else if(arm_bone.phys_pos_ratio > 0) {
                 damping.x *= 1. - arm_bone.phys_scale_ratio
             }
@@ -357,27 +357,32 @@ Processes all physics:
         }
 
         // interpolate parent orbit (rot res, bounce, etc)
-        let parent = constructed_bones.find((b) => b.id == const_bone.parent_id2)
+        let parent = constructed_bones.find((b) => b.id == const_bone.parent_id)
         if(arm_bone.phys_sway > 0 && parent != None) {
-            // interpolate to the angle difference between bone and parent
-            let diff = normalize(const_bone.pos - parent.unwrap().pos)
-            let diff_angle = diff.y.atan2(diff.x)
-            let mut rest_rot = shortest_angle_delta(arm_bone.phys_global_orbit, diff_angle)
-            // apply bounce
+            // 1. get the raw orbit angle between this bone and its parent
+            let diff = normalize(const_bone.pos - parent.pos)
+            let diff_angle = Math.atan2(diff.y, diff.x)
+
+            // 2. interpolate current orbit angle to raw angle
+            let orbit_buffer = shortest_angle_delta(arm_bone.phys_global_orbit, diff_angle)
+
+            // 3. apply bounce to orbit angle
             if(arm_bone.phys_rot_bounce > 0. && arm_bone.phys_rot_bounce <= 1) {
-                rest_rot += arm_bone.phys_global_orbit_vel / (2 - arm_bone.phys_rot_bounce)
+                orbit_buffer += arm_bone.phys_global_orbit_vel / (2 - arm_bone.phys_rot_bounce)
                 arm_bone.phys_global_orbit_vel = rest_rot
             }
-            arm_bone.phys_global_orbit += rest_rot / 10
 
-            // swing orbit based on position momentum
+            // 4. apply orbit buffer
+            arm_bone.phys_global_orbit += orbit_buffer / 10
+
+            // 5. swing orbit based on position momentum
             let vel = normalize(arm_bone.phys_global_pos - prev_pos)
-            let angle = (-vel.y).atan2(-vel.x)
+            let angle = Math.atan2(-vel.y, -vel.x)
             let vel_rot = shortest_angle_delta(arm_bone.phys_global_orbit, angle)
             let strength = magnitude(arm_bone.phys_global_pos - prev_pos) / 1000
             arm_bone.phys_global_orbit += vel_rot * strength * arm_bone.phys_sway
 
-            // apply difference in final angle and orbit
+            // 6. apply difference in raw angle and orbit
             arm_bone.phys_global_orbit_diff = diff_angle - arm_bone.phys_global_orbit
         }
     }
