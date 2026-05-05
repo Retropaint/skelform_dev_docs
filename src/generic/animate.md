@@ -2,9 +2,9 @@
 
 - [`Animate()`](#animate)
     - [`interpolateKeyframes()`](#interpolatekeyframes)
-    - [`resetBones()`](#resetbones)
     - [`interpolate()`](#interpolate)
         - [Bezier Explanation](#bezier-explanation)
+    - [`resetBones()`](#resetbones)
 
 # `Animate()`
 
@@ -55,43 +55,6 @@ states for non-animated fields.
     // bones that are not being animated should return to their initial states
     resetBones(bones, anims, frames[0], smoothFrames[0])
 }</code> </pre>
-
-## `resetBones()`
-
-Animate bones back to their initial states, if they're not being animated.
-
-This makes use of each bones' `init_` fields (`init_pos`, `init_rot`, etc).
-
-**Example:** animation 1 was played and rotated the arm bone, but animation 1 is
-not being played anymore. That arm bone must now return to its initial rotation.
-
-<pre> <code class="language-typescript hljs">function resetBones(bones, animations, frame, smoothFrame) {
-    elementMap = {}
-
-    // add every element that's being animated for each bone
-    anims.forEach(anim => {
-        anim.keyframes.forEach(kf => {
-            elementMap[kf.bone_id].push(kf.element)
-        })
-    jj
-
-    // animate every element that's not in the map, back to its initial state
-    bones.forEach(bone => {
-        if (!elementMap[kf.bone_id]["PositionX"])
-            interpolate(frame, smoothFrame, bone.pos.X, bone.init_pos.X, z, z)
-        if (!elementMap[kf.bone_id]["PositionY"])
-            interpolate(frame, smoothFrame, bone.pos.Y, bone.init_pos.Y, z, z)
-        if (!elementMap[kf.bone_id]["Rotation"])
-            interpolate(frame, smoothFrame, bone.rot, bone.init_rot, z, z)
-        if (!elementMap[kf.bone_id]["ScaleX"])
-            interpolate(frame, smoothFrame, bone.scale.X, bone.init_scale.X, z, z)
-        if (!elementMap[kf.bone_id]["ScaleY"])
-            interpolate(frame, smoothFrame, bone.scale.Y, bone.init_scale.X, z, z)
-        if (!elementMap[kf.bone_id]["Hidden"])
-            bone.hidden = bone.init_hidden
-    })   
-}
-</code> </pre>
 
 ## `interpolateKeyframes()`
 
@@ -226,3 +189,40 @@ The actual start and end values are applied at the end:
 progress = h10 * startHandle + h01 * endHandle + h11
 value = start + (end - start) * progress
 ```
+
+## `resetBones()`
+
+Animate bones back to their initial states, if they're not being animated.
+
+This makes use of each bones' `init_` fields (`init_pos`, `init_rot`, etc).
+
+**Example:** animation 1 was played and rotated the arm bone, but animation 1 is
+not being played anymore. That arm bone must now return to its initial rotation.
+
+<pre> <code class="language-typescript hljs">function resetBones(bones, animations, frame, smoothFrame) {
+    elementMap = {}
+
+    // add every element that's being animated for each bone
+    anims.forEach(anim => {
+        anim.keyframes.forEach(kf => {
+            elementMap[kf.bone_id].push(kf.element)
+        })
+    jj
+
+    // animate every element that's not in the map, back to its initial state
+    bones.forEach(bone => {
+        if (!elementMap[kf.bone_id]["PositionX"])
+            interpolate(frame, smoothFrame, bone.pos.X, bone.init_pos.X, z, z)
+        if (!elementMap[kf.bone_id]["PositionY"])
+            interpolate(frame, smoothFrame, bone.pos.Y, bone.init_pos.Y, z, z)
+        if (!elementMap[kf.bone_id]["Rotation"])
+            interpolate(frame, smoothFrame, bone.rot, bone.init_rot, z, z)
+        if (!elementMap[kf.bone_id]["ScaleX"])
+            interpolate(frame, smoothFrame, bone.scale.X, bone.init_scale.X, z, z)
+        if (!elementMap[kf.bone_id]["ScaleY"])
+            interpolate(frame, smoothFrame, bone.scale.Y, bone.init_scale.X, z, z)
+        if (!elementMap[kf.bone_id]["Hidden"])
+            bone.hidden = bone.init_hidden
+    })   
+}
+</code> </pre>
