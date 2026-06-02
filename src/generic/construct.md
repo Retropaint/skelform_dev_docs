@@ -369,7 +369,7 @@ Processes all physics:
             // 3. apply bounce to orbit angle
             if(arm_bone.phys_rot_bounce > 0. && arm_bone.phys_rot_bounce <= 1) {
                 orbit_buffer += arm_bone.phys_global_orbit_vel / (2 - arm_bone.phys_rot_bounce)
-                arm_bone.phys_global_orbit_vel = rest_rot
+                arm_bone.phys_global_orbit_vel = orbit_buffer
             }
 
             // 4. apply orbit buffer
