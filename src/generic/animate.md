@@ -205,23 +205,25 @@ not being played anymore. That arm bone must now return to its initial rotation.
     // add every element that's being animated for each bone
     anims.forEach(anim => {
         anim.keyframes.forEach(kf => {
-            elementMap[kf.bone_id].push(kf.element)
+            if(!elementMap[kf.bone_id].contains(kf.element)) {
+                elementMap[kf.bone_id].push(kf.element)
+            }
         })
     jj
 
     // animate every element that's not in the map, back to its initial state
     bones.forEach(bone => {
-        if (!elementMap[kf.bone_id]["PositionX"])
+        if (!elementMap[bone.id]["PositionX"])
             interpolate(frame, smoothFrame, bone.pos.X, bone.init_pos.X, z, z)
-        if (!elementMap[kf.bone_id]["PositionY"])
+        if (!elementMap[bone.id]["PositionY"])
             interpolate(frame, smoothFrame, bone.pos.Y, bone.init_pos.Y, z, z)
-        if (!elementMap[kf.bone_id]["Rotation"])
+        if (!elementMap[bone.id]["Rotation"])
             interpolate(frame, smoothFrame, bone.rot, bone.init_rot, z, z)
-        if (!elementMap[kf.bone_id]["ScaleX"])
+        if (!elementMap[bone.id]["ScaleX"])
             interpolate(frame, smoothFrame, bone.scale.X, bone.init_scale.X, z, z)
-        if (!elementMap[kf.bone_id]["ScaleY"])
+        if (!elementMap[bone.id]["ScaleY"])
             interpolate(frame, smoothFrame, bone.scale.Y, bone.init_scale.X, z, z)
-        if (!elementMap[kf.bone_id]["Hidden"])
+        if (!elementMap[bone.id]["Hidden"])
             bone.hidden = bone.init_hidden
     })   
 }
