@@ -15,11 +15,11 @@ This section will only cover the content in `armature.json`.
 - [`armature.json`](#armaturejson)
 - [Bones](#bones)
     - [Initial Fields](#initial-fields)
-    - [Inverse Kinematics](#inverse-kinematics)
     - [Meshes](#meshes)
         - [Vertex](#vertex)
         - [Bind](#bind)
         - [BindVert](#bindvert)
+- [Inverse Kinematics](#inverse-kinematics)
 - [Animations](#animations)
     - [Keyframes](#keyframes)
 - [Atlases](#atlases)
@@ -29,32 +29,37 @@ This section will only cover the content in `armature.json`.
 
 ## `armature.json`
 
-| Key         | Type        | Default                                   | Description                                  |
-| ----------- | ----------- | ----------------------------------------- | -------------------------------------------- |
-| version     | string      | `""`                                      | Editor version that exported this file       |
-| ik_root_ids | int[]       | `[]`                                      | ID of every inverse kinematics root bone     |
-| baked_ik    | bool        | `false`                                   | Was this file exported with baked IK frames? |
-| img_format  | string      | `"PNG"`                                   | Exported atlas image format (PNG, JPG, etc)  |
-| clear_color | Color[^1]   | <span class="color">`(0, 0, 0, 0)`</span> | Exported clear color of atlas images         |
-| bones       | Bone[]      | `[]`                                      | Array of all bones                           |
-| animations  | Animation[] | `[]`                                      | Array of all animations                      |
-| atlases     | Atlas[]     | `[]`                                      | Array of all atlases                         |
-| styles      | Style[]     | `[]`                                      | Array of all styles                          |
+| Key                | Type                                       | Default                                   | Description                                  |
+| ------------------ | ------------------------------------------ | ----------------------------------------- | -------------------------------------------- |
+| version            | string                                     | `""`                                      | Editor version that exported this file       |
+| baked_ik           | bool                                       | `false`                                   | Was this file exported with baked IK frames? |
+| img_format         | string                                     | `"PNG"`                                   | Exported atlas image format (PNG, JPG, etc)  |
+| clear_color        | Color[^1]                                  | <span class="color">`(0, 0, 0, 0)`</span> | Exported clear color of atlas images         |
+| bones              | [Bone](#bone)[]                            | `[]`                                      | Array of all bones                           |
+| animations         | [Animation](#animation)[]                  | `[]`                                      | Array of all animations                      |
+| atlases            | [Atlas](#atlas)[]                          | `[]`                                      | Array of all atlases                         |
+| styles             | [Styles](#styles)[]                        | `[]`                                      | Array of all styles                          |
+| inverse_kinematics | [InverseKinematics](#inverse-kinematics)[] | `[]`                                      | Array of all bone inverse kinematics data    |
+| physics            | [Physics](#physics)[]                      | `[]`                                      | Array of all bone physics data               |
+| visuals            | [Visuals](#visuals)[]                      | `[]`                                      | Array of all bone visuals (texture, mesh)    |
 
 ## Bones
 
-| Key       | Type      | Default                                           | Description                                        |
-| --------- | --------- | ------------------------------------------------- | -------------------------------------------------- |
-| id        | uint      | `0`                                               | Bone ID                                            |
-| name      | string    | `""`                                              | Name of bone                                       |
-| pos       | Vec2      | `(0, 0)`                                          | Position of bone                                   |
-| rot       | float     | `0`                                               | Rotation of bone                                   |
-| scale     | Vec2      | `(1, 1)`                                          | Scale of bone                                      |
-| parent_id | int       | `-1`                                              | Bone parent ID (-1 if none)                        |
-| tex       | string    | `""`                                              | Name of texture to use                             |
-| zindex    | int       | `0`                                               | Z-index of bone (higher index renders above lower) |
-| hidden    | bool      | `false`                                           | Whether this bone is hidden                        |
-| tint      | Color[^1] | <span class="color">`(255, 255, 255, 255)`</span> | Color tint                                         |
+| Key                   | Type      | Default                                           | Description                                        |
+| --------------------- | --------- | ------------------------------------------------- | -------------------------------------------------- |
+| id                    | uint      | `0`                                               | Bone ID                                            |
+| name                  | string    | `""`                                              | Name of bone                                       |
+| pos                   | Vec2      | `(0, 0)`                                          | Position of bone                                   |
+| rot                   | float     | `0`                                               | Rotation of bone                                   |
+| scale                 | Vec2      | `(1, 1)`                                          | Scale of bone                                      |
+| parent_id             | int       | `-1`                                              | Bone parent ID (-1 if none)                        |
+| tex                   | string    | `""`                                              | Name of texture to use                             |
+| zindex                | int       | `0`                                               | Z-index of bone (higher index renders above lower) |
+| hidden                | bool      | `false`                                           | Whether this bone is hidden                        |
+| tint                  | Color[^1] | <span class="color">`(255, 255, 255, 255)`</span> | Color tint                                         |
+| inverse_kinematics_id | int       | `-1`                                              | [Inverse Kinematics](#inverse-kinematics) ID       |
+| visuals_id            | int       | `-1`                                              | [Visuals](#visuals) ID                             |
+| physics_id            | int       | `-1`                                              | [Physics](#physics) ID                             |
 
 ### Initial Fields
 
@@ -75,20 +80,6 @@ _The following is **not** an exhaustive list._
 | init_rot   | float | `bone.rot`   |
 | init_scale | Vec2  | `bone.scale` |
 | ...        | ...   | ...          |
-
-### Inverse Kinematics
-
-Inverse kinematics is stored in the root (first) bone of each set of IK bones.
-
-Other bones will only have `ik_family_id`, which is -1 by default.
-
-| Key           | Type   | Default    | Description                                      |
-| ------------- | ------ | ---------- | ------------------------------------------------ |
-| ik_family_id  | uint   | `-1`       | The ID of family this bone is in (-1 by default) |
-| ik_constraint | string | `"None"`   | This family's constraint                         |
-| ik_mode       | string | `"FABRIK"` | This family's mode (FABRIK, Arc)                 |
-| ik_target_id  | uint   | `-1`       | This set's target bone ID                        |
-| ik_bone_ids   | uint[] | `[]`       | This set's ID of bones                           |
 
 ### Meshes
 
@@ -134,6 +125,20 @@ Vertices assigned to a bind.
 | ------ | ----- | ------- | ------------------------------ |
 | id     | uint  | `0`     | ID of vertex                   |
 | weight | float | `1`     | Weight assigned to this vertex |
+
+## Inverse Kinematics
+
+Inverse kinematics is stored in the root (first) bone of each set of IK bones.
+
+Other bones will only have `ik_family_id`, which is -1 by default.
+
+| Key           | Type   | Default    | Description                                      |
+| ------------- | ------ | ---------- | ------------------------------------------------ |
+| ik_family_id  | uint   | `-1`       | The ID of family this bone is in (-1 by default) |
+| ik_constraint | string | `"None"`   | This family's constraint                         |
+| ik_mode       | string | `"FABRIK"` | This family's mode (FABRIK, Arc)                 |
+| ik_target_id  | uint   | `-1`       | This set's target bone ID                        |
+| ik_bone_ids   | uint[] | `[]`       | This set's ID of bones                           |
 
 ## Animations
 
