@@ -14,17 +14,18 @@ This section will only cover the content in `armature.json`.
 
 - [`armature.json`](#armaturejson)
 - [Bones](#bones)
-    - [Initial Fields](#initial-fields)
+- [Inverse Kinematics](#inverse-kinematics)
+- [Visuals](#visuals)
     - [Meshes](#meshes)
         - [Vertex](#vertex)
         - [Bind](#bind)
         - [BindVert](#bindvert)
-- [Inverse Kinematics](#inverse-kinematics)
 - [Animations](#animations)
     - [Keyframes](#keyframes)
 - [Atlases](#atlases)
 - [Styles](#styles)
     - [Textures](#Textures)
+- [Initial Fields](#initial-fields)
 - [Constructed Bones](#constructed-bones)
 
 ## `armature.json`
@@ -40,8 +41,8 @@ This section will only cover the content in `armature.json`.
 | atlases            | [Atlas](#atlas)[]                          | `[]`                                      | Array of all atlases                         |
 | styles             | [Styles](#styles)[]                        | `[]`                                      | Array of all styles                          |
 | inverse_kinematics | [InverseKinematics](#inverse-kinematics)[] | `[]`                                      | Array of all bone inverse kinematics data    |
-| physics            | [Physics](#physics)[]                      | `[]`                                      | Array of all bone physics data               |
 | visuals            | [Visuals](#visuals)[]                      | `[]`                                      | Array of all bone visuals (texture, mesh)    |
+| physics            | [Physics](#physics)[]                      | `[]`                                      | Array of all bone physics data               |
 
 ## Bones
 
@@ -61,38 +62,36 @@ This section will only cover the content in `armature.json`.
 | visuals_id            | int       | `-1`                                              | [Visuals](#visuals) ID                             |
 | physics_id            | int       | `-1`                                              | [Physics](#physics) ID                             |
 
-### Initial Fields
+## Inverse Kinematics
 
-During animation, armature bones need to be modified directly for `smoothing` to
-work.
+Inverse kinematics is stored in the root (first) bone of each set of IK bones.
 
-If a bone field is not being animated, it needs to go back to its initial state
-with initial fields (starting with `init_`).
+| Key               | Type   | Default        | Description                                      |
+| ----------------- | ------ | -------------- | ------------------------------------------------ |
+| family_id         | uint   | `-1`           | The ID of family this bone is in (-1 by default) |
+| constraint        | string | `"None"`       | Constraint (Clockwise, CounterClockwise)         |
+| mode              | string | `"FABRIK"`     | Mode (FABRIK, Arc)                               |
+| target_id         | uint   | `-1`           | Target bone ID                                   |
+| bone_ids          | uint[] | `[]`           | ID of all bones in this family                   |
+| mimic_target      | bool   | `false`        | Should the last bone follow target's rotation?   |
+| init_constraint   | string | `constraint`   |
+| init_mode         | string | `mode`         |
+| init_mimic_target | bool   | `mimic_target` |
 
-`bool` fields use `int` initial fields, as animations cannot store boolean
-values (but can still represent them as `0` and `1`)
+## Visuals
 
-_The following is **not** an exhaustive list._
+Visual data of each bone (texture, zindex )
 
-| Key        | Type  | Default      |
-| ---------- | ----- | ------------ |
-| init_pos   | Vec2  | `bone.pos`   |
-| init_rot   | float | `bone.rot`   |
-| init_scale | Vec2  | `bone.scale` |
-| ...        | ...   | ...          |
-
-### Meshes
-
-Only bones that explicitly contain a mesh, will have building data on it.
-
-Bones with a regular texture rect will omit this, as the building data can be
-inferred through `Texture` instead.
-
-| Key      | Type     | Default | Description                                            |
-| -------- | -------- | ------- | ------------------------------------------------------ |
-| vertices | Vertex[] | `[]`    | Array of vertices                                      |
-| indices  | uint[]   | `[]`    | Each index is vertex ID. Every 3 IDs forms 1 triangle. |
-| binds    | Bind[]   | `[]`    | Array of bone binds                                    |
+| Key         | Type                | Default                                           | Description                                            |
+| ----------- | ------------------- | ------------------------------------------------- | ------------------------------------------------------ |
+| tex         | string              | `""`                                              | Name of texture to use                                 |
+| zindex      | int                 | `0`                                               | Z-index of bone (higher index renders above lower)     |
+| tint        | Color[^1]           | <span class="color">`(255, 255, 255, 255)`</span> | Color tint                                             |
+| vertices    | [Vertex](#vertex)[] | `[]`                                              | Array of vertices                                      |
+| indices     | uint[]              | `[]`                                              | Each index is vertex ID. Every 3 IDs forms 1 triangle. |
+| binds       | [Bind](#bind)[]     | `[]`                                              | Array of bone binds                                    |
+| init_tex    | Color[^1]           | <span class="color">`(255, 255, 255, 255)`</span> | Color tint                                             |
+| init_zindex | Color[^1]           | <span class="color">`(255, 255, 255, 255)`</span> | Color tint                                             |
 
 #### Vertex
 
@@ -125,22 +124,6 @@ Vertices assigned to a bind.
 | ------ | ----- | ------- | ------------------------------ |
 | id     | uint  | `0`     | ID of vertex                   |
 | weight | float | `1`     | Weight assigned to this vertex |
-
-## Inverse Kinematics
-
-Inverse kinematics is stored in the root (first) bone of each set of IK bones.
-
-| Key               | Type   | Default        | Description                                      |
-| ----------------- | ------ | -------------- | ------------------------------------------------ |
-| family_id         | uint   | `-1`           | The ID of family this bone is in (-1 by default) |
-| constraint        | string | `"None"`       | Constraint (Clockwise, CounterClockwise)         |
-| mode              | string | `"FABRIK"`     | Mode (FABRIK, Arc)                               |
-| target_id         | uint   | `-1`           | Target bone ID                                   |
-| bone_ids          | uint[] | `[]`           | ID of all bones in this family                   |
-| mimic_target      | bool   | `false`        | Should the last bone follow target's rotation?   |
-| init_constraint   | string | `constraint`   |
-| init_mode         | string | `mode`         |
-| init_mimic_target | bool   | `mimic_target` |
 
 ## Animations
 
@@ -198,6 +181,15 @@ Note: Coordinates are in pixels.
 | offset    | Vec2   | `(0, 0)` | Top-left corner of texture in the atlas                  |
 | size      | Vec2   | `(0, 0)` | Append to `offset` to get bottom-right corner of texture |
 | atlas_idx | uint   | `0`      | Index of atlas that this texture lives in                |
+
+## Initial Fields
+
+Some fields in Bones, Visuals, Inverse Kinematics, and Physics have `init_`
+counterparts. Their value is duplicated from the original field.
+
+While the original field is modified during animation, `init_` fields are used
+to return the original field back to its initial state (see
+[ResetBones()](/generic/animate.html#resetbones)).
 
 ## Constructed Bones
 
