@@ -24,7 +24,7 @@ This section will only cover the content in `armature.json`.
     - [Keyframes](#keyframes)
 - [Atlases](#atlases)
 - [Styles](#styles)
-    - [Textures](#Textures)
+    - [Texture](#Texture)
 - [Initial Fields](#initial-fields)
 - [Constructed Bones](#constructed-bones)
 
@@ -80,18 +80,18 @@ Inverse kinematics is stored in the root (first) bone of each set of IK bones.
 
 ## Visuals
 
-Visual data of each bone (texture, zindex )
+Visual data of each bone (texture & mesh)
 
 | Key         | Type                | Default                                           | Description                                            |
 | ----------- | ------------------- | ------------------------------------------------- | ------------------------------------------------------ |
 | tex         | string              | `""`                                              | Name of texture to use                                 |
 | zindex      | int                 | `0`                                               | Z-index of bone (higher index renders above lower)     |
-| tint        | Color[^1]           | <span class="color">`(255, 255, 255, 255)`</span> | Color tint                                             |
+| tint        | Color[^1]           | <span class="color">`(255, 255, 255, 255)`</span> | Multiplicative color tint for texture                  |
 | vertices    | [Vertex](#vertex)[] | `[]`                                              | Array of vertices                                      |
 | indices     | uint[]              | `[]`                                              | Each index is vertex ID. Every 3 IDs forms 1 triangle. |
 | binds       | [Bind](#bind)[]     | `[]`                                              | Array of bone binds                                    |
-| init_tex    | Color[^1]           | <span class="color">`(255, 255, 255, 255)`</span> | Color tint                                             |
-| init_zindex | Color[^1]           | <span class="color">`(255, 255, 255, 255)`</span> | Color tint                                             |
+| init_tex    | Color[^2]           | <span class="color">`(255, 255, 255, 255)`</span> |                                                        |
+| init_zindex | Color[^2]           | <span class="color">`(255, 255, 255, 255)`</span> |                                                        |
 
 #### Vertex
 
@@ -110,11 +110,11 @@ as well as how the texture is mapped (UV).
 Meshes can have 'binding' bones to influence a set of vertices. These are the
 primary method of animating vertices.
 
-| Key     | Type       | Default | Description                                  |
-| ------- | ---------- | ------- | -------------------------------------------- |
-| id      | int        | `-1`    | ID of bind                                   |
-| is_path | bool       | `false` | Should this bind behave like a path?         |
-| verts   | BindVert[] | `[]`    | Array of vertex data associated to this bind |
+| Key     | Type                    | Default | Description                                  |
+| ------- | ----------------------- | ------- | -------------------------------------------- |
+| id      | int                     | `-1`    | ID of bind                                   |
+| is_path | bool                    | `false` | Should this bind behave like a path?         |
+| verts   | [BindVert](#bindvert)[] | `[]`    | Array of vertex data associated to this bind |
 
 #### BindVert
 
@@ -127,14 +127,14 @@ Vertices assigned to a bind.
 
 ## Animations
 
-| Key       | Type       | Default | Description                        |
-| --------- | ---------- | ------- | ---------------------------------- |
-| id        | string     | `0`     | ID of animation                    |
-| name      | string     | `""`    | Name of animation                  |
-| fps       | uint       | `0`     | Frames per second of animation     |
-| keyframes | Keyframe[] | `[]`    | Data of all keyframes of animation |
+| Key       | Type                     | Default | Description                        |
+| --------- | ------------------------ | ------- | ---------------------------------- |
+| id        | string                   | `0`     | ID of animation                    |
+| name      | string                   | `""`    | Name of animation                  |
+| fps       | uint                     | `0`     | Frames per second of animation     |
+| keyframes | [Keyframe](#keyframes)[] | `[]`    | Data of all keyframes of animation |
 
-### Keyframes
+### Keyframe
 
 Keyframes are defined by their `element` (what's animated), as well as either
 `value` or `value_str` (what value to animate `element` to)
@@ -165,13 +165,13 @@ Easily-accessible information about texture atlas files.
 
 Groups of textures.
 
-| Key      | Type    | Default | Description       |
-| -------- | ------- | ------- | ----------------- |
-| id       | uint    | `0`     | ID of style       |
-| name     | string  | `""`    | Name of style     |
-| textures | Texture | `[]`    | Array of textures |
+| Key      | Type                | Default | Description       |
+| -------- | ------------------- | ------- | ----------------- |
+| id       | uint                | `0`     | ID of style       |
+| name     | string              | `""`    | Name of style     |
+| textures | [Texture](#texture) | `[]`    | Array of textures |
 
-### Textures
+### Texture
 
 Note: Coordinates are in pixels.
 
@@ -180,7 +180,7 @@ Note: Coordinates are in pixels.
 | name      | string | `""`     | Name of texture                                          |
 | offset    | Vec2   | `(0, 0)` | Top-left corner of texture in the atlas                  |
 | size      | Vec2   | `(0, 0)` | Append to `offset` to get bottom-right corner of texture |
-| atlas_idx | uint   | `0`      | Index of atlas that this texture lives in                |
+| atlas_idx | uint   | `0`      | Index of [atlas](#atlas) that this texture lives in      |
 
 ## Initial Fields
 
@@ -198,3 +198,5 @@ generic function. This is a clone of the bones array, but with construction
 applied to it for use later with `Draw()`.
 
 [^1]: A variant of Vec4: `(r, g, b, a)`
+
+[^2]: See [Initial Fields](#initialfields)
