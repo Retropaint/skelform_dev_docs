@@ -130,15 +130,17 @@ Vertices assigned to a bind.
 
 Inverse kinematics is stored in the root (first) bone of each set of IK bones.
 
-Other bones will only have `ik_family_id`, which is -1 by default.
-
-| Key           | Type   | Default    | Description                                      |
-| ------------- | ------ | ---------- | ------------------------------------------------ |
-| ik_family_id  | uint   | `-1`       | The ID of family this bone is in (-1 by default) |
-| ik_constraint | string | `"None"`   | This family's constraint                         |
-| ik_mode       | string | `"FABRIK"` | This family's mode (FABRIK, Arc)                 |
-| ik_target_id  | uint   | `-1`       | This set's target bone ID                        |
-| ik_bone_ids   | uint[] | `[]`       | This set's ID of bones                           |
+| Key               | Type   | Default        | Description                                      |
+| ----------------- | ------ | -------------- | ------------------------------------------------ |
+| family_id         | uint   | `-1`           | The ID of family this bone is in (-1 by default) |
+| constraint        | string | `"None"`       | Constraint (Clockwise, CounterClockwise)         |
+| mode              | string | `"FABRIK"`     | Mode (FABRIK, Arc)                               |
+| target_id         | uint   | `-1`           | Target bone ID                                   |
+| bone_ids          | uint[] | `[]`           | ID of all bones in this family                   |
+| mimic_target      | bool   | `false`        | Should the last bone follow target's rotation?   |
+| init_constraint   | string | `constraint`   |
+| init_mode         | string | `mode`         |
+| init_mimic_target | bool   | `mimic_target` |
 
 ## Animations
 
