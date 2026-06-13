@@ -11,7 +11,13 @@
 Interpolates bone fields based on provided animation data, as well as initial
 states for non-animated fields.
 
-<pre> <code class="language-typescript hljs">function Animate(bones: Bone[], anims: Animation[], frames: int[], smoothFrames: int[]) {
+<pre> <code class="language-typescript hljs">function Animate(
+    armature: Armature,
+    visuals: Visuals[],
+    anims: Animation[],
+    frames: int[],
+    smoothFrames: int[]
+) {
     for (let a = 0; a < anims.length; a++) {
         for (k = 0; k < anims[a].keyframes.length; k++) {
             let kf = anims[a].keyframes[k];
@@ -35,30 +41,57 @@ states for non-animated fields.
                 continue;
             }
 
-            // interpolate the relevant bone field, based on this and next keyframes' values
-            let bone = bones[kf.bone_id]
+            let f = frames[a];
+            let sf = smoothFrames[a];
+
+            // animate basic fields
+            let bone = armature.bones[kf.bone_id]
             if (kf.element == "PositionX")
-                interpolateKeyframes(bone.pos.x, kf, nextKf, frames[a], smoothFrames[a]);
+                interpolateKeyframes(bone.pos.x, kf, nextKf, f, sf);
             if (kf.element == "PositionY")
-                interpolateKeyframes(bone.pos.y, kf, nextKf, frames[a], smoothFrames[a]);
+                interpolateKeyframes(bone.pos.y, kf, nextKf, f, sf);
             if (kf.element == "Rotation")
-                interpolateKeyframes(bone.rot, kf, nextKf, frames[a], smoothFrames[a]);
+                interpolateKeyframes(bone.rot, kf, nextKf, f, sf);
             if (kf.element == "ScaleX")
-                interpolateKeyframes(bone.scale.x, kf, nextKf, frames[a], smoothFrames[a]);
+                interpolateKeyframes(bone.scale.x, kf, nextKf, f, sf);
             if (kf.element == "ScaleY")
-                interpolateKeyframes(bone.scale.y, kf, nextKf, frames[a], smoothFrames[a]);
+                interpolateKeyframes(bone.scale.y, kf, nextKf, f, sf);
             if (kf.element == "Hidden")
                 bone.hidden = kf.value == 1;
+
+            // animate visual fields
+            if (bone.visuals_id != -1) {
+                let visual = armature.visuals[bone.visuals_id]
+
+                if (kf.element == "Texture")
+                    visual.tex = kf.value_str;
+                if (kf.element == "TintR")
+                    interpolateKeyframes(bone.tint.r, kf, nextKf, f, sf);
+                if (kf.element == "TintG")
+                    interpolateKeyframes(bone.tint.g, kf, nextKf, f, sf);
+                if (kf.element == "TintB")
+                    interpolateKeyframes(bone.tint.b, kf, nextKf, f, sf);
+                if (kf.element == "TintA")
+                    interpolateKeyframes(bone.tint.a, kf, nextKf, f, sf);
+            }
+
+            // animate inverse kinematics fields
+            if (bone.ik_family_id != -1) {
+                let ik = armature.inverse_kinematics[bone.ik_family_id]
+
+                if (kf.element == "IkConstraint")
+                    ik.constraint = kf.value_str;
+            }            
         }
     }
 
     // bones that are not being animated should return to their initial states
-    resetBones(bones, anims, frames[0], smoothFrames[0])
+    resetBones(armature, anims, frames[0], smoothFrames[0])
 }</code> </pre>
 
 ## `interpolateKeyframes()`
 
-With the provided animation frame, determines the keyframes to interpolate the
+With the provided animaeion frame, determines the keyframes to interpolate the
 field by.
 
 The resulting interpolation from the keyframes is interpolated again for
@@ -199,7 +232,7 @@ This makes use of each bones' `init_` fields (`init_pos`, `init_rot`, etc).
 **Example:** animation 1 was played and rotated the arm bone, but animation 1 is
 not being played anymore. That arm bone must now return to its initial rotation.
 
-<pre> <code class="language-typescript hljs">function resetBones(bones, animations, frame, smoothFrame) {
+<pre> <code class="language-typescript hljs">function resetBones(armature, animations, frame, smoothFrame) {
     elementMap = {}
 
     // add every element that's being animated for each bone
@@ -211,20 +244,52 @@ not being played anymore. That arm bone must now return to its initial rotation.
         })
     jj
 
-    // animate every element that's not in the map, back to its initial state
-    bones.forEach(bone => {
+    let f = frame;
+    let sf = smoothFrame;
+
+    // reset every element that's not in the map back to its initial state
+    armature.bones.forEach(bone => {
+
+        // reset basic fields
         if (!elementMap[bone.id]["PositionX"])
-            interpolate(frame, smoothFrame, bone.pos.X, bone.init_pos.X, z, z)
+            interpolate(f, sf, bone.pos.X, bone.init_pos.X, z, z)
         if (!elementMap[bone.id]["PositionY"])
-            interpolate(frame, smoothFrame, bone.pos.Y, bone.init_pos.Y, z, z)
+            interpolate(f, sf, bone.pos.Y, bone.init_pos.Y, z, z)
         if (!elementMap[bone.id]["Rotation"])
-            interpolate(frame, smoothFrame, bone.rot, bone.init_rot, z, z)
+            interpolate(f, sf, bone.rot, bone.init_rot, z, z)
         if (!elementMap[bone.id]["ScaleX"])
-            interpolate(frame, smoothFrame, bone.scale.X, bone.init_scale.X, z, z)
+            interpolate(f, sf, bone.scale.x, bone.init_scale.x, z, z)
         if (!elementMap[bone.id]["ScaleY"])
-            interpolate(frame, smoothFrame, bone.scale.Y, bone.init_scale.X, z, z)
+            interpolate(f, sf, bone.scale.y, bone.init_scale.y, z, z)
         if (!elementMap[bone.id]["Hidden"])
             bone.hidden = bone.init_hidden
+
+        // reset visual fields
+        if bone.visuals_id != -1 {
+            let visual = armature.visuals[bone.visual_id]
+
+            if (!elementMap[bone.id]["Texture"])
+                bone.tex = bone.init_tex;
+            if (!elementMap[bone.id]["TintR"])
+                interpolate(f, sf, visuals.tint.r, visuals.init_tint.r, z, z)
+            if (!elementMap[bone.id]["TintG"])
+                interpolate(f, sf, visuals.tint.g, visuals.init_pos.g, z, z)
+            if (!elementMap[bone.id]["TintB"])
+                interpolate(f, sf, visuals.tint.b, visuals.init_tint.b, z, z)
+            if (!elementMap[bone.id]["TintA"])
+                interpolate(f, sf, visuals.tint.a, visuals.init_tint.a, z, z)
+        }
+
+        // reset inverse kinematics fields
+        if (bone.ik_family_id != -1) {
+            let ik = armature.inverse_kinematics[bone.ik_family_id
+
+            if (!elementMap[bone.id]["IkConstraint"])
+                ik.tex = ik.init_tex;
+        }]        
     })   
 }
 </code> </pre>
+
+_Note: most runtimes will have this functionality at the end of Animate(). The
+separation of functions is purely for documentation purposes._
