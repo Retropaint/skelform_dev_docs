@@ -34,8 +34,7 @@ Constructs the armature's bones with inheritance and inverse kinematics.
 
     // inverse kinematics will return which bones' rotations should be overridden
     ikRots: Object = <a href="#inversekinematics">inversekinematics</a>(
-        armature.constructed_bones,
-        armature.ikRootIds,
+        armature.constructed_bones, armature.inverse_kinematics
     );
 
     // run inheritance again for IK rotations
@@ -135,26 +134,26 @@ Processes inverse kinematics and returns the final bones' rotations, which would
 later be used by `inheritance()`.
 
 IK data for each set of bones is stored in the root bone, which can be iterated
-wth `ikRootIds`.
+wth `inverse_kinematics`.
 
-<pre> <code class="language-typescript hljs">function inverseKinematics(bones: Bone[], ikRootIds: int[]): Object {
+<pre> <code class="language-typescript hljs">function inverseKinematics(
+    bones: Bone[], inverse_kinematics: InverseKinematics[]
+): Object {
     ikRot: Object = {}
 
-    for(let rootId of ikRootIds) {
-        family: Bone[] = bones[rootId]
-
+    for(let family of inverse_kinematics) {
         // get relevant bones from the same set
-        if(family.ikTargetId == - 1) {
+        if(family.target_id == - 1) {
             continue
         }
-        root: Vec2 = bones[family.ikBoneIds[0]].pos
-        target: Vec2 = bones[family.ikTargetId].pos
+        root: Vec2 = bones[family.bone_ids[0]].pos
+        target: Vec2 = bones[family.target_id].pos
         familyBones: Bone[] = bones.filter(|bone|
-            family.ikBoneIds.contains(bone.id)
+            family.bone_ids.contains(bone.id)
         )
 
         // determine which IK mode to use
-        switch(family.ikMode) {
+        switch(family.mode) {
             case "FABRIK":
                 for range(10) {
                     <a href="#fabrik">fabrik</a>(*familyBones, root, target)
@@ -169,10 +168,10 @@ wth `ikRootIds`.
         // add rotations to ikRot, with bone ID being the key
         for(let b = 0; b < family.ikBoneIds.length; b++) {
             // last bone of IK should have free rotation
-            if(b == family.ikBoneIds.len() - 1) {
+            if(b == family.bone_ids.len() - 1) {
                 continue
             }
-            ikRot[family.ikBoneIds[b]] = bones[family.ikBoneIds[b]].rot
+            ikRot[family.bone_ids[b]] = bones[family.bone_ids[b]].rot
         }
     }
 
