@@ -6,29 +6,39 @@ the armature.
 Propagated visibility is handled via a fixed bool array.
 
 ```typescript
-function Draw(bones: Bone[], atlases: Texture2D[], styles: Style[]) {
+function Draw(bones: Bone[], visuals: Visuals[], atlases: Texture2D[], styles: Style[]) {
     // bones with higher zindex should render first
-    sort(&bones, zindex)
+    bones.sort((a, b) => {
+        if(a.visuals_id == -1 || b.visuals_id == -1) {
+            return -1;
+        }
+        let visualsA = visuals[a.visual_id];
+        let visualsB = visuals[b.visual_id];
+        return visualsA.zindex - visualsB.zindex;
+    })
 
     // initialize a fixed array of false, for propagated visibility
     let hiddens = new Array(bones.length).fill(false);
 
     for(let bone of bones) {
-        let hidden = bone.hidden || false
+        if(bone.visuals_id == -1) {
+            continue;
+        }
+        let visual = visuals[bone.visual_id];
 
-        // if this bone's parent is hidden, so is this
+        // save this bone's hidden status so it can be propagated to its children,
+        // and ignore rendering if it's hidden
+        let hidden = bone.hidden || false
         if (bone.parent_id != -1 && hiddens[bone.parent_id]) {
           hidden = true;
         }
-
-        // add this bone's visibility to the array
         hiddens[b] = hidden
-
         if (hidden) {
           continue;
         }
 
-        let tex = GenericRuntime.getBoneTexture(bone.tex, styles)
+        // get active texture
+        let tex = GenericRuntime.getBoneTexture(visual.tex, styles)
         if !tex {
             continue
         }
@@ -44,7 +54,7 @@ function Draw(bones: Bone[], atlases: Texture2D[], styles: Style[]) {
 
         // render bone as mesh
         if(bone.vertices.len() > 0) {
-            drawMesh(bone, tex, realTex)
+            drawMesh(bone, visual, tex, realTex)
             continue
         }
 

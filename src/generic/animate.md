@@ -91,7 +91,7 @@ states for non-animated fields.
 
 ## `interpolateKeyframes()`
 
-With the provided animaeion frame, determines the keyframes to interpolate the
+With the provided animation frame, determines the keyframes to interpolate the
 field by.
 
 The resulting interpolation from the keyframes is interpolated again for

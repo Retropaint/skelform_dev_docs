@@ -27,26 +27,25 @@ Constructs the armature's bones with inheritance and inverse kinematics.
         armature.constructed_bones.sort((bone) => bone.id);
     }
 
-    // inheritance is run once to put bones in place,
-    // for inverse kinematics to properly determine rotations
+    // 1st inheritance pass
     <a href="#resetinheritance">resetInheritance</a>(aramture.constructed_bones, armature.bones);
-    <a href="#inheritance">inheritance</a>(armature.constructed_bones, {}, {});
+    <a href="#inheritance">inheritance</a>(armature.constructed_bones, {}, []);
 
-    // inverse kinematics will return which bones' rotations should be overridden
-    ikRots: Object = <a href="#inversekinematics">inversekinematics</a>(
-        armature.constructed_bones, armature.inverse_kinematics
-    );
-
-    // run inheritance again for IK rotations
-    <a href="#resetinheritance">resetInheritance</a>(aramture.constructed_bones, armature.bones);
-    <a href="#inheritance">inheritance</a>(armature.constructed_bones, ikRots, {});
-
-    // process physics
-    simulate_physics(armature.bones, armature.constructed_bones)
-
-    // run inheritance again for physics
-    <a href="#resetinheritance">resetInheritance</a>(aramture.constructed_bones, armature.bones);
-    <a href="#inheritance">inheritance</a>(armature.constructed_bones, ikRots, armature.bones);
+    // 2nd inheritance pass: inverse kinematics
+    if (armature.inverse_kinematics.length > 0) {
+        ikRots: Object = <a href="#inversekinematics">inverseKinematics</a>(
+           armature.constructed_bones, armature.inverse_kinematics
+        );
+        <a href="#resetinheritance">resetInheritance</a>(aramture.constructed_bones, armature.bones);
+        <a href="#inheritance">inheritance</a>(armature.constructed_bones, ikRots, []);
+    }
+    
+    // 3rd inheritance pass: physics
+    if (armature.physics.length > 0) {
+        <a href="#simulatePhysics">simulatePhysics</a>(armature.constructed_bones, armature.physics);
+        <a href="#resetinheritance">resetInheritance</a>(aramture.constructed_bones, armature.bones);
+        <a href="#inheritance">inheritance</a>(armature.constructed_bones, ikRots, armature.physics);
+    }
 
     // mesh deformation
     <a href="#constructverts">constructVerts</a>((armature.constructed_bones);
@@ -58,44 +57,47 @@ Constructs the armature's bones with inheritance and inverse kinematics.
 Child bones need to inherit their parent.
 
 ```typescript
-inheritance(bones: Bone[], ikRots: Object, armature_bones: Bone[]) {
+inheritance(bones: Bone[], ikRots: Object, physics: Physics[]) {
     for(let b = 0; b < bones.length; b++) {
         if(bones[b].parentId != -1) {
             parent: Bone = bones[bones[b].parentId];
 
             let orbit_rot = bones[bones[b].parent_id as usize].rot
-            // apply orbital difference, if rotation resistance physics is active
-            if armature_bones.len() > 0 && armature_bones[b].phys_sway > 0 {
-                orbit_rot -= armature_bones[b].phys_global_orbit_diff
-            }
-            bones[b].rot += orbit_rot
 
-            bones[b].scale *= parent.scale
+            // apply orbital difference, if rotation resistance physics is active
+            let phys = physics[bones[b].physics_id];
+            if phys != undefined && phys.sway > 0 {
+                orbit_rot -= phys.global_orbit_diff;
+            }
+            bones[b].rot += orbit_rot;
+
+            bones[b].scale *= parent.scale;
 
             // adjust child's distance from player as it gets bigger/smaller
-            bones[b].pos *= parent.scale
+            bones[b].pos *= parent.scale;
 
             // rotate child around parent as if it were orbitting
-            bones[b].pos = rotate(&bones[b].pos, parent.rot)
+            bones[b].pos = rotate(&bones[b].pos, parent.rot);
 
-            bones[b].pos += parent.pos
+            bones[b].pos += parent.pos;
         }
 
         // override bone's rotation from inverse kinematics
         if ikRots[b] {
-            bones[b].rot = ikRots[b]
+            bones[b].rot = ikRots[b];
         }
 
         // apply physics, if armature_bones is provided
-        if armature_bones.len() > 0 {
+        let phys = physics[bones[b].physics_id];
+        if phys != undefined {
             if bones[b].phys_rot_damping > 0. {
-                bones[b].rot = armature_bones[b].phys_global_rot
+                bones[b].rot = phys.global_rot;
             }
             if bones[b].phys_pos_damping > 0. {
-                bones[b].pos = armature_bones[b].phys_global_pos
+                bones[b].pos = phys.global_pos;
             }
             if bones[b].phys_scale_damping > 0. {
-                bones[b].scale = armature_bones[b].phys_global_scale
+                bones[b].scale = phys.global_scale;
             }
         }
     }
@@ -307,41 +309,43 @@ Processes all physics:
 - Sway (`phys_sway`)
 - Bounce (`phys_rot_bounce`)
 
-<pre> <code class="language-typescript hljs">function simulatePhysics(armature_bones, constructed_bones) {
-    for(let b = 0; b < armature_bones.length; b++) {
+<pre> <code class="language-typescript hljs">function simulatePhysics(constructedBones: Bone[], physics: Physics[]) {
+    for(let b = 0; b < constructed_bones.length; b++) {
+        if constructedBones[b].physics_id == -1 {
+            continue;
+        }
+        let physics = &mut physics[constructedBones[b].physics_id as usize];
+
         let s = Vec2(0.3, 0.3)
         let e = Vec2(0.6, 0.6)
-        let arm_bone = &mut armature_bones[b]
-        let const_bone = &constructed_bones[b]
-        let prev_pos = arm_bone.phys_global_pos
+        let const_bone = &constructedBones[b]
+        let prev_pos = physics.phys_global_pos
 
         // interpolate position
-        if(arm_bone.phys_pos_damping > 0 || arm_bone.phys_sway > 0) {
-            let phys_pos = &arm_bone.phys_global_pos
-            let damping = Vec2(arm_bone.phys_pos_damping, arm_bone.phys_pos_damping)
+        if(physics.pos_damping > 0 || physics.sway > 0) {
+            let damping = Vec2(physics.pos_damping, physics.pos_damping)
 
             // ratio
-            if(arm_bone.phys_pos_ratio < 0) {
-                damping.y *= 1. - Math.abs(arm_bone.phys_pos_ratio)
-            } else if(arm_bone.phys_pos_ratio > 0) {
-                damping.x *= 1. - arm_bone.phys_pos_ratio
+            if(physics.pos_ratio < 0) {
+                damping.y *= 1. - Math.abs(physics.pos_ratio)
+            } else if(physics.pos_ratio > 0) {
+                damping.x *= 1. - physics.pos_ratio
             }
 
-            cb_scale = const_bone.scale
-            phys_pos.x = interpolate(2, damping.x, phys_pos.x, const_bone.pos.x, s, e)
-            phys_pos.y = interpolate(2, damping.y, phys_pos.y, const_bone.pos.y, s, e)
+            physics.global_pos.x = interpolate(2, damping.x, phys_pos.x, const_bone.pos.x, s, e)
+            physics.global_pos.y = interpolate(2, damping.y, phys_pos.y, const_bone.pos.y, s, e)
         }
 
         // interpolate scale
-        if(arm_bone.phys_scale_damping > 0) {
-            let phys_scale = &arm_bone.phys_global_scale
-            let damping = Vec2(arm_bone.phys_scale_damping, arm_bone.phys_scale_damping)
+        if(physics.scale_damping > 0) {
+            let phys_scale = &physics.global_scale
+            let damping = Vec2(physics.scale_damping, physics.scale_damping)
 
             // ratio
-            if(arm_bone.phys_scale_ratio < 0) {
-                damping.y *= 1. - Math.abs(arm_bone.phys_scale_ratio)
-            } else if(arm_bone.phys_pos_ratio > 0) {
-                damping.x *= 1. - arm_bone.phys_scale_ratio
+            if(physics.scale_ratio < 0) {
+                damping.y *= 1. - Math.abs(physics.scale_ratio)
+            } else if(physics.pos_ratio > 0) {
+                damping.x *= 1. - physics.scale_ratio
             }
 
             cb_scale = const_bone.scale
@@ -350,39 +354,39 @@ Processes all physics:
         }
 
         // interpolate rotation
-        if(arm_bone.phys_rot_damping > 0) {
-            let rot = shortest_angle_delta(arm_bone.phys_global_rot, const_bone.rot)
-            arm_bone.phys_global_rot += rot / arm_bone.phys_rot_damping
+        if(physics.rot_damping > 0) {
+            let rot = shortest_angle_delta(physics.global_rot, const_bone.rot)
+            physics.global_rot += rot / physics.rot_damping
         }
 
         // interpolate parent orbit (rot res, bounce, etc)
         let parent = constructed_bones.find((b) => b.id == const_bone.parent_id)
-        if(arm_bone.phys_sway > 0 && parent != None) {
+        if(physics.sway > 0 && parent != None) {
             // 1. get the raw orbit angle between this bone and its parent
             let diff = normalize(const_bone.pos - parent.pos)
             let diff_angle = Math.atan2(diff.y, diff.x)
 
             // 2. interpolate current orbit angle to raw angle
-            let orbit_buffer = shortest_angle_delta(arm_bone.phys_global_orbit, diff_angle)
+            let orbit_buffer = shortest_angle_delta(physics.global_orbit, diff_angle)
 
             // 3. apply bounce to orbit angle
-            if(arm_bone.phys_rot_bounce > 0. && arm_bone.phys_rot_bounce <= 1) {
-                orbit_buffer += arm_bone.phys_global_orbit_vel / (2 - arm_bone.phys_rot_bounce)
-                arm_bone.phys_global_orbit_vel = orbit_buffer
+            if(physics.rot_bounce > 0. && physics.rot_bounce <= 1) {
+                orbit_buffer += physics.global_orbit_vel / (2 - physics.rot_bounce)
+                physics.global_orbit_vel = orbit_buffer
             }
 
             // 4. apply orbit buffer
-            arm_bone.phys_global_orbit += orbit_buffer / 10
+            physics.global_orbit += orbit_buffer / 10
 
             // 5. swing orbit based on position momentum
-            let vel = normalize(arm_bone.phys_global_pos - prev_pos)
+            let vel = normalize(physics.global_pos - prev_pos)
             let angle = Math.atan2(-vel.y, -vel.x)
-            let vel_rot = shortest_angle_delta(arm_bone.phys_global_orbit, angle)
-            let strength = magnitude(arm_bone.phys_global_pos - prev_pos) / 1000
-            arm_bone.phys_global_orbit += vel_rot * strength * arm_bone.phys_sway
+            let vel_rot = shortest_angle_delta(physics.global_orbit, angle)
+            let strength = magnitude(physics.global_pos - prev_pos) / 1000
+            physics.global_orbit += vel_rot * strength * physics.sway
 
             // 6. apply difference in raw angle and orbit
-            arm_bone.phys_global_orbit_diff = diff_angle - arm_bone.phys_global_orbit
+            physics.global_orbit_diff = diff_angle - physics.global_orbit
         }
     }
 }

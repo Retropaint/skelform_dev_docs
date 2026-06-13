@@ -20,6 +20,7 @@ This section will only cover the content in `armature.json`.
         - [Vertex](#vertex)
         - [Bind](#bind)
         - [BindVert](#bindvert)
+- [Physics](#physics)
 - [Animations](#animations)
     - [Keyframes](#keyframes)
 - [Atlases](#atlases)
@@ -124,6 +125,24 @@ Vertices assigned to a bind.
 | ------ | ----- | ------- | ------------------------------ |
 | id     | uint  | `0`     | ID of vertex                   |
 | weight | float | `1`     | Weight assigned to this vertex |
+
+## Physics
+
+| Key               | Type  | Default  | Description                                                                                    |
+| ----------------- | ----- | -------- | ---------------------------------------------------------------------------------------------- |
+| global_pos        | Vec2  | `(0, 0)` | Bone's position based on physics. Overrides `bone.position` in [inheritance()](#inheritance)   |
+| global_scale      | Vec2  | `(0, 0)` | Bone's scale based on physics. Overrides `bone.scale` in [inheritance()](#inheritance)         |
+| global_rot        | Vec2  | `(0, 0)` | Bone's rotation based on physics. Overrides `bone.rotation` in [inheritance()](#inheritance)   |
+| pos_damping       | float | `0`      | Higher damping makes position interpolate slower towards `bone.position`                       |
+| scale_damping     | float | `0`      | Higher damping makes scale interpolate slower towards `bone.scale`                             |
+| rot_damping       | float | `0`      | Higher damping makes rotation interpolate slower towards `bone.rotation`                       |
+| pos_ratio         | float | `0`      | Ranges from -1 to 1. -1-0: less Y, 0-1: less X                                                 |
+| scale_ratio       | float | `0`      | Ranges from -1 to 1. -1-0: less Y, 0-1: less X                                                 |
+| global_orbit      | float | `0`      | Bone's parental orbit based on physics. Overrides `orbit_rot` in [inheritance()](#inheritance) |
+| global_orbit_diff | float | `0`      | Used to offset `global_orbit` by this much when swaying                                        |
+| global_orbit_vel  | float | `0`      | Used to calculate velocity when `rot_bounce` is more than 0                                    |
+| sway              | float | `0`      | When bone's parent is moved, how much should this bone sway?                                   |
+| rot_bounce        | float | `0`      | Along with sway, makes bone bouncy/wiggly                                                      |
 
 ## Animations
 
