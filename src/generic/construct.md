@@ -2,7 +2,7 @@
 
 - [`Construct()`](#construct)
     - [`inheritance()`](#inheritance)
-        - [`resetInheritance()`](#resetinheritance)
+    - [`resetInheritance()`](#resetinheritance)
     - [`rotate()`](#rotate)
     - [`inverseKinematics()`](#inversekinematics)
         - [`pointBones()`](#pointbones)
@@ -66,7 +66,7 @@ inheritance(bones: Bone[], ikRots: Object, physics: Physics[]) {
 
             // apply orbital difference, if rotation resistance physics is active
             let phys = physics[bones[b].physics_id];
-            if phys != undefined && phys.sway > 0 {
+            if(phys != undefined && phys.sway > 0) {
                 orbit_rot -= phys.global_orbit_diff;
             }
             bones[b].rot += orbit_rot;
@@ -83,20 +83,20 @@ inheritance(bones: Bone[], ikRots: Object, physics: Physics[]) {
         }
 
         // override bone's rotation from inverse kinematics
-        if ikRots[b] {
+        if(ikRots[b]) {
             bones[b].rot = ikRots[b];
         }
 
         // apply physics, if armature_bones is provided
         let phys = physics[bones[b].physics_id];
         if phys != undefined {
-            if bones[b].phys_rot_damping > 0. {
+            if(bones[b].phys_rot_damping > 0.) {
                 bones[b].rot = phys.global_rot;
             }
-            if bones[b].phys_pos_damping > 0. {
+            if(bones[b].phys_pos_damping > 0.) {
                 bones[b].pos = phys.global_pos;
             }
-            if bones[b].phys_scale_damping > 0. {
+            if(bones[b].phys_scale_damping > 0.) {
                 bones[b].scale = phys.global_scale;
             }
         }
@@ -113,6 +113,9 @@ Must always be called before `inheritance()`.
 ```typescript
 resetInheritance(constructed_bones: Bone[], bones: Bone[]) {
     for(let b = 0; b < bones.length; b++) {
+        constructed_bones[b].pos = bones[b].pos;
+        constructed_bones[b].rot = bones[b].rot;
+        constructed_bones[b].scale = bones[b].scale;
     }
 }
 ```
