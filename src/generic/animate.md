@@ -61,18 +61,18 @@ states for non-animated fields.
 
             // animate visual fields
             if (bone.visuals_id != -1) {
-                let visual = armature.visuals[bone.visuals_id]
+                let visuals = armature.visuals[bone.visuals_id]
 
                 if (kf.element == "Texture")
-                    visual.tex = kf.value_str;
+                    visuals.tex = kf.value_str;
                 if (kf.element == "TintR")
-                    interpolateKeyframes(bone.tint.r, kf, nextKf, f, sf);
+                    interpolateKeyframes(visuals.tint.r, kf, nextKf, f, sf);
                 if (kf.element == "TintG")
-                    interpolateKeyframes(bone.tint.g, kf, nextKf, f, sf);
+                    interpolateKeyframes(visuals.tint.g, kf, nextKf, f, sf);
                 if (kf.element == "TintB")
-                    interpolateKeyframes(bone.tint.b, kf, nextKf, f, sf);
+                    interpolateKeyframes(visuals.tint.b, kf, nextKf, f, sf);
                 if (kf.element == "TintA")
-                    interpolateKeyframes(bone.tint.a, kf, nextKf, f, sf);
+                    interpolateKeyframes(visuals.tint.a, kf, nextKf, f, sf);
             }
 
             // animate inverse kinematics fields
