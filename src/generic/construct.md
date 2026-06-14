@@ -48,7 +48,7 @@ Constructs the armature's bones with inheritance and inverse kinematics.
     }
 
     // mesh deformation
-    <a href="#constructverts">constructVerts</a>((armature.constructed_bones);
+    <a href="#constructverts">constructVerts</a>((armature.constructed_bones, armature.visuals);
 }
 </code> </pre>
 
@@ -399,30 +399,35 @@ Constructs vertices, for bones with mesh data.
 Note: a helper function (`inheritVert()`) is included in the code block below
 
 ```typescript
-function constructVerts(bones: Bone[]) {
+function constructVerts(bones: Bone[], visuals: Visuals[]) {
     for(let b = 0; b < bones.length; b++) {
+        if bones[b].visuals_id == -1 {
+            continue;
+        }
+        let visual = visuals[bones[b].visuals_id];
+
         bone: Bone = bones[b]
 
         // Move vertex to main bone.
         // This will be overridden if vertex has a bind.
-        for(let v = 0; v < bone.vertices.length; v++) {
-            bone.vertices[v].pos = bone.vertices[v].init_pos;
-            bone.vertices[v] = inheritVert(bone.vertices[v].pos, bone)
+        for(let v = 0; v < visual.vertices.length; v++) {
+            visual.vertices[v].pos = visual.vertices[v].init_pos;
+            visual.vertices[v] = inheritVert(visual.vertices[v].pos, bone)
         }
 
-        for(let bi = 0; bi < bones[b].binds.length; bi++) {
-            let boneId = bones[b].binds[bi].boneId
+        for(let bi = 0; bi < visual.binds.length; bi++) {
+            let boneId = visual.binds[bi].boneId
             if boneId == -1 {
                 continue
             }
             bindBone: Bone = bones.find(|bone| bone.id == bId))
-            bind: Bind = bones[b].binds[bi]
+            bind: Bind = visual.binds[bi]
             for(let v = 0; v < bind.verts.length; v++) {
                 id: int = bind.verts[v].id
 
                 if !bind.isPath {
                     // weights
-                    vert: Vertex = bones[b].vertices[id]
+                    vert: Vertex = visual.vertices[id]
                     weight: float = bind.verts[v].weight
                     endpos: Vec2 = inheritVert(vert.initPos, bindBone) - vert.pos
                     vert.pos += endPos * weight
@@ -436,7 +441,7 @@ function constructVerts(bones: Bone[]) {
 
                 // 1.
                 // get previous and next bind
-                binds: Bind[] = bones[b].binds
+                binds: Bind[] = visual.binds
                 prev: int = bi > 0 ? bi - 1 : bi
                 next: int = min((bi + 1, binds.length - 1)
                 prevBone: Bone = bones.find(|bone| bone.id == binds[prev].boneId)
@@ -453,11 +458,11 @@ function constructVerts(bones: Bone[]) {
 
                 // 3.
                 // move vert to bind, then rotate it around bind by normalAngle
-                vert: Vertex = bones[b].vertices[id]
+                vert: Vertex = visual.vertices[id]
                 vert.pos = vert.initPos + bindBone.pos
                 rotated: Vec2 = rotate(vert.pos - bindBone.pos, normalAngle)
                 vert.pos = bindBone.pos + (rotated * bind.verts[v].weight)
-                bones[b].vertices[id] = vert
+                visual.vertices[id] = vert
             }
         }
     }
