@@ -8,8 +8,8 @@ scale rather than the bone's own.
 
 ```typescript
 function CheckBoneFlip(bone: Bone, scale: Vec2) {
-    Bool both = scale.x < 0. && scale.y < 0.
-    Bool either = scale.x < 0. || scale.y < 0.
+    const both: Bool = scale.x < 0 && scale.y < 0;
+    const either: Bool = scale.x < 0 || scale.y < 0;
     if(either && !both) {
         bone.rot = -bone.rot
     }

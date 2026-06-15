@@ -5,21 +5,21 @@ reverse options.
 
 ```typescript
 function FormatFrame(
-  frame: Int,
-  animation: Animation,
-  reverse: Bool,
-  isLoop: Bool,
+    frame: Int,
+    animation: Animation,
+    reverse: Bool,
+    isLoop: Bool,
 ): Int {
-  lastFrame: Int = animation.keyframes.last().frame;
+    lastFrame: Int = animation.keyframes[-1].frame;
 
-  if (isLoop) {
-    frame %= lastFrame + 1;
-  }
+    if (isLoop) {
+        frame %= lastFrame + 1;
+    }
 
-  if (reverse) {
-    frame = lastFrame - frame;
-  }
+    if (reverse) {
+        frame = lastFrame - frame;
+    }
 
-  return frame;
+    return frame;
 }
 ```

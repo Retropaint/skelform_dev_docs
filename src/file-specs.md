@@ -15,14 +15,14 @@ This section will only cover the content in `armature.json`.
 - [`armature.json`](#armaturejson)
 - [Bones](#bones)
 - [Animations](#animations)
-  - [Keyframes](#keyframes)
+    - [Keyframes](#keyframes)
 - [Atlases](#atlases)
 - [Styles](#styles)
-  - [Texture](#Texture)
+    - [Textures](#textures)
 - [Visuals](#visuals)
-  - [Vertex](#vertex)
-  - [Bind](#bind)
-  - [BindVert](#bindvert)
+    - [Vertex](#vertex)
+    - [Bind](#bind)
+    - [BindVert](#bindvert)
 - [Inverse Kinematics](#inverse-kinematics)
 - [Physics](#physics)
 - [Initial Fields](#initial-fields)
@@ -190,7 +190,7 @@ Groups of textures.
 | name     | String              | `""`    | Name of style     |
 | textures | [Texture](#texture) | `[]`    | Array of textures |
 
-### Texture
+### Textures
 
 Note: Coordinates are in pixels.
 
