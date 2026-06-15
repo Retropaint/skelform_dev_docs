@@ -25,7 +25,9 @@ is `Animate()` working as intended.
 
 ## Pseudo Code
 
-All code shown on this document is not meant to be run directly.
+All code shown on this document is _not_ meant to be run directly.
+
+Some elements (eg; functions) will lead to their section if clicked.
 
 The language used is Typescript, but with a few concessions:
 
