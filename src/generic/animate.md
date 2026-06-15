@@ -132,37 +132,37 @@ Interpolation uses a modified bezier spline (explanation below).
 Note that 2 helper functions are included below the main function.
 
 ```typescript
-function interp(
+function interpolate(
     current: Int,
     max: Int,
-    start_val: Float,
-    end_val: Float,
-    start_handle: Vec2,
-    end_handle: Vec2,
+    startVal: Float,
+    endVal: Float,
+    startHandle: Vec2,
+    endHandle: Vec2,
 ): Float {
     // snapping behavior for Snap transition preset
-    if(start_handle.y == 999.0 && end_handle.y == 999.0) {
-        return start_val;
+    if(startHandle.y == 999.0 && endHandle.y == 999.0) {
+        return startVal;
     }
     if(max == 0 || current >= max) {
-        return end_val;
+        return endVal;
     }
 
     // solve for t with Newton-Raphson
     const initial = current / max;
     let t = initial;
     for(let i = 0; i < 5; i++) {
-        let x = cubicBezier(t, start_handle.x, end_handle.x);
-        let dx = cubicBezierDerivative(t, start_handle.x, end_handle.x);
-        if(abs(dx) < 1e-5 {
+        let x = cubicBezier(t, startHandle.x, endHandle.x);
+        let dx = cubicBezierDerivative(t, startHandle.x, endHandle.x);
+        if(Math.abs(dx) < 1e-5 {
             break;
         }
         t -= (x - initial) / dx;
         t = clamp(t, 0.0, 1.0);
     }
 
-    const progress = cubic_bezier(t, start_handle.y, end_handle.y)
-    return start_val + (end_val - start_val) * progress
+    const progress = cubic_bezier(t, startHandle.y, endHandle.y)
+    return startVal + (endVal - startVal) * progress
 }
 
 // for both functions below, p0 and p3 are always 0 and 1 respectively

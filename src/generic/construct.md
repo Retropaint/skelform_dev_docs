@@ -19,37 +19,37 @@ Constructs the armature's bones with inheritance and inverse kinematics.
 
 ```typescript
 function Construct(armature: Armature): Bone[] {
-    let const_bones = armature.constructed_bones;
+    let constBones = armature.constructed_bones;
 
     // initialize constructed_bones
-    if (const_bones == undefined) {
-        const_bones = clone(armature.bones);
+    if (constBones == undefined) {
+        constBones = clone(armature.bones);
     } else {
         // constructed_bones may have been used later for drawing
         // which sorts them by zindex, so sort back by id
-        const_bones.sort((bone) => bone.id);
+        constBones.sort(bone => bone.id);
     }
 
     // 1st inheritance pass
-    resetInheritance(const_bones, armature.bones);
-    inheritance(const_bones, {}, []);
+    resetInheritance(constBones, armature.bones);
+    inheritance(constBones, {}, []);
 
     // 2nd inheritance pass: inverse kinematics
     if (armature.inverse_kinematics.length > 0) {
-        ikRots = inverseKinematics(const_bones, armature.inverse_kinematics);
-        resetInheritance(const_bones, armature.bones);
-        inheritance(const_bones, ikRots, []);
+        ikRots = inverseKinematics(constBones, armature.inverse_kinematics);
+        resetInheritance(constBones, armature.bones);
+        inheritance(constBones, ikRots, []);
     }
 
     // 3rd inheritance pass: physics
     if (armature.physics.length > 0) {
-        simulatePhysics(const_bones, armature.physics);
+        simulatePhysics(constBones, armature.physics);
         resetInheritance(aramture.constructed_bones, armature.bones);
-        inheritance(const_bones, ikRots, armature.physics);
+        inheritance(constBones, ikRots, armature.physics);
     }
 
     // mesh deformation
-    constructVerts((const_bones, armature.visuals);
+    constructVerts((constBones, armature.visuals);
 }
 ```
 
@@ -112,11 +112,11 @@ Resets the provided `constructed_bones` to their original transforms.
 Must always be called before `inheritance()`.
 
 ```typescript
-resetInheritance(constructed_bones: Bone[], bones: Bone[]) {
+resetInheritance(constructedBones: Bone[], bones: Bone[]) {
     for(let b = 0; b < bones.length; b++) {
-        constructed_bones[b].pos = bones[b].pos;
-        constructed_bones[b].rot = bones[b].rot;
-        constructed_bones[b].scale = bones[b].scale;
+        constructedBones[b].pos = bones[b].pos;
+        constructedBones[b].rot = bones[b].rot;
+        constructedBones[b].scale = bones[b].scale;
     }
 }
 ```
@@ -145,11 +145,11 @@ wth `inverse_kinematics`.
 ```typescript
 function inverseKinematics(
     bones: Bone[],
-    inverse_kinematics: InverseKinematics[],
+    inverseKinematics: InverseKinematics[],
 ): Object {
     ikRot: Object = {};
 
-    for (let family of inverse_kinematics) {
+    for (let family of inverseKinematics) {
         // get relevant bones from the same set
         if (family.target_id == -1) {
             continue;
@@ -332,8 +332,8 @@ function simulatePhysics(constructedBones: Bone[], physics: Physics[]) {
 
         const s = Vec2(0.3, 0.3);
         const e = Vec2(0.6, 0.6);
-        const const_bone = constructedBones[b];
-        const prev_pos = physics.global_pos;
+        const constBone = constructedBones[b];
+        const prevPos = physics.global_pos;
 
         // interpolate position
         if(physics.pos_damping > 0 || physics.sway > 0) {
@@ -347,8 +347,8 @@ function simulatePhysics(constructedBones: Bone[], physics: Physics[]) {
             }
 
             let phys_pos = physics.global_pos;
-            phys_pos.x = interpolate(2, damping.x, phys_pos.x, const_bone.pos.x, s, e);
-            phys_pos.y = interpolate(2, damping.y, phys_pos.y, const_bone.pos.y, s, e);
+            phys_pos.x = interpolate(2, damping.x, phys_pos.x, constBone.pos.x, s, e);
+            phys_pos.y = interpolate(2, damping.y, phys_pos.y, constBone.pos.y, s, e);
         }
 
         // interpolate scale
@@ -362,46 +362,45 @@ function simulatePhysics(constructedBones: Bone[], physics: Physics[]) {
                 damping.x *= 1. - physics.scale_ratio
             }
 
-            const cb_scale = const_bone.scale;
-            let phys_scale = physics.global_scale;
-            phys_scale.x = interpolate(2, damping.x, phys_scale.x, cb.scale.x, s, e)
-            phys_scale.y = interpolate(2, damping.y, phys_scale.y, cb.scale.y, s, e)
+            let physScale = physics.global_scale;
+            physScale.x = interpolate(2, damping.x, physScale.x, constBone.scale.x, s, e)
+            physScale.y = interpolate(2, damping.y, physScale.y, constBone.scale.y, s, e)
         }
 
         // interpolate rotation
         if(physics.rot_damping > 0) {
-            const rot = shortest_angle_delta(physics.global_rot, const_bone.rot)
+            const rot = shortest_angle_delta(physics.global_rot, constBone.rot)
             physics.global_rot += rot / physics.rot_damping
         }
 
         // interpolate parent orbit (rot res, bounce, etc)
-        const parent = constructed_bones.find((b) => b.id == const_bone.parent_id)
+        const parent = constructed_bones.find(b => b.id == constBone.parent_id)
         if(physics.sway > 0 && parent != undefined) {
             // 1. get the raw orbit angle between this bone and its parent
-            const diff = normalize(const_bone.pos - parent.pos)
-            const diff_angle = Math.atan2(diff.y, diff.x)
+            const diff = normalize(constBone.pos - parent.pos)
+            const diffAngle = Math.atan2(diff.y, diff.x)
 
             // 2. interpolate current orbit angle to raw angle
-            let orbit_buffer = shortest_angle_delta(physics.global_orbit, diff_angle)
+            let orbitBuffer = shortest_angle_delta(physics.global_orbit, diffAngle)
 
             // 3. apply bounce to orbit angle
             if(physics.rot_bounce > 0 && physics.rot_bounce <= 1) {
-                orbit_buffer += physics.global_orbit_vel / (2 - physics.rot_bounce)
-                physics.global_orbit_vel = orbit_buffer
+                orbitBuffer += physics.global_orbit_vel / (2 - physics.rot_bounce)
+                physics.global_orbit_vel = orbitBuffer
             }
 
             // 4. apply orbit buffer
-            physics.global_orbit += orbit_buffer / 10
+            physics.global_orbit += orbitBuffer / 10
 
             // 5. swing orbit based on position momentum
-            const vel = normalize(physics.global_pos - prev_pos)
+            const vel = normalize(physics.global_pos - prevPos)
             const angle = Math.atan2(-vel.y, -vel.x)
-            const vel_rot = shortest_angle_delta(physics.global_orbit, angle)
-            const strength = magnitude(physics.global_pos - prev_pos) / 1000
-            physics.global_orbit += vel_rot * strength * physics.sway
+            const velRot = shortest_angle_delta(physics.global_orbit, angle)
+            const strength = magnitude(physics.global_pos - prevPos) / 1000
+            physics.global_orbit += velRot * strength * physics.sway
 
             // 6. apply difference in raw angle and orbit
-            physics.global_orbit_diff = diff_angle - physics.global_orbit
+            physics.global_orbit_diff = diffAngle - physics.global_orbit
         }
     }
 }
@@ -435,7 +434,7 @@ function constructVerts(bones: Bone[], visuals: Visuals[]) {
             if boneId == -1 {
                 continue;
             }
-            bindBone: Bone = bones.find((bone) => bone.id == bId))
+            bindBone: Bone = bones.find(bone => bone.id == bId))
             bind: Bind = visual.binds[bi]
             for(let v = 0; v < bind.verts.length; v++) {
                 id: Int = bind.verts[v].id
@@ -458,8 +457,8 @@ function constructVerts(bones: Bone[], visuals: Visuals[]) {
                 // get previous and next bind
                 const prev: Int = bi > 0 ? bi - 1 : bi;
                 const next: Int = min((bi + 1, visual.binds.length - 1);
-                const prevBone: Bone = bones.find((bone) => bone.id == visual.binds[prev].bone_id);
-                const nextBone: Bone = bones.find((bone) => bone.id == visual.binds[next].bone_id);
+                const prevBone: Bone = bones.find(bone => bone.id == visual.binds[prev].bone_id);
+                const nextBone: Bone = bones.find(bone => bone.id == visual.binds[next].bone_id);
 
                 // 2.
                 // get the average of normals between previous and next bind

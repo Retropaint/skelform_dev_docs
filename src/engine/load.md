@@ -12,7 +12,7 @@ function Load(zipPath: String): (Armature, Texture2D[]) {
     const armature: Armature = Json.new(armatureJson);
 
     let textures: Texture2D[];
-    armature.atlases.forEach((atlas) => {
+    armature.atlases.forEach(atlas => {
         Image img = zip.byName(atlas.filename);
         textures.push(Texture2D(img));
     })
