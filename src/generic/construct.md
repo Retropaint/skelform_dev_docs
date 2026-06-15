@@ -196,7 +196,7 @@ function pointBones(bones: Bone[]*, family: Bone) {
     tipPos: Vec2 = endBone.pos
     for(let i = family.bone_ids.length; i > 0; i--) {
         if(i == family.bone_ids.length - 1) {
-            // end bone should follow target bone rotation, if miimc_target is true
+            // end bone should follow target bone rotation, if mimic_target is true
             if(family.mimic_target) {
                 endBone.rot = bones[family.target_id]
             }
