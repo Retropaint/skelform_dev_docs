@@ -91,13 +91,13 @@ function inheritance(bones: Bone[], ikRots: Object, physics: Physics[]) {
         // apply physics, if armature_bones is provided
         let phys = physics[bones[b].physics_id];
         if phys != undefined {
-            if(bones[b].phys_rot_damping > 0.) {
+            if(phys.rot_damping > 0.) {
                 bones[b].rot = phys.global_rot;
             }
-            if(bones[b].phys_pos_damping > 0.) {
+            if(phys.pos_damping > 0.) {
                 bones[b].pos = phys.global_pos;
             }
-            if(bones[b].phys_scale_damping > 0.) {
+            if(phys.scale_damping > 0.) {
                 bones[b].scale = phys.global_scale;
             }
         }
@@ -315,11 +315,11 @@ function arcIk(bones: Bone[], root: Vec2, target: Vec2) {
 
 Processes all physics:
 
-- Position (`phys_pos_damping`)
-- Scale (`phys_scale_damping`)
-- Rotation (`phys_rot_damping`)
-- Sway (`phys_sway`)
-- Bounce (`phys_rot_bounce`)
+- Position (`physics.pos_damping`)
+- Scale (`physics.scale_damping`)
+- Rotation (`physics.rot_damping`)
+- Sway (`physics.sway`)
+- Bounce (`physics.rot_bounce`)
 
 ```typescript
 function simulatePhysics(constructedBones: Bone[], physics: Physics[]) {
@@ -332,7 +332,7 @@ function simulatePhysics(constructedBones: Bone[], physics: Physics[]) {
         const s = Vec2(0.3, 0.3);
         const e = Vec2(0.6, 0.6);
         const const_bone = constructedBones[b];
-        const prev_pos = physics.phys_global_pos;
+        const prev_pos = physics.global_pos;
 
         // interpolate position
         if(physics.pos_damping > 0 || physics.sway > 0) {

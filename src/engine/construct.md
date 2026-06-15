@@ -33,7 +33,7 @@ function Construct(armature: Armature*, options: ConstructOptions): Bone[] {
         // velocity only affects position for physics
         if(const_bone.physics_id != -1) {
             let physics = armature.physics[const_bone.physics_id];
-            physics.phys_global_pos -= options.velocity
+            physics.global_pos -= options.velocity
         }
 
         // engine quirks & user options applied to vertices
