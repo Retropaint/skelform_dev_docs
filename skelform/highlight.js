@@ -3620,8 +3620,6 @@ if (typeof exports === 'object' && typeof module !== 'undefined') { module.expor
       const functionDeclaration = tsLanguage.contains.find(m => m.label === "func.def");
       functionDeclaration.relevance = 0; // () => {} is more typical in TypeScript
 
-      console.log(tsLanguage);
-
       Object.assign(tsLanguage, {
         name: 'TypeScript',
         aliases: [
