@@ -1,17 +1,17 @@
 ## Table of Contents
 
 - [`Construct()`](#construct)
-  - [`inheritance()`](#inheritance)
-  - [`resetInheritance()`](#resetinheritance)
-  - [`rotate()`](#rotate)
-  - [`inverseKinematics()`](#inversekinematics)
-    - [`pointBones()`](#pointbones)
-    - [`applyConstraints()`](#applyconstraints)
-    - [`fabrik()`](#fabrik)
-    - [`arcIk()`](#arcik)
-  - [`simulatePhysics()`](#simulatephysics)
-  - [`constructVerts()`](#constructverts)
-    - [Pathing Explained](#pathing-explained)
+    - [`inheritance()`](#inheritance)
+    - [`resetInheritance()`](#resetinheritance)
+    - [`rotate()`](#rotate)
+    - [`inverseKinematics()`](#inversekinematics)
+        - [`pointBones()`](#pointbones)
+        - [`applyConstraints()`](#applyconstraints)
+        - [`fabrik()`](#fabrik)
+        - [`arcIk()`](#arcik)
+    - [`simulatePhysics()`](#simulatephysics)
+    - [`constructVerts()`](#constructverts)
+        - [Pathing Explained](#pathing-explained)
 
 # `Construct()`
 
@@ -221,17 +221,17 @@ Applies constraints to bone rotations (clockwise or counter-clockwise).
 
 ```typescript
 function applyConstraints(bones: Bone[], family: Bone) {
-  let jointDir: Vec2 = normalize(bones[family.ikBoneIds[1]].pos - root);
-  let baseDir: Vec2 = normalize(target - root);
-  let dir: Float = jointDir.x * baseDir.y - baseDir.x * jointDir.y;
-  let baseAngle: Float = atan2(baseDir.y, baseDir.x);
-  let cw: Bool = family.ikConstraint == "Clockwise" && dir > 0;
-  let ccw: Bool = family.ikConstraint == "CounterClockwise" && dir < 0;
-  if (ccw || cw) {
-    for (let id of family.ikBoneIds) {
-      bones[id].rot = -bones[id].rot + baseAngle * 2;
+    let jointDir: Vec2 = normalize(bones[family.ikBoneIds[1]].pos - root);
+    let baseDir: Vec2 = normalize(target - root);
+    let dir: Float = jointDir.x * baseDir.y - baseDir.x * jointDir.y;
+    let baseAngle: Float = atan2(baseDir.y, baseDir.x);
+    let cw: Bool = family.ikConstraint == "Clockwise" && dir > 0;
+    let ccw: Bool = family.ikConstraint == "CounterClockwise" && dir < 0;
+    if (ccw || cw) {
+        for (let id of family.ikBoneIds) {
+            bones[id].rot = -bones[id].rot + baseAngle * 2;
+        }
     }
-  }
 }
 ```
 
@@ -247,28 +247,28 @@ Source for algorithm:
 
 ```typescript
 function fabrik(bones: Bone[], root: Vec2, target: Vec2) {
-  // forward-reaching
-  nextPos: Vec2 = target;
-  nextLength: Float = 0.0;
-  for (let b = bones.length - 1; b > 0; b--) {
-    length: Vec2 = normalize(nextPos - bones[b].pos) * nextLength;
-    if (isNaN(length)) length = new Vec2(0, 0);
-    if (b != 0) nextLength = magnitude(bones[b].pos - bones[b - 1].pos);
-    bones[b].pos = nextPos - length;
-    nextPos = bones[b].pos;
-  }
+    // forward-reaching
+    nextPos: Vec2 = target;
+    nextLength: Float = 0.0;
+    for (let b = bones.length - 1; b > 0; b--) {
+        length: Vec2 = normalize(nextPos - bones[b].pos) * nextLength;
+        if (isNaN(length)) length = new Vec2(0, 0);
+        if (b != 0) nextLength = magnitude(bones[b].pos - bones[b - 1].pos);
+        bones[b].pos = nextPos - length;
+        nextPos = bones[b].pos;
+    }
 
-  // backward-reaching
-  prevPos: Vec2 = root;
-  prevLength: Float = 0.0;
-  for (let b = 0; b < bones.length; b++) {
-    length: Vec2 = normalize(prevPos - bones[b].pos) * prevLength;
-    if (isNaN(length)) length = new Vec2(0, 0);
-    if (b != bones.len() - 1)
-      prevLength = magnitude(bones[b].pos - bones[b + 1].pos);
-    bones[b].pos = prevPos - length;
-    prevPos = bones[b].pos;
-  }
+    // backward-reaching
+    prevPos: Vec2 = root;
+    prevLength: Float = 0.0;
+    for (let b = 0; b < bones.length; b++) {
+        length: Vec2 = normalize(prevPos - bones[b].pos) * prevLength;
+        if (isNaN(length)) length = new Vec2(0, 0);
+        if (b != bones.len() - 1)
+            prevLength = magnitude(bones[b].pos - bones[b + 1].pos);
+        bones[b].pos = prevPos - length;
+        prevPos = bones[b].pos;
+    }
 }
 ```
 
