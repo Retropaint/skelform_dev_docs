@@ -1,10 +1,10 @@
 ## Table of Contents
 
 - [`Animate()`](#animate)
-    - [`interpolateKeyframes()`](#interpolatekeyframes)
-    - [`interpolate()`](#interpolate)
-        - [Bezier Explanation](#bezier-explanation)
-    - [`resetBones()`](#resetbones)
+  - [`interpolateKeyframes()`](#interpolatekeyframes)
+  - [`interpolate()`](#interpolate)
+    - [Bezier Explanation](#bezier-explanation)
+  - [`resetBones()`](#resetbones)
 
 # `Animate()`
 
@@ -15,8 +15,8 @@ states for non-animated fields.
     armature: Armature,
     visuals: Visuals[],
     anims: Animation[],
-    frames: int[],
-    smoothFrames: int[]
+    frames: Int[],
+    smoothFrames: Int[]
 ) {
     for (let a = 0; a < anims.length; a++) {
         for (k = 0; k < anims[a].keyframes.length; k++) {
@@ -100,8 +100,8 @@ The resulting interpolation from the keyframes is interpolated again for
 smoothing.
 
 <pre> <code class="language-typescript hljs">function interpolateKeyframes(
-    field: float, prevKf: Keyframe, nextKf: Keyframe, frame: int, smoothFrame: int
-): float {
+    field: Float, prevKf: Keyframe, nextKf: Keyframe, frame: Int, smoothFrame: Int
+): Float {
     const totalFrames = nextKf.frame - prevKf.frame
     const currentFrame = frame - prevKf.frame
 
@@ -129,13 +129,13 @@ Note that 2 helper functions are included below the main function.
 
 ```typescript
 function interp(
-    current: int,
-    max: int,
-    start_val: float,
-    end_val: float,
+    current: Int,
+    max: Int,
+    start_val: Float,
+    end_val: Float,
     start_handle: Vec2,
     end_handle: Vec2,
-): float {
+): Float {
     // snapping behavior for Snap transition preset
     if(start_handle.y == 999.0 && end_handle.y == 999.0) {
         return start_val;
@@ -163,12 +163,12 @@ function interp(
 
 // for both functions below, p0 and p3 are always 0 and 1 respectively
 
-function cubicBezier(t: float, p1: float, p2: float): float {
+function cubicBezier(t: Float, p1: Float, p2: Float): Float {
     let u = 1. - t
     return 3. * u * u * t * p1 + 3. * u * t * t * p2 + t * t * t
 }
 
-function cubicBezierDerivative(t: float, p1: float, p2: float): float {
+function cubicBezierDerivative(t: Float, p1: Float, p2: Float): Float {
     let u = 1. - t
     return 3. * u * u * p1 + 6. * u * t * (p2 - p1) + 3. * t * t * (1. - p2)
 }

@@ -5,9 +5,9 @@ Reads a SkelForm file (`.skf`) and loads its armature and textures.
 The below example assumes `Texture2D` is the engine-specific texture object.
 
 ```typescript
-function Load(zipPath: string): (Armature, Texture2D[]) {
+function Load(zipPath: String): (Armature, Texture2D[]) {
     zip: Zip = ZipLib.open(zipPath)
-    armatureJson: string = zip.byName("armature.json")
+    armatureJson: String = zip.byName("armature.json")
 
     armature: Armature = Json.new(&armatureJson)
 

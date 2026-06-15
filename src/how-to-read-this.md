@@ -29,4 +29,4 @@ All code shown on this document is not meant to be run directly.
 
 The language used is Typescript, but with a few concessions:
 
-- `number` is replaced with `int` or `float` where appropriate
+- `number` is replaced with `Int` or `Float` where appropriate

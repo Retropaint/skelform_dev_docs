@@ -1,17 +1,17 @@
 ## Table of Contents
 
 - [`Construct()`](#construct)
-    - [`inheritance()`](#inheritance)
-    - [`resetInheritance()`](#resetinheritance)
-    - [`rotate()`](#rotate)
-    - [`inverseKinematics()`](#inversekinematics)
-        - [`pointBones()`](#pointbones)
-        - [`applyConstraints()`](#applyconstraints)
-        - [`fabrik()`](#fabrik)
-        - [`arcIk()`](#arcik)
-    - [`simulatePhysics()`](#simulatephysics)
-    - [`constructVerts()`](#constructverts)
-        - [Pathing Explained](#pathing-explained)
+  - [`inheritance()`](#inheritance)
+  - [`resetInheritance()`](#resetinheritance)
+  - [`rotate()`](#rotate)
+  - [`inverseKinematics()`](#inversekinematics)
+    - [`pointBones()`](#pointbones)
+    - [`applyConstraints()`](#applyconstraints)
+    - [`fabrik()`](#fabrik)
+    - [`arcIk()`](#arcik)
+  - [`simulatePhysics()`](#simulatephysics)
+  - [`constructVerts()`](#constructverts)
+    - [Pathing Explained](#pathing-explained)
 
 # `Construct()`
 
@@ -221,17 +221,17 @@ Applies constraints to bone rotations (clockwise or counter-clockwise).
 
 ```typescript
 function applyConstraints(bones: Bone[], family: Bone) {
-    jointDir: Vec2 = normalize(bones[family.ikBoneIds[1]].pos - root);
-    baseDir: Vec2 = normalize(target - root);
-    dir: float = jointDir.x * baseDir.y - baseDir.x * jointDir.y;
-    baseAngle: float = atan2(baseDir.y, baseDir.x);
-    cw: bool = family.ikConstraint == "Clockwise" && dir > 0;
-    ccw: bool = family.ikConstraint == "CounterClockwise" && dir < 0;
-    if (ccw || cw) {
-        for (let id of family.ikBoneIds) {
-            bones[id].rot = -bones[id].rot + baseAngle * 2;
-        }
+  let jointDir: Vec2 = normalize(bones[family.ikBoneIds[1]].pos - root);
+  let baseDir: Vec2 = normalize(target - root);
+  let dir: Float = jointDir.x * baseDir.y - baseDir.x * jointDir.y;
+  let baseAngle: Float = atan2(baseDir.y, baseDir.x);
+  let cw: Bool = family.ikConstraint == "Clockwise" && dir > 0;
+  let ccw: Bool = family.ikConstraint == "CounterClockwise" && dir < 0;
+  if (ccw || cw) {
+    for (let id of family.ikBoneIds) {
+      bones[id].rot = -bones[id].rot + baseAngle * 2;
     }
+  }
 }
 ```
 
@@ -247,28 +247,28 @@ Source for algorithm:
 
 ```typescript
 function fabrik(bones: Bone[], root: Vec2, target: Vec2) {
-    // forward-reaching
-    nextPos: Vec2 = target;
-    nextLength: float = 0.0;
-    for (let b = bones.length - 1; b > 0; b--) {
-        length: Vec2 = normalize(nextPos - bones[b].pos) * nextLength;
-        if (isNaN(length)) length = new Vec2(0, 0);
-        if (b != 0) nextLength = magnitude(bones[b].pos - bones[b - 1].pos);
-        bones[b].pos = nextPos - length;
-        nextPos = bones[b].pos;
-    }
+  // forward-reaching
+  nextPos: Vec2 = target;
+  nextLength: Float = 0.0;
+  for (let b = bones.length - 1; b > 0; b--) {
+    length: Vec2 = normalize(nextPos - bones[b].pos) * nextLength;
+    if (isNaN(length)) length = new Vec2(0, 0);
+    if (b != 0) nextLength = magnitude(bones[b].pos - bones[b - 1].pos);
+    bones[b].pos = nextPos - length;
+    nextPos = bones[b].pos;
+  }
 
-    // backward-reaching
-    prevPos: Vec2 = root;
-    prevLength: float = 0.0;
-    for (let b = 0; b < bones.length; b++) {
-        length: Vec2 = normalize(prevPos - bones[b].pos) * prevLength;
-        if (isNaN(length)) length = new Vec2(0, 0);
-        if (b != bones.len() - 1)
-            prevLength = magnitude(bones[b].pos - bones[b + 1].pos);
-        bones[b].pos = prevPos - length;
-        prevPos = bones[b].pos;
-    }
+  // backward-reaching
+  prevPos: Vec2 = root;
+  prevLength: Float = 0.0;
+  for (let b = 0; b < bones.length; b++) {
+    length: Vec2 = normalize(prevPos - bones[b].pos) * prevLength;
+    if (isNaN(length)) length = new Vec2(0, 0);
+    if (b != bones.len() - 1)
+      prevLength = magnitude(bones[b].pos - bones[b + 1].pos);
+    bones[b].pos = prevPos - length;
+    prevPos = bones[b].pos;
+  }
 }
 ```
 
@@ -282,28 +282,28 @@ distance of each bone after the other.
 ```typescript
 function arcIk(bones: Bone[], root: Vec2, target: Vec2) {
     // determine where bones will be on the arc line (ranging from 0 to 1)
-    dist: float[] = [0.]
+    dist: Float[] = [0.]
 
     maxLength: Vec2 = magnitude(bones.last().pos - root)
-    currLength: float = 0.
+    currLength: Float = 0.
     for(let b = 1; b < bones.length; b++) {
-        length: float = magnitude(bones[b].pos - bones[b - 1].pos)
+        length: Float = magnitude(bones[b].pos - bones[b - 1].pos)
         currLength += length;
         dist.push(currLength / maxLength)
     }
 
     base: Vec2 = target - root
-    baseAngle: float = base.y.atan2(base.x)
-    baseMag: float = magnitude(base).min(maxLength)
-    peak: float = maxLength / baseMag
-    valley: float = baseMag / maxLength
+    baseAngle: Float = base.y.atan2(base.x)
+    baseMag: Float = magnitude(base).min(maxLength)
+    peak: Float = maxLength / baseMag
+    valley: Float = baseMag / maxLength
     for(let b = 1; b < bones.length; b++) {
         bones[b].pos = new Vec2(
             bones[b].pos.x * valley,
             root.y + (1.0 - peak) * sin(dist[b] * PI) * baseMag,
         )
 
-        rotated: float = rotate(bones[b].pos - root, baseAngle)
+        rotated: Float = rotate(bones[b].pos - root, baseAngle)
         bones[b].pos = rotated + root
     }
 }
@@ -433,12 +433,12 @@ function constructVerts(bones: Bone[], visuals: Visuals[]) {
             bindBone: Bone = bones.find(|bone| bone.id == bId))
             bind: Bind = visual.binds[bi]
             for(let v = 0; v < bind.verts.length; v++) {
-                id: int = bind.verts[v].id
+                id: Int = bind.verts[v].id
 
                 if !bind.isPath {
                     // weights
                     vert: Vertex = visual.vertices[id]
-                    weight: float = bind.verts[v].weight
+                    weight: Float = bind.verts[v].weight
                     endpos: Vec2 = inheritVert(vert.initPos, bindBone) - vert.pos
                     vert.pos += endPos * weight
                     continue
@@ -452,8 +452,8 @@ function constructVerts(bones: Bone[], visuals: Visuals[]) {
                 // 1.
                 // get previous and next bind
                 binds: Bind[] = visual.binds
-                prev: int = bi > 0 ? bi - 1 : bi
-                next: int = min((bi + 1, binds.length - 1)
+                prev: Int = bi > 0 ? bi - 1 : bi
+                next: Int = min((bi + 1, binds.length - 1)
                 prevBone: Bone = bones.find(|bone| bone.id == binds[prev].boneId)
                 nextBone: Bone = bones.find(|bone| bone.id == binds[next].boneId)
 
@@ -464,7 +464,7 @@ function constructVerts(bones: Bone[], visuals: Visuals[]) {
                 prevNormal: Vec2 = normalize(Vec2.new(-prevDir.y, prevDir.x))
                 nextNormal: Vec2 = normalize(Vec2.new(-nextDir.y, nextDir.x))
                 average: Vec2 = prevNormal + nextNormal
-                normalAngle: float = atan2(average.y, average.x)
+                normalAngle: Float = atan2(average.y, average.x)
 
                 // 3.
                 // move vert to bind, then rotate it around bind by normalAngle

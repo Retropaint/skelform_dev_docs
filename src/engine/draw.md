@@ -3,7 +3,7 @@
 Uses the bones from `Construct()` (usually `armature.constructed_bones`) to draw
 the armature.
 
-Propagated visibility is handled via a fixed bool array.
+Propagated visibility is handled via a fixed Bool array.
 
 ```typescript
 function Draw(bones: Bone[], visuals: Visuals[], atlases: Texture2D[], styles: Style[]) {

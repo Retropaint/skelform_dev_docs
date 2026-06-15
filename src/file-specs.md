@@ -15,14 +15,14 @@ This section will only cover the content in `armature.json`.
 - [`armature.json`](#armaturejson)
 - [Bones](#bones)
 - [Animations](#animations)
-    - [Keyframes](#keyframes)
+  - [Keyframes](#keyframes)
 - [Atlases](#atlases)
 - [Styles](#styles)
-    - [Texture](#Texture)
+  - [Texture](#Texture)
 - [Visuals](#visuals)
-    - [Vertex](#vertex)
-    - [Bind](#bind)
-    - [BindVert](#bindvert)
+  - [Vertex](#vertex)
+  - [Bind](#bind)
+  - [BindVert](#bindvert)
 - [Inverse Kinematics](#inverse-kinematics)
 - [Physics](#physics)
 - [Initial Fields](#initial-fields)
@@ -32,9 +32,9 @@ This section will only cover the content in `armature.json`.
 
 | Key                | Type                                       | Default                                   | Description                                  |
 | ------------------ | ------------------------------------------ | ----------------------------------------- | -------------------------------------------- |
-| version            | string                                     | `""`                                      | Editor version that exported this file       |
-| baked_ik           | bool                                       | `false`                                   | Was this file exported with baked IK frames? |
-| img_format         | string                                     | `"PNG"`                                   | Exported atlas image format (PNG, JPG, etc)  |
+| version            | String                                     | `""`                                      | Editor version that exported this file       |
+| baked_ik           | Bool                                       | `false`                                   | Was this file exported with baked IK frames? |
+| img_format         | String                                     | `"PNG"`                                   | Exported atlas image format (PNG, JPG, etc)  |
 | clear_color        | Color[^1]                                  | <span class="color">`(0, 0, 0, 0)`</span> | Exported clear color of atlas images         |
 | bones              | [Bone](#bone)[]                            | `[]`                                      | Array of all bones                           |
 | animations         | [Animation](#animation)[]                  | `[]`                                      | Array of all animations                      |
@@ -48,19 +48,19 @@ This section will only cover the content in `armature.json`.
 
 | Key                   | Type      | Default                                           | Description                                        |
 | --------------------- | --------- | ------------------------------------------------- | -------------------------------------------------- |
-| id                    | uint      | `0`                                               | Bone ID                                            |
-| name                  | string    | `""`                                              | Name of bone                                       |
+| id                    | Uint      | `0`                                               | Bone ID                                            |
+| name                  | String    | `""`                                              | Name of bone                                       |
 | pos                   | Vec2      | `(0, 0)`                                          | Position of bone                                   |
-| rot                   | float     | `0`                                               | Rotation of bone                                   |
+| rot                   | Float     | `0`                                               | Rotation of bone                                   |
 | scale                 | Vec2      | `(1, 1)`                                          | Scale of bone                                      |
-| parent_id             | int       | `-1`                                              | Bone parent ID (-1 if none)                        |
-| tex                   | string    | `""`                                              | Name of texture to use                             |
-| zindex                | int       | `0`                                               | Z-index of bone (higher index renders above lower) |
-| hidden                | bool      | `false`                                           | Whether this bone is hidden                        |
+| parent_id             | Int       | `-1`                                              | Bone parent ID (-1 if none)                        |
+| tex                   | String    | `""`                                              | Name of texture to use                             |
+| zindex                | Int       | `0`                                               | Z-index of bone (higher index renders above lower) |
+| hidden                | Bool      | `false`                                           | Whether this bone is hidden                        |
 | tint                  | Color[^1] | <span class="color">`(255, 255, 255, 255)`</span> | Color tint                                         |
-| inverse_kinematics_id | int       | `-1`                                              | [Inverse Kinematics](#inverse-kinematics) ID       |
-| visuals_id            | int       | `-1`                                              | [Visuals](#visuals) ID                             |
-| physics_id            | int       | `-1`                                              | [Physics](#physics) ID                             |
+| inverse_kinematics_id | Int       | `-1`                                              | [Inverse Kinematics](#inverse-kinematics) ID       |
+| visuals_id            | Int       | `-1`                                              | [Visuals](#visuals) ID                             |
+| physics_id            | Int       | `-1`                                              | [Physics](#physics) ID                             |
 
 ## Inverse Kinematics
 
@@ -68,15 +68,15 @@ Inverse kinematics is stored in the root (first) bone of each set of IK bones.
 
 | Key               | Type   | Default        | Description                                      |
 | ----------------- | ------ | -------------- | ------------------------------------------------ |
-| family_id         | uint   | `-1`           | The ID of family this bone is in (-1 by default) |
-| constraint        | string | `"None"`       | Constraint (Clockwise, CounterClockwise)         |
-| mode              | string | `"FABRIK"`     | Mode (FABRIK, Arc)                               |
-| target_id         | uint   | `-1`           | Target bone ID                                   |
-| bone_ids          | uint[] | `[]`           | ID of all bones in this family                   |
-| mimic_target      | bool   | `false`        | Should the last bone follow target's rotation?   |
-| init_constraint   | string | `constraint`   | Initial field for `constraint`[^2]               |
-| init_mode         | string | `mode`         | Initial field for `mode`[^2]                     |
-| init_mimic_target | bool   | `mimic_target` | Initial field for `mimic_target`[^2]             |
+| family_id         | Uint   | `-1`           | The ID of family this bone is in (-1 by default) |
+| constraint        | String | `"None"`       | Constraint (Clockwise, CounterClockwise)         |
+| mode              | String | `"FABRIK"`     | Mode (FABRIK, Arc)                               |
+| target_id         | Uint   | `-1`           | Target bone ID                                   |
+| bone_ids          | Uint[] | `[]`           | ID of all bones in this family                   |
+| mimic_target      | Bool   | `false`        | Should the last bone follow target's rotation?   |
+| init_constraint   | String | `constraint`   | Initial field for `constraint`[^2]               |
+| init_mode         | String | `mode`         | Initial field for `mode`[^2]                     |
+| init_mimic_target | Bool   | `mimic_target` | Initial field for `mimic_target`[^2]             |
 
 ## Visuals
 
@@ -84,15 +84,15 @@ Visual data of each bone (texture & mesh)
 
 | Key         | Type                | Default                                           | Description                                            |
 | ----------- | ------------------- | ------------------------------------------------- | ------------------------------------------------------ |
-| tex         | string              | `""`                                              | Name of texture to use                                 |
-| zindex      | int                 | `0`                                               | Z-index of bone (higher index renders above lower)     |
+| tex         | String              | `""`                                              | Name of texture to use                                 |
+| zindex      | Int                 | `0`                                               | Z-index of bone (higher index renders above lower)     |
 | tint        | Color[^1]           | <span class="color">`(255, 255, 255, 255)`</span> | Multiplicative color tint for texture                  |
 | vertices    | [Vertex](#vertex)[] | `[]`                                              | Array of vertices                                      |
-| indices     | uint[]              | `[]`                                              | Each index is vertex ID. Every 3 IDs forms 1 triangle. |
+| indices     | Uint[]              | `[]`                                              | Each index is vertex ID. Every 3 IDs forms 1 triangle. |
 | binds       | [Bind](#bind)[]     | `[]`                                              | Array of bone binds                                    |
 | init_tex    | String              | `""`                                              | Initial field for `tex`[^2]                            |
 | init_tint   | Color[^1]           | <span class="color">`(255, 255, 255, 255)`</span> | Initial field for `tint`[^2]                           |
-| init_zindex | int                 | `0`                                               | Initial field for `zindex`[^2]                         |
+| init_zindex | Int                 | `0`                                               | Initial field for `zindex`[^2]                         |
 
 #### Vertex
 
@@ -101,10 +101,10 @@ as well as how the texture is mapped (UV).
 
 | Key      | Type | Default  | Description                            |
 | -------- | ---- | -------- | -------------------------------------- |
-| id       | uint | `0`      | ID of vertex                           |
+| id       | Uint | `0`      | ID of vertex                           |
 | pos      | Vec2 | `(0, 0)` | Position of vertex                     |
 | uv       | Vec2 | `(0, 0)` | UV of vertex                           |
-| init_pos | int  | `pos`    | Helper for initial vertex position[^2] |
+| init_pos | Int  | `pos`    | Helper for initial vertex position[^2] |
 
 #### Bind
 
@@ -113,8 +113,8 @@ primary method of animating vertices.
 
 | Key     | Type                    | Default | Description                                  |
 | ------- | ----------------------- | ------- | -------------------------------------------- |
-| id      | int                     | `-1`    | ID of bind                                   |
-| is_path | bool                    | `false` | Should this bind behave like a path?         |
+| id      | Int                     | `-1`    | ID of bind                                   |
+| is_path | Bool                    | `false` | Should this bind behave like a path?         |
 | verts   | [BindVert](#bindvert)[] | `[]`    | Array of vertex data associated to this bind |
 
 #### BindVert
@@ -123,8 +123,8 @@ Vertices assigned to a bind.
 
 | Key    | Type  | Default | Description                    |
 | ------ | ----- | ------- | ------------------------------ |
-| id     | uint  | `0`     | ID of vertex                   |
-| weight | float | `1`     | Weight assigned to this vertex |
+| id     | Uint  | `0`     | ID of vertex                   |
+| weight | Float | `1`     | Weight assigned to this vertex |
 
 ## Physics
 
@@ -133,24 +133,24 @@ Vertices assigned to a bind.
 | global_pos        | Vec2  | `(0, 0)` | Bone's position based on physics. Overrides `bone.position` in [inheritance()](#inheritance)   |
 | global_scale      | Vec2  | `(0, 0)` | Bone's scale based on physics. Overrides `bone.scale` in [inheritance()](#inheritance)         |
 | global_rot        | Vec2  | `(0, 0)` | Bone's rotation based on physics. Overrides `bone.rotation` in [inheritance()](#inheritance)   |
-| pos_damping       | float | `0`      | Higher damping makes position interpolate slower towards `bone.position`                       |
-| scale_damping     | float | `0`      | Higher damping makes scale interpolate slower towards `bone.scale`                             |
-| rot_damping       | float | `0`      | Higher damping makes rotation interpolate slower towards `bone.rotation`                       |
-| pos_ratio         | float | `0`      | Ranges from -1 to 1. -1-0: less Y, 0-1: less X                                                 |
-| scale_ratio       | float | `0`      | Ranges from -1 to 1. -1-0: less Y, 0-1: less X                                                 |
-| global_orbit      | float | `0`      | Bone's parental orbit based on physics. Overrides `orbit_rot` in [inheritance()](#inheritance) |
-| global_orbit_diff | float | `0`      | Used to offset `global_orbit` by this much when swaying                                        |
-| global_orbit_vel  | float | `0`      | Used to calculate velocity when `rot_bounce` is more than 0                                    |
-| sway              | float | `0`      | When bone's parent is moved, how much should this bone sway?                                   |
-| rot_bounce        | float | `0`      | Along with sway, makes bone bouncy/wiggly                                                      |
+| pos_damping       | Float | `0`      | Higher damping makes position interpolate slower towards `bone.position`                       |
+| scale_damping     | Float | `0`      | Higher damping makes scale interpolate slower towards `bone.scale`                             |
+| rot_damping       | Float | `0`      | Higher damping makes rotation interpolate slower towards `bone.rotation`                       |
+| pos_ratio         | Float | `0`      | Ranges from -1 to 1. -1-0: less Y, 0-1: less X                                                 |
+| scale_ratio       | Float | `0`      | Ranges from -1 to 1. -1-0: less Y, 0-1: less X                                                 |
+| global_orbit      | Float | `0`      | Bone's parental orbit based on physics. Overrides `orbit_rot` in [inheritance()](#inheritance) |
+| global_orbit_diff | Float | `0`      | Used to offset `global_orbit` by this much when swaying                                        |
+| global_orbit_vel  | Float | `0`      | Used to calculate velocity when `rot_bounce` is more than 0                                    |
+| sway              | Float | `0`      | When bone's parent is moved, how much should this bone sway?                                   |
+| rot_bounce        | Float | `0`      | Along with sway, makes bone bouncy/wiggly                                                      |
 
 ## Animations
 
 | Key       | Type                     | Default | Description                        |
 | --------- | ------------------------ | ------- | ---------------------------------- |
-| id        | string                   | `0`     | ID of animation                    |
-| name      | string                   | `""`    | Name of animation                  |
-| fps       | uint                     | `0`     | Frames per second of animation     |
+| id        | String                   | `0`     | ID of animation                    |
+| name      | String                   | `""`    | Name of animation                  |
+| fps       | Uint                     | `0`     | Frames per second of animation     |
 | keyframes | [Keyframe](#keyframes)[] | `[]`    | Data of all keyframes of animation |
 
 ### Keyframe
@@ -162,14 +162,14 @@ Eg: `element: PosX` with `value: 20` means 'Position X = 20 at `frame`'
 
 | Key          | Type   | Default | Description                              |
 | ------------ | ------ | ------- | ---------------------------------------- |
-| frame        | uint   | `0`     | frame of keyframe                        |
-| bone_id      | uint   | `0`     | ID of bone that keyframe refers to       |
-| element      | string | `""`    | Element to be animated by this keyframe  |
-| value        | float  | `0`     | Value to set `element` of bone to        |
-| value_str    | string | `""`    | String variant of value                  |
-| next_kf      | int    | `-1`    | Index of the next associated keyframe    |
-| start_handle | float  | `0.333` | Handle to use for start of interpolation |
-| end_handle   | float  | `0.666` | Handle to use for end of interpolation   |
+| frame        | Uint   | `0`     | frame of keyframe                        |
+| bone_id      | Uint   | `0`     | ID of bone that keyframe refers to       |
+| element      | String | `""`    | Element to be animated by this keyframe  |
+| value        | Float  | `0`     | Value to set `element` of bone to        |
+| value_str    | String | `""`    | String variant of value                  |
+| next_kf      | Int    | `-1`    | Index of the next associated keyframe    |
+| start_handle | Float  | `0.333` | Handle to use for start of interpolation |
+| end_handle   | Float  | `0.666` | Handle to use for end of interpolation   |
 
 ## Atlases
 
@@ -177,7 +177,7 @@ Easily-accessible information about texture atlas files.
 
 | Key      | Type   | Default  | Description                 |
 | -------- | ------ | -------- | --------------------------- |
-| filename | string | `""`     | Name of file for this atlas |
+| filename | String | `""`     | Name of file for this atlas |
 | size     | Vec2   | `(0, 0)` | Size of image (in pixels)   |
 
 ## Styles
@@ -186,8 +186,8 @@ Groups of textures.
 
 | Key      | Type                | Default | Description       |
 | -------- | ------------------- | ------- | ----------------- |
-| id       | uint                | `0`     | ID of style       |
-| name     | string              | `""`    | Name of style     |
+| id       | Uint                | `0`     | ID of style       |
+| name     | String              | `""`    | Name of style     |
 | textures | [Texture](#texture) | `[]`    | Array of textures |
 
 ### Texture
@@ -196,10 +196,10 @@ Note: Coordinates are in pixels.
 
 | Key       | Type   | Default  | Description                                              |
 | --------- | ------ | -------- | -------------------------------------------------------- |
-| name      | string | `""`     | Name of texture                                          |
+| name      | String | `""`     | Name of texture                                          |
 | offset    | Vec2   | `(0, 0)` | Top-left corner of texture in the atlas                  |
 | size      | Vec2   | `(0, 0)` | Append to `offset` to get bottom-right corner of texture |
-| atlas_idx | uint   | `0`      | Index of [atlas](#atlas) that this texture lives in      |
+| atlas_idx | Uint   | `0`      | Index of [atlas](#atlas) that this texture lives in      |
 
 ## Initial Fields
 

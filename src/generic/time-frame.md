@@ -9,17 +9,17 @@ If better suited, this function can be re-implemented for engine runtimes.
 
 ```typescript
 function TimeFrame(
-    time: Time, 
-    animation: Animation, 
-    reverse: bool, 
-    isLoop: bool
-): int {
-    elapsed: float = time.asMillis() / 1e3
-    frametime: float = 1.0 / animation.fps
+  time: Time,
+  animation: Animation,
+  reverse: Bool,
+  isLoop: Bool,
+): Int {
+  elapsed: Float = time.asMillis() / 1e3;
+  frametime: Float = 1.0 / animation.fps;
 
-    frame: int = (elapsed / frametime)
-    frame = FormatFrame(frame, animation, reverse, isLoop)
+  frame: Int = elapsed / frametime;
+  frame = FormatFrame(frame, animation, reverse, isLoop);
 
-    return frame
+  return frame;
 }
 ```
