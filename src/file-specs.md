@@ -15,7 +15,7 @@ This section will only cover the content in `armature.json`.
 - [Armature](#armature)
 - [Bones](#bones)
 - [Animations](#animations)
-    - [Keyframes](#keyframes)
+    - [Keyframess](#keyframes)
 - [Atlases](#atlases)
 - [Styles](#styles)
     - [Textures](#textures)
@@ -128,32 +128,32 @@ Vertices assigned to a bind.
 
 ## Physics
 
-| Key               | Type  | Default  | Description                                                                                    |
-| ----------------- | ----- | -------- | ---------------------------------------------------------------------------------------------- |
-| global_pos        | Vec2  | `(0, 0)` | Bone's position based on physics. Overrides `bone.position` in [inheritance()](#inheritance)   |
-| global_scale      | Vec2  | `(0, 0)` | Bone's scale based on physics. Overrides `bone.scale` in [inheritance()](#inheritance)         |
-| global_rot        | Vec2  | `(0, 0)` | Bone's rotation based on physics. Overrides `bone.rotation` in [inheritance()](#inheritance)   |
-| pos_damping       | Float | `0`      | Higher damping makes position interpolate slower towards `bone.position`                       |
-| scale_damping     | Float | `0`      | Higher damping makes scale interpolate slower towards `bone.scale`                             |
-| rot_damping       | Float | `0`      | Higher damping makes rotation interpolate slower towards `bone.rotation`                       |
-| pos_ratio         | Float | `0`      | Ranges from -1 to 1. -1-0: less Y, 0-1: less X                                                 |
-| scale_ratio       | Float | `0`      | Ranges from -1 to 1. -1-0: less Y, 0-1: less X                                                 |
-| global_orbit      | Float | `0`      | Bone's parental orbit based on physics. Overrides `orbit_rot` in [inheritance()](#inheritance) |
-| global_orbit_diff | Float | `0`      | Used to offset `global_orbit` by this much when swaying                                        |
-| global_orbit_vel  | Float | `0`      | Used to calculate velocity when `rot_bounce` is more than 0                                    |
-| sway              | Float | `0`      | When bone's parent is moved, how much should this bone sway?                                   |
-| rot_bounce        | Float | `0`      | Along with sway, makes bone bouncy/wiggly                                                      |
+| Key               | Type  | Default  | Description                                                                                                           |
+| ----------------- | ----- | -------- | --------------------------------------------------------------------------------------------------------------------- |
+| global_pos        | Vec2  | `(0, 0)` | Bone's position based on physics. Overrides `bone.position` in [inheritance()](/generic/construct.html#inheritance)   |
+| global_scale      | Vec2  | `(0, 0)` | Bone's scale based on physics. Overrides `bone.scale` in [inheritance()](/generic/construct.html#inheritance)         |
+| global_rot        | Vec2  | `(0, 0)` | Bone's rotation based on physics. Overrides `bone.rotation` in [inheritance()](/generic/construct.html#inheritance)   |
+| pos_damping       | Float | `0`      | Higher damping makes position interpolate slower towards `bone.position`                                              |
+| scale_damping     | Float | `0`      | Higher damping makes scale interpolate slower towards `bone.scale`                                                    |
+| rot_damping       | Float | `0`      | Higher damping makes rotation interpolate slower towards `bone.rotation`                                              |
+| pos_ratio         | Float | `0`      | Ranges from -1 to 1. -1-0: less Y, 0-1: less X                                                                        |
+| scale_ratio       | Float | `0`      | Ranges from -1 to 1. -1-0: less Y, 0-1: less X                                                                        |
+| global_orbit      | Float | `0`      | Bone's parental orbit based on physics. Overrides `orbit_rot` in [inheritance()](/generic/construct.html#inheritance) |
+| global_orbit_diff | Float | `0`      | Used to offset `global_orbit` by this much when swaying                                                               |
+| global_orbit_vel  | Float | `0`      | Used to calculate velocity when `rot_bounce` is more than 0                                                           |
+| sway              | Float | `0`      | When bone's parent is moved, how much should this bone sway?                                                          |
+| rot_bounce        | Float | `0`      | Along with sway, makes bone bouncy/wiggly                                                                             |
 
 ## Animations
 
-| Key       | Type                     | Default | Description                        |
-| --------- | ------------------------ | ------- | ---------------------------------- |
-| id        | String                   | `0`     | ID of animation                    |
-| name      | String                   | `""`    | Name of animation                  |
-| fps       | Uint                     | `0`     | Frames per second of animation     |
-| keyframes | [Keyframe](#keyframes)[] | `[]`    | Data of all keyframes of animation |
+| Key       | Type                      | Default | Description                        |
+| --------- | ------------------------- | ------- | ---------------------------------- |
+| id        | String                    | `0`     | ID of animation                    |
+| name      | String                    | `""`    | Name of animation                  |
+| fps       | Uint                      | `0`     | Frames per second of animation     |
+| keyframes | [Keyframes](#keyframes)[] | `[]`    | Data of all keyframes of animation |
 
-### Keyframe
+### Keyframes
 
 Keyframes are defined by their `element` (what's animated), as well as either
 `value` or `value_str` (what value to animate `element` to)
@@ -199,7 +199,7 @@ Note: Coordinates are in pixels.
 | name      | String | `""`     | Name of texture                                          |
 | offset    | Vec2   | `(0, 0)` | Top-left corner of texture in the atlas                  |
 | size      | Vec2   | `(0, 0)` | Append to `offset` to get bottom-right corner of texture |
-| atlas_idx | Uint   | `0`      | Index of [atlas](#atlas) that this texture lives in      |
+| atlas_idx | Uint   | `0`      | Index of [atlas](#atlases) that this texture lives in    |
 
 ## Initial Fields
 
