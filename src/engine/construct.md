@@ -18,13 +18,13 @@ function Construct(armature: Armature*, options: ConstructOptions): Bone[] {
         let const_bone = armature.constructed_bones[b];
 
         // engine quirks like negative Y or reversed rotations can be applied here
-        const_bone.pos.y = -const_bone.pos.y
-        const_bone.rot   = -const_bone.rot
+        const_bone.pos.y = -const_bone.pos.y;
+        const_bone.rot   = -const_bone.rot;
 
         // apply user options
-        const_bone.scale *= options.scale
-        const_bone.pos   *= options.scale
-        const_bone.pos   += options.position
+        const_bone.scale *= options.scale;
+        const_bone.pos   *= options.scale;
+        const_bone.pos   += options.position;
 
         // bones must be flipped if scale is in the negatives
         GenericRuntime.checkBoneFlip(bone, options.scale)
@@ -32,16 +32,16 @@ function Construct(armature: Armature*, options: ConstructOptions): Bone[] {
         // velocity only affects position for physics
         if(const_bone.physics_id != -1) {
             let physics = armature.physics[const_bone.physics_id];
-            physics.global_pos -= options.velocity
+            physics.global_pos -= options.velocity;
         }
 
         // engine quirks & user options applied to vertices
         if(const_bone.visuals_id != -1) {
             let visuals = armature.physics[const_bone.visuals_id];
             visuals.vertices.forEach(vert => {
-                vert.pos.y = -vert.pos.y
-                vert.pos   *= options.scale
-                vert.pos   += options.position
+                vert.pos.y = -vert.pos.y;
+                vert.pos   *= options.scale;
+                vert.pos   += options.position;
             })
         }
     }

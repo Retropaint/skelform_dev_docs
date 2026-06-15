@@ -144,43 +144,46 @@ wth `inverse_kinematics`.
 
 ```typescript
 function inverseKinematics(
-    bones: Bone[], inverse_kinematics: InverseKinematics[]
+    bones: Bone[],
+    inverse_kinematics: InverseKinematics[],
 ): Object {
-    ikRot: Object = {}
+    ikRot: Object = {};
 
-    for(let family of inverse_kinematics) {
+    for (let family of inverse_kinematics) {
         // get relevant bones from the same set
-        if(family.target_id == -1) {
-            continue
+        if (family.target_id == -1) {
+            continue;
         }
-        const root: Vec2 = bones[family.bone_ids[0]].pos
-        const target: Vec2 = bones[family.target_id].pos
-        let familyBones: Bone[] = bones.filter(bone => family.bone_ids.contains(bone.id))
+        const root: Vec2 = bones[family.bone_ids[0]].pos;
+        const target: Vec2 = bones[family.target_id].pos;
+        let familyBones: Bone[] = bones.filter((bone) =>
+            family.bone_ids.contains(bone.id),
+        );
 
         // determine which IK mode to use
-        switch(family.mode) {
+        switch (family.mode) {
             case "FABRIK":
-                for range(10) {
-                    fabrik(familyBones, root, target)
+                for (let i = 0; i < 10; i++) {
+                    fabrik(familyBones, root, target);
                 }
             case "Arc":
-                arcIk(familyBones, root, target)
+                arcIk(familyBones, root, target);
         }
 
-        pointBones(bones, family)
-        applyConstraints(bones, family)
+        pointBones(bones, family);
+        applyConstraints(bones, family);
 
         // add rotations to ikRot, with bone ID being the key
-        for(let b = 0; b < family.bone_ids.length; b++) {
+        for (let b = 0; b < family.bone_ids.length; b++) {
             // last bone of IK should have free rotation
-            if(b == family.bone_ids.length - 1) {
+            if (b == family.bone_ids.length - 1) {
                 continue;
             }
-            ikRot[family.bone_ids[b]] = bones[family.bone_ids[b]].rot
+            ikRot[family.bone_ids[b]] = bones[family.bone_ids[b]].rot;
         }
     }
 
-    return ikRot
+    return ikRot;
 }
 ```
 
@@ -192,8 +195,8 @@ Used by `inverseKinematics()` to get the final bone's rotations.
 
 ```typescript
 function pointBones(bones: Bone[]*, family: Bone) {
-    endBone: Bone = bones[family.bone_ids[-1]]
-    tipPos: Vec2 = endBone.pos
+    let endBone: Bone = bones[family.bone_ids[-1]]
+    let tipPos: Vec2 = endBone.pos
     for(let i = family.bone_ids.length; i > 0; i--) {
         if(i == family.bone_ids.length - 1) {
             // end bone should follow target bone rotation, if mimic_target is true
@@ -202,8 +205,8 @@ function pointBones(bones: Bone[]*, family: Bone) {
             }
             break;
         }
-        bone = *bones[family.bone_ids[i]]
-        dir: Vec2 = tipPos - bone.pos
+        const bone = *bones[family.bone_ids[i]]
+        const dir: Vec2 = tipPos - bone.pos
         bone.rot = atan2(dir.y, dir.x)
         tipPos = bone.pos
     }
