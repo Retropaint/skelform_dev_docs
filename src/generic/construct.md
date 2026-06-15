@@ -153,24 +153,22 @@ function inverseKinematics(
         if(family.target_id == -1) {
             continue
         }
-        root: Vec2 = bones[family.bone_ids[0]].pos
-        target: Vec2 = bones[family.target_id].pos
-        familyBones: Bone[] = bones.filter(|bone|
-            family.bone_ids.contains(bone.id)
-        )
+        const root: Vec2 = bones[family.bone_ids[0]].pos
+        const target: Vec2 = bones[family.target_id].pos
+        let familyBones: Bone[] = bones.filter(bone => family.bone_ids.contains(bone.id))
 
         // determine which IK mode to use
         switch(family.mode) {
             case "FABRIK":
                 for range(10) {
-                    fabrik(*familyBones, root, target)
+                    fabrik(familyBones, root, target)
                 }
             case "Arc":
-                arcIk(*familyBones, root, target)
+                arcIk(familyBones, root, target)
         }
 
-        pointBones(*bones, family)
-        applyConstraints(*bones, family)
+        pointBones(bones, family)
+        applyConstraints(bones, family)
 
         // add rotations to ikRot, with bone ID being the key
         for(let b = 0; b < family.bone_ids.length; b++) {
