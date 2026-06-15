@@ -138,7 +138,7 @@ Vertices assigned to a bind.
 | rot_damping       | Float | `0`      | Higher damping makes rotation interpolate slower towards `bone.rotation`                                              |
 | pos_ratio         | Float | `0`      | Ranges from -1 to 1. -1-0: less Y, 0-1: less X                                                                        |
 | scale_ratio       | Float | `0`      | Ranges from -1 to 1. -1-0: less Y, 0-1: less X                                                                        |
-| global_orbit      | Float | `0`      | Bone's parental orbit based on physics. Overrides `orbit_rot` in [inheritance()](/generic/construct.html#inheritance) |
+| global_orbit      | Float | `0`      | Bone's parental orbit based on physics. Overrides `orbitRot` in [inheritance()](/generic/construct.html#inheritance) |
 | global_orbit_diff | Float | `0`      | Used to offset `global_orbit` by this much when swaying                                                               |
 | global_orbit_vel  | Float | `0`      | Used to calculate velocity when `rot_bounce` is more than 0                                                           |
 | sway              | Float | `0`      | When bone's parent is moved, how much should this bone sway?                                                          |

@@ -63,14 +63,14 @@ function inheritance(bones: Bone[], ikRots: Object, physics: Physics[]) {
         if (bones[b].parent_id != -1) {
             const parent: Bone = bones[bones[b].parent_id];
 
-            let orbit_rot = bones[bones[b].parent_id as usize].rot;
+            let orbitRot = bones[bones[b].parent_id as usize].rot;
 
             // apply orbital difference, if rotation resistance physics is active
             let phys = physics[bones[b].physics_id];
             if (phys != undefined && phys.sway > 0) {
-                orbit_rot -= phys.global_orbit_diff;
+                orbitRot -= phys.global_orbit_diff;
             }
-            bones[b].rot += orbit_rot;
+            bones[b].rot += orbitRot;
 
             bones[b].scale *= parent.scale;
 
