@@ -408,6 +408,18 @@ dd > p {
 
 /* Custom */
 
+h2, h3, h1:not(.menu-title) {
+    padding-left: 1rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.4rem;
+    background: var(--header-bg);
+    color: var(--header-fg) !important;
+
+    .header {
+        color: var(--header-fg) !important;
+    }
+}
+
 .color {
     font-size: 14px;
 }
