@@ -157,7 +157,13 @@ var hljs = (function() {
       "byName",
       "new",
       "open",
-      "fill"
+      "fill",
+      "sin",
+      "cos",
+      "filter",
+      "contains",
+      "includes",
+      "len"
     ]
 
     /**
