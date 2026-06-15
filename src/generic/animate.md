@@ -1,10 +1,10 @@
 ## Table of Contents
 
 - [`Animate()`](#animate)
-  - [`interpolateKeyframes()`](#interpolatekeyframes)
-  - [`interpolate()`](#interpolate)
-    - [Bezier Explanation](#bezier-explanation)
-  - [`resetBones()`](#resetbones)
+    - [`interpolateKeyframes()`](#interpolatekeyframes)
+    - [`interpolate()`](#interpolate)
+        - [Bezier Explanation](#bezier-explanation)
+    - [`resetBones()`](#resetbones)
 
 # `Animate()`
 
@@ -32,17 +32,17 @@ states for non-animated fields.
                 kf.next_kf = k;
             }
 
-            let nextKf = anims[a].keyframes[kf.next_kf];
+            const nextKf = anims[a].keyframes[kf.next_kf];
 
             // skip keyframe if it's not the last, and would not be animated
-            let isLast = kf.next_kf == k;
-            let isBeforeFrame = nextKf.frame < frames[a];
+            const isLast = kf.next_kf == k;
+            const isBeforeFrame = nextKf.frame < frames[a];
             if (isBeforeFrame && !isLast) {
                 continue;
             }
 
-            let f = frames[a];
-            let sf = smoothFrames[a];
+            const f = frames[a];
+            const sf = smoothFrames[a];
 
             // animate basic fields
             let bone = armature.bones[kf.bone_id]
@@ -116,7 +116,7 @@ smoothing.
     )
 
     // using the requested smoothing frames, interpolate the current field to the target value
-    let z = { x: 0, y: 0 }
+    const z = { x: 0, y: 0 }
     interpolate(currentFrame, smoothFrame, field, result, z, z)
 }
 </code> </pre>
@@ -145,7 +145,7 @@ function interp(
     }
 
     // solve for t with Newton-Raphson
-    let initial = current / max
+    const initial = current / max
     let t = initial
     for(let i = 0; i < 5; i++) {
         let x = cubic_bezier(t, start_handle.x, end_handle.x)
@@ -157,19 +157,19 @@ function interp(
         t = clamp(t, 0.0, 1.0)
     }
 
-    let progress = cubic_bezier(t, start_handle.y, end_handle.y)
+    const progress = cubic_bezier(t, start_handle.y, end_handle.y)
     return start_val + (end_val - start_val) * progress
 }
 
 // for both functions below, p0 and p3 are always 0 and 1 respectively
 
 function cubicBezier(t: Float, p1: Float, p2: Float): Float {
-    let u = 1. - t
+    const u = 1. - t
     return 3. * u * u * t * p1 + 3. * u * t * t * p2 + t * t * t
 }
 
 function cubicBezierDerivative(t: Float, p1: Float, p2: Float): Float {
-    let u = 1. - t
+    const u = 1. - t
     return 3. * u * u * p1 + 6. * u * t * (p2 - p1) + 3. * t * t * (1. - p2)
 }
 ```
@@ -234,8 +234,10 @@ This makes use of each bones' `init_` fields (`init_pos`, `init_rot`, etc).
 **Example:** animation 1 was played and rotated the arm bone, but animation 1 is
 not being played anymore. That arm bone must now return to its initial rotation.
 
-<pre> <code class="language-typescript hljs">function resetBones(armature, animations, frame, smoothFrame) {
-    elementMap = {}
+<pre> <code class="language-typescript hljs">function resetBones(
+    armature: Armature, animations: Animation[], frame: Uint, smoothFrame: Uint
+) {
+    let elementMap = {}
 
     // add every element that's being animated for each bone
     anims.forEach(anim => {
@@ -246,8 +248,8 @@ not being played anymore. That arm bone must now return to its initial rotation.
         })
     jj
 
-    let f = frame;
-    let sf = smoothFrame;
+    const f = frame;
+    const sf = smoothFrame;
 
     // reset every element that's not in the map back to its initial state
     armature.bones.forEach(bone => {
