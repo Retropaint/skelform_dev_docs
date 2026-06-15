@@ -81,6 +81,8 @@ states for non-animated fields.
 
                 if (kf.element == "IkConstraint")
                     ik.constraint = kf.value_str;
+                if (kf.element == "MimicTarget")
+                    ik.mimic_target = kf.value == 1;
             }            
         }
     }
@@ -286,6 +288,8 @@ not being played anymore. That arm bone must now return to its initial rotation.
 
             if (!elementMap[bone.id]["IkConstraint"])
                 ik.tex = ik.init_tex;
+            if (!elementMap[bone.id]["MimicTarget"])
+                ik.mimic_target = ik.init_mimic_target;
         }]        
     })   
 }
