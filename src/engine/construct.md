@@ -13,32 +13,35 @@ ConstructOptions {
 
 function Construct(armature: Armature*, options: ConstructOptions): Bone[] {
     // this will modify armature.constructed_bones, as well as armature.bones for physics fields
-    GenericRuntime::Construct(armature)
+    GenericRuntime.construct(armature)
 
     for(let b = 0; b < armature.bones.length; b++) {
-        let constructed_bone = &armature.constructed_bones[b];
+        let const_bone = armature.constructed_bones[b];
 
         // engine quirks like negative Y or reversed rotations can be applied here
-        constructed_bone.pos.y = -constructed_bone.pos.y
-        constructed_bone.rot   = -constructed_bone.rot
+        const_bone.pos.y = -const_bone.pos.y
+        const_bone.rot   = -const_bone.rot
 
         // apply user options
-        constructed_bone.scale *= options.scale
-        constructed_bone.pos   *= options.scale
-        constructed_bone.pos   += options.position
+        const_bone.scale *= options.scale
+        const_bone.pos   *= options.scale
+        const_bone.pos   += options.position
 
         // bones must be flipped if scale is in the negatives
-        GenericRuntime.CheckBoneFlip(bone, options.scale)
+        GenericRuntime.checkBoneFlip(bone, options.scale)
 
         // velocity only affects position for physics
-        armature.bones[b].phys_global_pos -= options.velocity
+        if(const_bone.physics_id != -1) {
+            let physics = armature.physics[const_bone.physics_id];
+            physics.phys_global_pos -= options.velocity
+        }
 
         // engine quirks & user options applied to vertices
-        for(let vert of constructed_bone.vertices) {
+        const_bones.vertices.forEach(vert => {
             vert.pos.y = -vert.pos.y
             vert.pos   *= options.scale
             vert.pos   += options.position
-        }
+        })
     }
 }
 ```

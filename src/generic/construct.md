@@ -17,7 +17,8 @@
 
 Constructs the armature's bones with inheritance and inverse kinematics.
 
-<pre> <code class="language-typescript hljs">function Construct(armature: Armature): Bone[] {
+```typescript
+function Construct(armature: Armature): Bone[] {
     // initialize constructed_bones
     if (armature.constructed_bones == undefined) {
         armature.constructed_bones = clone(armature.bones);
@@ -28,29 +29,29 @@ Constructs the armature's bones with inheritance and inverse kinematics.
     }
 
     // 1st inheritance pass
-    <a href="#resetinheritance">resetInheritance</a>(armature.constructed_bones, armature.bones);
-    <a href="#inheritance">inheritance</a>(armature.constructed_bones, {}, []);
+    resetInheritance(armature.constructed_bones, armature.bones);
+    inheritance(armature.constructed_bones, {}, []);
 
     // 2nd inheritance pass: inverse kinematics
     if (armature.inverse_kinematics.length > 0) {
-        ikRots: Object = <a href="#inversekinematics">inverseKinematics</a>(
+        ikRots: Object = inverseKinematics(
            armature.constructed_bones, armature.inverse_kinematics
         );
-        <a href="#resetinheritance">resetInheritance</a>(armature.constructed_bones, armature.bones);
-        <a href="#inheritance">inheritance</a>(armature.constructed_bones, ikRots, []);
+        resetInheritance(armature.constructed_bones, armature.bones);
+        inheritance(armature.constructed_bones, ikRots, []);
     }
-    
+
     // 3rd inheritance pass: physics
     if (armature.physics.length > 0) {
-        <a href="#simulatePhysics">simulatePhysics</a>(armature.constructed_bones, armature.physics);
-        <a href="#resetinheritance">resetInheritance</a>(aramture.constructed_bones, armature.bones);
-        <a href="#inheritance">inheritance</a>(armature.constructed_bones, ikRots, armature.physics);
+        simulatePhysics(armature.constructed_bones, armature.physics);
+        resetInheritance(aramture.constructed_bones, armature.bones);
+        inheritance(armature.constructed_bones, ikRots, armature.physics);
     }
 
     // mesh deformation
-    <a href="#constructverts">constructVerts</a>((armature.constructed_bones, armature.visuals);
+    constructVerts((armature.constructed_bones, armature.visuals);
 }
-</code> </pre>
+```
 
 ## `inheritance()`
 
@@ -371,7 +372,7 @@ Processes all physics:
 
         // interpolate parent orbit (rot res, bounce, etc)
         let parent = constructed_bones.find((b) => b.id == const_bone.parent_id)
-        if(physics.sway > 0 && parent != None) {
+        if(physics.sway > 0 && parent != undefined) {
             // 1. get the raw orbit angle between this bone and its parent
             let diff = normalize(const_bone.pos - parent.pos)
             let diff_angle = Math.atan2(diff.y, diff.x)

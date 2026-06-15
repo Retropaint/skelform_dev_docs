@@ -18,7 +18,7 @@ function TimeFrame(
   frametime: Float = 1.0 / animation.fps;
 
   frame: Int = elapsed / frametime;
-  frame = FormatFrame(frame, animation, reverse, isLoop);
+  frame = formatFrame(frame, animation, reverse, isLoop);
 
   return frame;
 }

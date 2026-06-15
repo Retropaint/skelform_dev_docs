@@ -5,13 +5,13 @@ better fit the engine/environment that the runtime is made for.
 
 ```typescript
 function TimeFrame(
-  time: Time,
-  animation: Animation,
-  reverse: Bool,
-  isLoop: Bool,
+    time: Time,
+    animation: Animation,
+    reverse: Bool,
+    isLoop: Bool,
 ) {
-  GenericRuntime.TimeFrame(time, animation, reverse, isLoop);
+    GenericRuntime.timeFrame(time, animation, reverse, isLoop);
 
-  // or, copy it's implementation with a more appropriate Time type from the engine
+    // or, copy it's implementation with a more appropriate Time type from the engine
 }
 ```

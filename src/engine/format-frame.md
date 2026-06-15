@@ -4,11 +4,11 @@ Simply calls `FormatFrame()` from the generic runtime.
 
 ```typescript
 function FormatFrame(
-  frame: Int,
-  animation: Animation,
-  reverse: Bool,
-  isLoop: Bool,
+    frame: Int,
+    animation: Animation,
+    reverse: Bool,
+    isLoop: Bool,
 ) {
-  GenericRuntime.FormatFrame(frame, animation, reverse, isLoop);
+    GenericRuntime.formatFrame(frame, animation, reverse, isLoop);
 }
 ```
