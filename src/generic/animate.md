@@ -11,12 +11,13 @@
 Interpolates bone fields based on provided animation data, as well as initial
 states for non-animated fields.
 
-<pre> <code class="language-typescript hljs">function Animate(
+```typescript
+function Animate(
     armature: Armature,
     visuals: Visuals[],
     anims: Animation[],
     frames: Int[],
-    smoothFrames: Int[]
+    smoothFrames: Int[],
 ) {
     for (let a = 0; a < anims.length; a++) {
         for (let k = 0; k < anims[a].keyframes.length; k++) {
@@ -45,7 +46,7 @@ states for non-animated fields.
             const sf = smoothFrames[a];
 
             // animate basic fields
-            let bone = armature.bones[kf.bone_id]
+            let bone = armature.bones[kf.bone_id];
             if (kf.element == "PositionX")
                 interpolateKeyframes(bone.pos.x, kf, nextKf, f, sf);
             if (kf.element == "PositionY")
@@ -56,15 +57,13 @@ states for non-animated fields.
                 interpolateKeyframes(bone.scale.x, kf, nextKf, f, sf);
             if (kf.element == "ScaleY")
                 interpolateKeyframes(bone.scale.y, kf, nextKf, f, sf);
-            if (kf.element == "Hidden")
-                bone.hidden = kf.value == 1;
+            if (kf.element == "Hidden") bone.hidden = kf.value == 1;
 
             // animate visual fields
             if (bone.visuals_id != -1) {
-                let visuals = armature.visuals[bone.visuals_id]
+                let visuals = armature.visuals[bone.visuals_id];
 
-                if (kf.element == "Texture")
-                    visuals.tex = kf.value_str;
+                if (kf.element == "Texture") visuals.tex = kf.value_str;
                 if (kf.element == "TintR")
                     interpolateKeyframes(visuals.tint.r, kf, nextKf, f, sf);
                 if (kf.element == "TintG")
@@ -77,19 +76,19 @@ states for non-animated fields.
 
             // animate inverse kinematics fields
             if (bone.ik_family_id != -1) {
-                let ik = armature.inverse_kinematics[bone.ik_family_id]
+                let ik = armature.inverse_kinematics[bone.ik_family_id];
 
-                if (kf.element == "IkConstraint")
-                    ik.constraint = kf.value_str;
+                if (kf.element == "IkConstraint") ik.constraint = kf.value_str;
                 if (kf.element == "MimicTarget")
                     ik.mimic_target = kf.value == 1;
-            }            
+            }
         }
     }
 
     // bones that are not being animated should return to their initial states
-    resetBones(armature, anims, frames[0], smoothFrames[0])
-}</code> </pre>
+    resetBones(armature, anims, frames[0], smoothFrames[0]);
+}
+```
 
 ## `interpolateKeyframes()`
 
@@ -99,11 +98,16 @@ field by.
 The resulting interpolation from the keyframes is interpolated again for
 smoothing.
 
-<pre> <code class="language-typescript hljs">function interpolateKeyframes(
-    field: Float, prevKf: Keyframe, nextKf: Keyframe, frame: Int, smoothFrame: Int
+```typescript
+function interpolateKeyframes(
+    field: Float,
+    prevKf: Keyframe,
+    nextKf: Keyframe,
+    frame: Int,
+    smoothFrame: Int,
 ): Float {
-    const totalFrames = nextKf.frame - prevKf.frame
-    const currentFrame = frame - prevKf.frame
+    const totalFrames = nextKf.frame - prevKf.frame;
+    const currentFrame = frame - prevKf.frame;
 
     // interpolate from current to next keyframe value
     const result = interpolate(
@@ -112,14 +116,14 @@ smoothing.
         prevKf.value,
         nextKf.value,
         nextKf.start_handle,
-        nextKf.end_handle
-    )
+        nextKf.end_handle,
+    );
 
     // using the requested smoothing frames, interpolate the current field to the target value
-    const z = { x: 0, y: 0 }
-    interpolate(currentFrame, smoothFrame, field, result, z, z)
+    const z = { x: 0, y: 0 };
+    interpolate(currentFrame, smoothFrame, field, result, z, z);
 }
-</code> </pre>
+```
 
 ## `interpolate()`
 
@@ -234,7 +238,8 @@ This makes use of each bones' `init_` fields (`init_pos`, `init_rot`, etc).
 **Example:** animation 1 was played and rotated the arm bone, but animation 1 is
 not being played anymore. That arm bone must now return to its initial rotation.
 
-<pre> <code class="language-typescript hljs">function resetBones(
+```typescript
+function resetBones(
     armature: Armature, animations: Animation[], frame: Uint, smoothFrame: Uint
 ) {
     let elementMap = {}
@@ -292,10 +297,10 @@ not being played anymore. That arm bone must now return to its initial rotation.
                 ik.tex = ik.init_tex;
             if (!elementMap[bone.id]["MimicTarget"])
                 ik.mimic_target = ik.init_mimic_target;
-        }]        
-    })   
+        }]
+    })
 }
-</code> </pre>
+```
 
 _Note: most runtimes will have this functionality at the end of Animate(). The
 separation of functions is purely for documentation purposes._

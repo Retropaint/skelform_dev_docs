@@ -58,7 +58,7 @@ function Construct(armature: Armature): Bone[] {
 Child bones need to inherit their parent.
 
 ```typescript
-inheritance(bones: Bone[], ikRots: Object, physics: Physics[]) {
+function inheritance(bones: Bone[], ikRots: Object, physics: Physics[]) {
     for(let b = 0; b < bones.length; b++) {
         if(bones[b].parentId != -1) {
             parent: Bone = bones[bones[b].parentId];
@@ -78,7 +78,7 @@ inheritance(bones: Bone[], ikRots: Object, physics: Physics[]) {
             bones[b].pos *= parent.scale;
 
             // rotate child around parent as if it were orbitting
-            bones[b].pos = rotate(&bones[b].pos, parent.rot);
+            bones[b].pos = rotate(bones[b].pos, parent.rot);
 
             bones[b].pos += parent.pos;
         }
@@ -142,7 +142,8 @@ later be used by `inheritance()`.
 IK data for each set of bones is stored in the root bone, which can be iterated
 wth `inverse_kinematics`.
 
-<pre> <code class="language-typescript hljs">function inverseKinematics(
+```typescript
+function inverseKinematics(
     bones: Bone[], inverse_kinematics: InverseKinematics[]
 ): Object {
     ikRot: Object = {}
@@ -162,14 +163,14 @@ wth `inverse_kinematics`.
         switch(family.mode) {
             case "FABRIK":
                 for range(10) {
-                    <a href="#fabrik">fabrik</a>(*familyBones, root, target)
+                    fabrik(*familyBones, root, target)
                 }
             case "Arc":
-                <a href="#arcik">arcIk</a>(*familyBones, root, target)
+                arcIk(*familyBones, root, target)
         }
 
-        <a href="#pointbones">pointBones</a>(*bones, family)
-        <a href="#applyconstraints">applyConstraints</a>(*bones, family)
+        pointBones(*bones, family)
+        applyConstraints(*bones, family)
 
         // add rotations to ikRot, with bone ID being the key
         for(let b = 0; b < family.ikBoneIds.length; b++) {
@@ -183,7 +184,7 @@ wth `inverse_kinematics`.
 
     return ikRot
 }
-</code> </pre>
+```
 
 ## `pointBones()`
 
@@ -320,17 +321,18 @@ Processes all physics:
 - Sway (`phys_sway`)
 - Bounce (`phys_rot_bounce`)
 
-<pre> <code class="language-typescript hljs">function simulatePhysics(constructedBones: Bone[], physics: Physics[]) {
+```typescript
+function simulatePhysics(constructedBones: Bone[], physics: Physics[]) {
     for(let b = 0; b < constructed_bones.length; b++) {
         if constructedBones[b].physics_id == -1 {
             continue;
         }
-        let physics = &mut physics[constructedBones[b].physics_id as usize];
+        let physics = physics[constructedBones[b].physics_id as usize];
 
-        let s = Vec2(0.3, 0.3)
-        let e = Vec2(0.6, 0.6)
-        let const_bone = &constructedBones[b]
-        let prev_pos = physics.phys_global_pos
+        const s = Vec2(0.3, 0.3);
+        const e = Vec2(0.6, 0.6);
+        const const_bone = constructedBones[b];
+        const prev_pos = physics.phys_global_pos;
 
         // interpolate position
         if(physics.pos_damping > 0 || physics.sway > 0) {
@@ -343,14 +345,14 @@ Processes all physics:
                 damping.x *= 1. - physics.pos_ratio
             }
 
-            physics.global_pos.x = interpolate(2, damping.x, phys_pos.x, const_bone.pos.x, s, e)
-            physics.global_pos.y = interpolate(2, damping.y, phys_pos.y, const_bone.pos.y, s, e)
+            let phys_pos = physics.global_pos;
+            phys_pos.x = interpolate(2, damping.x, phys_pos.x, const_bone.pos.x, s, e)
+            phys_pos.y = interpolate(2, damping.y, phys_pos.y, const_bone.pos.y, s, e)
         }
 
         // interpolate scale
         if(physics.scale_damping > 0) {
-            let phys_scale = &physics.global_scale
-            let damping = Vec2(physics.scale_damping, physics.scale_damping)
+            let damping = Vec2(physics.scale_damping, physics.scale_damping);
 
             // ratio
             if(physics.scale_ratio < 0) {
@@ -359,7 +361,8 @@ Processes all physics:
                 damping.x *= 1. - physics.scale_ratio
             }
 
-            cb_scale = const_bone.scale
+            const cb_scale = const_bone.scale;
+            let phys_scale = physics.global_scale;
             phys_scale.x = interpolate(2, damping.x, phys_scale.x, cb.scale.x, s, e)
             phys_scale.y = interpolate(2, damping.y, phys_scale.y, cb.scale.y, s, e)
         }
@@ -401,7 +404,7 @@ Processes all physics:
         }
     }
 }
-</code> </pre>
+```
 
 ## `constructVerts()`
 
@@ -481,7 +484,7 @@ function constructVerts(bones: Bone[], visuals: Visuals[]) {
 
 function inheritVert(pos: Vec2, bone: Bone): Vec2 {
     pos *= bone.scale
-    pos = utils.rotate(&pos, bone.rot)
+    pos = rotate(pos, bone.rot)
     pos += bone.pos
     return pos
 }

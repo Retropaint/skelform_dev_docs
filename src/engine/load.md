@@ -9,7 +9,7 @@ function Load(zipPath: String): (Armature, Texture2D[]) {
     zip: Zip = ZipLib.open(zipPath)
     armatureJson: String = zip.byName("armature.json")
 
-    armature: Armature = Json.new(&armatureJson)
+    armature: Armature = Json.new(armatureJson)
 
     textures: Texture2D[]
     for(let atlas of armature.atlases) {
