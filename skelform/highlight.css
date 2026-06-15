@@ -24,7 +24,7 @@
 .hljs-name,
 .hljs-selector-id,
 .hljs-selector-class {
-  color: #e96f34;
+  color: #9cdcfe;
 }
 
 /* Orange */
@@ -35,30 +35,38 @@
 .hljs-literal,
 .hljs-type,
 .hljs-params {
-  color: #d26f3f;
+  color: #b5cea8;
 }
 
 .hljs-number {
-  color: #d7cc31;
+  color: #b5cea8;
 }
 
 /* Green */
 .hljs-string,
 .hljs-symbol,
 .hljs-bullet {
-  color: #008200;
+  color: #ce9178;
+}
+
+.class_ {
+  color: #4ec9b0;
 }
 
 /* Blue */
-.hljs-title,
+.function_,
 .hljs-section {
-  color: #6da2e6;
+  color: #dcdcaa;
 }
 
 /* Purple */
 .hljs-keyword,
 .hljs-selector-tag {
-  color: #64d370;
+  color: #569cd6;
+}
+
+.hljs-property {
+  color: #46a8dd;
 }
 
 .hljs {
