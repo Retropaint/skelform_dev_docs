@@ -19,7 +19,7 @@ states for non-animated fields.
     smoothFrames: Int[]
 ) {
     for (let a = 0; a < anims.length; a++) {
-        for (k = 0; k < anims[a].keyframes.length; k++) {
+        for (let k = 0; k < anims[a].keyframes.length; k++) {
             let kf = anims[a].keyframes[k];
 
             // only prev keyframes are considered
