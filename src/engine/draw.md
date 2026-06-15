@@ -17,8 +17,8 @@ function Draw(
         if (a.visuals_id == -1 || b.visuals_id == -1) {
             return -1;
         }
-        let visualsA = visuals[a.visual_id];
-        let visualsB = visuals[b.visual_id];
+        const visualsA = visuals[a.visual_id];
+        const visualsB = visuals[b.visual_id];
         return visualsA.zindex - visualsB.zindex;
     });
 
@@ -29,7 +29,7 @@ function Draw(
         if (bone.visuals_id == -1) {
             continue;
         }
-        let visual = visuals[bone.visual_id];
+        const visual = visuals[bone.visual_id];
 
         // save this bone's hidden status so it can be propagated to its children,
         // and ignore rendering if it's hidden
@@ -55,7 +55,7 @@ function Draw(
         // here, clip() is assumed to be a texture clipper that takes:
         // (image, top_left, bottom_right)
         // do what is best for the engine
-        let realTex = clip(atlas, tex.offset, tex.size);
+        const realTex = clip(atlas, tex.offset, tex.size);
 
         // render bone as mesh
         if (visual.vertices.length > 0) {
