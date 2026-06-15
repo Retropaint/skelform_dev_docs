@@ -151,7 +151,13 @@ var hljs = (function() {
       "clone",
       "normalize",
       "magnitude",
-      "range"
+      "range",
+      "find",
+      "push",
+      "byName",
+      "new",
+      "open",
+      "fill"
     ]
 
     /**
