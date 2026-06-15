@@ -261,9 +261,9 @@ function resetBones(
 
         // reset basic fields
         if (!elementMap[bone.id]["PositionX"])
-            interpolate(f, sf, bone.pos.X, bone.init_pos.X, z, z)
+            interpolate(f, sf, bone.pos.x, bone.init_pos.x, z, z)
         if (!elementMap[bone.id]["PositionY"])
-            interpolate(f, sf, bone.pos.Y, bone.init_pos.Y, z, z)
+            interpolate(f, sf, bone.pos.y, bone.init_pos.y, z, z)
         if (!elementMap[bone.id]["Rotation"])
             interpolate(f, sf, bone.rot, bone.init_rot, z, z)
         if (!elementMap[bone.id]["ScaleX"])
@@ -275,14 +275,14 @@ function resetBones(
 
         // reset visual fields
         if bone.visuals_id != -1 {
-            let visual = armature.visuals[bone.visual_id]
+            let visuals = armature.visuals[bone.visual_id]
 
             if (!elementMap[bone.id]["Texture"])
-                bone.tex = bone.init_tex;
+                visuals.tex = visuals.init_tex;
             if (!elementMap[bone.id]["TintR"])
                 interpolate(f, sf, visuals.tint.r, visuals.init_tint.r, z, z)
             if (!elementMap[bone.id]["TintG"])
-                interpolate(f, sf, visuals.tint.g, visuals.init_pos.g, z, z)
+                interpolate(f, sf, visuals.tint.g, visuals.init_tint.g, z, z)
             if (!elementMap[bone.id]["TintB"])
                 interpolate(f, sf, visuals.tint.b, visuals.init_tint.b, z, z)
             if (!elementMap[bone.id]["TintA"])
@@ -294,7 +294,7 @@ function resetBones(
             let ik = armature.inverse_kinematics[bone.ik_family_id]
 
             if (!elementMap[bone.id]["IkConstraint"])
-                ik.tex = ik.init_tex;
+                ik.constraint = ik.init_constraint;
             if (!elementMap[bone.id]["MimicTarget"])
                 ik.mimic_target = ik.init_mimic_target;
         }]

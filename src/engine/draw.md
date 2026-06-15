@@ -53,7 +53,7 @@ function Draw(bones: Bone[], visuals: Visuals[], atlases: Texture2D[], styles: S
         let realTex = clip(atlas, tex.offset, tex.size)
 
         // render bone as mesh
-        if(bone.vertices.len() > 0) {
+        if(visual.vertices.len() > 0) {
             drawMesh(bone, visual, tex, realTex)
             continue
         }

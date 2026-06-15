@@ -37,11 +37,14 @@ function Construct(armature: Armature*, options: ConstructOptions): Bone[] {
         }
 
         // engine quirks & user options applied to vertices
-        const_bones.vertices.forEach(vert => {
-            vert.pos.y = -vert.pos.y
-            vert.pos   *= options.scale
-            vert.pos   += options.position
-        })
+        if(const_bone.visuals_id != -1) {
+            let visuals = armature.physics[const_bone.visuals_id];
+            visuals.vertices.forEach(vert => {
+                vert.pos.y = -vert.pos.y
+                vert.pos   *= options.scale
+                vert.pos   += options.position
+            })
+        }
     }
 }
 ```
