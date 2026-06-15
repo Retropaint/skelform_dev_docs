@@ -3214,7 +3214,8 @@ if (typeof exports === 'object' && typeof module !== 'undefined') { module.expor
           regex.concat(IDENT_RE$1, /(?![0-9A-Za-z$_(])/)
         ),
         end: IDENT_RE$1,
-        keywords: "let",
+        // built-in keywords that should not be considered variables
+        keywords: ["let", "break", "continue", "const"],
         className: "variable",
         relevance: 1
       };
