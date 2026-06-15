@@ -28,7 +28,7 @@ Constructs the armature's bones with inheritance and inverse kinematics.
     }
 
     // 1st inheritance pass
-    <a href="#resetinheritance">resetInheritance</a>(aramture.constructed_bones, armature.bones);
+    <a href="#resetinheritance">resetInheritance</a>(armature.constructed_bones, armature.bones);
     <a href="#inheritance">inheritance</a>(armature.constructed_bones, {}, []);
 
     // 2nd inheritance pass: inverse kinematics
@@ -36,7 +36,7 @@ Constructs the armature's bones with inheritance and inverse kinematics.
         ikRots: Object = <a href="#inversekinematics">inverseKinematics</a>(
            armature.constructed_bones, armature.inverse_kinematics
         );
-        <a href="#resetinheritance">resetInheritance</a>(aramture.constructed_bones, armature.bones);
+        <a href="#resetinheritance">resetInheritance</a>(armature.constructed_bones, armature.bones);
         <a href="#inheritance">inheritance</a>(armature.constructed_bones, ikRots, []);
     }
     
@@ -192,10 +192,17 @@ Used by `inverseKinematics()` to get the final bone's rotations.
 
 ```typescript
 function pointBones(bones: Bone[]*, family: Bone) {
-    endBone: Bone = bones[family.ikBoneIds[-1]]
+    endBone: Bone = bones[family.ik_bone_ids[-1]]
     tipPos: Vec2 = endBone.pos
-    for(let i = family.ikBoneIds.length - 1; i > 0; i--) {
-        bone = *bones[family.ikBoneIds[i]]
+    for(let i = family.ik_bone_ids.length; i > 0; i--) {
+        if(i == family.ik_bone_ids.length - 1) {
+            // end bone should follow target bone rotation, if miimc_target is true
+            if(family.mimic_target) {
+                endBone.rot = bones[family.target_id]
+            }
+            break;
+        }
+        bone = *bones[family.ik_bone_ids[i]]
         dir: Vec2 = tipPos - bone.pos
         bone.rot = atan2(dir.y, dir.x)
         tipPos = bone.pos
