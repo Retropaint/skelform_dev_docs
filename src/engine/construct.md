@@ -4,7 +4,6 @@ Calls `Construct()` from the generic runtime, then modifies constructed bones
 based on user options and engine quirks.
 
 ```typescript
-
 ConstructOptions {
     position: Vec2,
     scale: Vec2,

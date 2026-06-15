@@ -10,7 +10,7 @@ function FormatFrame(
     reverse: Bool,
     isLoop: Bool,
 ): Int {
-    lastFrame: Int = animation.keyframes[-1].frame;
+    const lastFrame: Int = animation.keyframes[-1].frame;
 
     if (isLoop) {
         frame %= lastFrame + 1;

@@ -149,16 +149,16 @@ function interp(
     }
 
     // solve for t with Newton-Raphson
-    const initial = current / max
-    let t = initial
+    const initial = current / max;
+    let t = initial;
     for(let i = 0; i < 5; i++) {
-        let x = cubic_bezier(t, start_handle.x, end_handle.x)
-        let dx = cubic_bezier_derivative(t, start_handle.x, end_handle.x)
+        let x = cubicBezier(t, start_handle.x, end_handle.x);
+        let dx = cubicBezierDerivative(t, start_handle.x, end_handle.x);
         if(abs(dx) < 1e-5 {
-            break
+            break;
         }
-        t -= (x - initial) / dx
-        t = clamp(t, 0.0, 1.0)
+        t -= (x - initial) / dx;
+        t = clamp(t, 0.0, 1.0);
     }
 
     const progress = cubic_bezier(t, start_handle.y, end_handle.y)
@@ -168,13 +168,13 @@ function interp(
 // for both functions below, p0 and p3 are always 0 and 1 respectively
 
 function cubicBezier(t: Float, p1: Float, p2: Float): Float {
-    const u = 1. - t
-    return 3. * u * u * t * p1 + 3. * u * t * t * p2 + t * t * t
+    const u = 1. - t;
+    return 3. * u * u * t * p1 + 3. * u * t * t * p2 + t * t * t;
 }
 
 function cubicBezierDerivative(t: Float, p1: Float, p2: Float): Float {
-    const u = 1. - t
-    return 3. * u * u * p1 + 6. * u * t * (p2 - p1) + 3. * t * t * (1. - p2)
+    const u = 1. - t;
+    return 3. * u * u * p1 + 6. * u * t * (p2 - p1) + 3. * t * t * (1. - p2);
 }
 ```
 

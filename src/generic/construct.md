@@ -61,7 +61,7 @@ Child bones need to inherit their parent.
 function inheritance(bones: Bone[], ikRots: Object, physics: Physics[]) {
     for (let b = 0; b < bones.length; b++) {
         if (bones[b].parent_id != -1) {
-            parent: Bone = bones[bones[b].parent_id];
+            const parent: Bone = bones[bones[b].parent_id];
 
             let orbit_rot = bones[bones[b].parent_id as usize].rot;
 

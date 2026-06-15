@@ -6,17 +6,17 @@ The below example assumes `Texture2D` is the engine-specific texture object.
 
 ```typescript
 function Load(zipPath: String): (Armature, Texture2D[]) {
-    zip: Zip = ZipLib.open(zipPath)
-    armatureJson: String = zip.byName("armature.json")
+    const zip: Zip = ZipLib.open(zipPath);
+    const armatureJson: String = zip.byName("armature.json");
 
-    armature: Armature = Json.new(armatureJson)
+    const armature: Armature = Json.new(armatureJson);
 
-    textures: Texture2D[]
-    for(let atlas of armature.atlases) {
-        Image img = zip.byName(atlas.filename)
-        textures.push(Texture2D(img))
-    }
+    let textures: Texture2D[];
+    armature.atlases.forEach((atlas) => {
+        Image img = zip.byName(atlas.filename);
+        textures.push(Texture2D(img));
+    })
 
-    return (armature, textures)
+    return (armature, textures);
 }
 ```
