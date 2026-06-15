@@ -146,7 +146,7 @@ var hljs = (function() {
 
   /** @type {Renderer} */
   class HTMLRenderer {
-    builtInFuncs = [
+    blacklist = [
       "sort",
       "clone",
       "normalize",
@@ -163,7 +163,21 @@ var hljs = (function() {
       "filter",
       "contains",
       "includes",
-      "len"
+      "len",
+      "Int",
+      "Float",
+      "Bool",
+      "Time",
+      "GenericRuntime",
+      "String",
+      "asMillis",
+      "forEach",
+      "Object",
+      "Vec2",
+
+      // todo: direct these to their proper pages
+      "timeFrame",
+      "formatFrame",
     ]
 
     /**
@@ -196,11 +210,17 @@ var hljs = (function() {
       const className = scopeToCSSClass(node.scope,
         { prefix: this.classPrefix });
 
-      console.log(node)
+      const nodeName = node.children[0]
 
       // add <a href> to function, unless it's built-in
-      if (node.scope == "title.function" && !this.builtInFuncs.includes(node.children[0])) {
-        this.functionRef(node.children[0]);
+      if (node.scope == "title.function" && !this.blacklist.includes(nodeName)) {
+        this.functionRef("#" + node.children[0]);
+      }
+
+      // add <a href> to SkelForm types
+      if (node.scope == "title.class" && !this.blacklist.includes(nodeName)) {
+        const hasS = (nodeName != "Armature" && nodeName[nodeName.length - 1] != 's') ? "s" : "";
+        this.functionRef("/file-specs.html#" + node.children[0] + hasS);
       }
 
       this.span(className);
@@ -214,8 +234,9 @@ var hljs = (function() {
       if (!emitsWrappingTags(node)) return;
       this.buffer += SPAN_CLOSE;
 
-      // close <a> element if this is a function (not built-in)
-      if (node.scope == "title.function" && !this.builtInFuncs.includes(node.children[0])) {
+      // close <a> element for SkelForm functions & types
+      const isSkf = node.scope == 'title.function' || node.scope == 'title.class'
+      if (isSkf && !this.blacklist.includes(node.children[0])) {
         this.buffer += "</a>"
       }
     }
@@ -234,7 +255,7 @@ var hljs = (function() {
      *
      * @param {string} href */
     functionRef(href) {
-      this.buffer += `<a href="#${href.toLowerCase()}">`;
+      this.buffer += `<a href="${href.toLowerCase()}">`;
     }
 
     /**
