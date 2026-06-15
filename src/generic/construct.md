@@ -173,8 +173,8 @@ wth `inverse_kinematics`.
         // add rotations to ikRot, with bone ID being the key
         for(let b = 0; b < family.ikBoneIds.length; b++) {
             // last bone of IK should have free rotation
-            if(b == family.bone_ids.len() - 1) {
-                continue
+            if(b == family.bone_ids.length - 1) {
+                continue;
             }
             ikRot[family.bone_ids[b]] = bones[family.bone_ids[b]].rot
         }
@@ -248,8 +248,8 @@ Source for algorithm:
 ```typescript
 function fabrik(bones: Bone[], root: Vec2, target: Vec2) {
     // forward-reaching
-    nextPos: Vec2 = target;
-    nextLength: Float = 0.0;
+    let nextPos: Vec2 = target;
+    let nextLength: Float = 0.0;
     for (let b = bones.length - 1; b > 0; b--) {
         length: Vec2 = normalize(nextPos - bones[b].pos) * nextLength;
         if (isNaN(length)) length = new Vec2(0, 0);
@@ -259,12 +259,12 @@ function fabrik(bones: Bone[], root: Vec2, target: Vec2) {
     }
 
     // backward-reaching
-    prevPos: Vec2 = root;
-    prevLength: Float = 0.0;
+    let prevPos: Vec2 = root;
+    let prevLength: Float = 0.0;
     for (let b = 0; b < bones.length; b++) {
         length: Vec2 = normalize(prevPos - bones[b].pos) * prevLength;
         if (isNaN(length)) length = new Vec2(0, 0);
-        if (b != bones.len() - 1)
+        if (b != bones.length - 1)
             prevLength = magnitude(bones[b].pos - bones[b + 1].pos);
         bones[b].pos = prevPos - length;
         prevPos = bones[b].pos;
