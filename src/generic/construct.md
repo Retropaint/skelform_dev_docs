@@ -194,17 +194,17 @@ Used by `inverseKinematics()` to get the final bone's rotations.
 
 ```typescript
 function pointBones(bones: Bone[]*, family: Bone) {
-    endBone: Bone = bones[family.ik_bone_ids[-1]]
+    endBone: Bone = bones[family.bone_ids[-1]]
     tipPos: Vec2 = endBone.pos
-    for(let i = family.ik_bone_ids.length; i > 0; i--) {
-        if(i == family.ik_bone_ids.length - 1) {
+    for(let i = family.bone_ids.length; i > 0; i--) {
+        if(i == family.bone_ids.length - 1) {
             // end bone should follow target bone rotation, if miimc_target is true
             if(family.mimic_target) {
                 endBone.rot = bones[family.target_id]
             }
             break;
         }
-        bone = *bones[family.ik_bone_ids[i]]
+        bone = *bones[family.bone_ids[i]]
         dir: Vec2 = tipPos - bone.pos
         bone.rot = atan2(dir.y, dir.x)
         tipPos = bone.pos

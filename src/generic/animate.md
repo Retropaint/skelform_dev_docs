@@ -291,7 +291,7 @@ function resetBones(
 
         // reset inverse kinematics fields
         if (bone.ik_family_id != -1) {
-            let ik = armature.inverse_kinematics[bone.ik_family_id
+            let ik = armature.inverse_kinematics[bone.ik_family_id]
 
             if (!elementMap[bone.id]["IkConstraint"])
                 ik.tex = ik.init_tex;
