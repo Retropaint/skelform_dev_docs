@@ -12,7 +12,7 @@ This section will only cover the content in `armature.json`.
 
 ## Table of Contents
 
-- [`armature.json`](#armaturejson)
+- [Armature](#armature)
 - [Bones](#bones)
 - [Animations](#animations)
     - [Keyframes](#keyframes)
@@ -28,7 +28,7 @@ This section will only cover the content in `armature.json`.
 - [Initial Fields](#initial-fields)
 - [Constructed Bones](#constructed-bones)
 
-## `armature.json`
+## Armature
 
 | Key                | Type                                       | Default                                   | Description                                  |
 | ------------------ | ------------------------------------------ | ----------------------------------------- | -------------------------------------------- |

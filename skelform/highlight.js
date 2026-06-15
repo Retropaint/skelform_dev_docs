@@ -230,13 +230,9 @@ var hljs = (function() {
 
       // add <a href> to SkelForm types
       if (node.scope == "title.class" && !this.blacklist.includes(nodeName)) {
-        const hasS = nodeName[nodeName.length - 1] != 's' ? "s" : "";
+        const hasS = (nodeName[nodeName.length - 1] != 's' && nodeName != "Armature") ? "s" : "";
         let finalName = nodeName + hasS;
         let anchor = '#';
-        if (nodeName == "Armature") {
-          finalName = "";
-          anchor = '';
-        }
         this.functionRef("/file-specs.html" + anchor + this.toKebabCase(finalName));
       }
 
