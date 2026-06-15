@@ -3240,7 +3240,7 @@ if (typeof exports === 'object' && typeof module !== 'undefined') { module.expor
         ),
         end: IDENT_RE$1,
         // built-in keywords that should not be considered variables
-        keywords: ["let", "break", "continue", "const"],
+        keywords: ["let", "break", "continue", "const", "true", "false"],
         className: "variable",
         relevance: 1
       };
