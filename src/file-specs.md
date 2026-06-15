@@ -74,9 +74,9 @@ Inverse kinematics is stored in the root (first) bone of each set of IK bones.
 | target_id         | uint   | `-1`           | Target bone ID                                   |
 | bone_ids          | uint[] | `[]`           | ID of all bones in this family                   |
 | mimic_target      | bool   | `false`        | Should the last bone follow target's rotation?   |
-| init_constraint   | string | `constraint`   |
-| init_mode         | string | `mode`         |
-| init_mimic_target | bool   | `mimic_target` |
+| init_constraint   | string | `constraint`   | Initial field for `constraint`[^2]               |
+| init_mode         | string | `mode`         | Initial field for `mode`[^2]                     |
+| init_mimic_target | bool   | `mimic_target` | Initial field for `mimic_target`[^2]             |
 
 ## Visuals
 
@@ -90,20 +90,21 @@ Visual data of each bone (texture & mesh)
 | vertices    | [Vertex](#vertex)[] | `[]`                                              | Array of vertices                                      |
 | indices     | uint[]              | `[]`                                              | Each index is vertex ID. Every 3 IDs forms 1 triangle. |
 | binds       | [Bind](#bind)[]     | `[]`                                              | Array of bone binds                                    |
-| init_tex    | Color[^2]           | <span class="color">`(255, 255, 255, 255)`</span> |                                                        |
-| init_zindex | Color[^2]           | <span class="color">`(255, 255, 255, 255)`</span> |                                                        |
+| init_tex    | String              | `""`                                              | Initial field for `tex`[^2]                            |
+| init_tint   | Color[^1]           | <span class="color">`(255, 255, 255, 255)`</span> | Initial field for `tint`[^2]                           |
+| init_zindex | int                 | `0`                                               | Initial field for `zindex`[^2]                         |
 
 #### Vertex
 
 A mesh is defined by its vertices, which describe how each point is positioned,
 as well as how the texture is mapped (UV).
 
-| Key      | Type | Default  | Description                        |
-| -------- | ---- | -------- | ---------------------------------- |
-| id       | uint | `0`      | ID of vertex                       |
-| pos      | Vec2 | `(0, 0)` | Position of vertex                 |
-| uv       | Vec2 | `(0, 0)` | UV of vertex                       |
-| init_pos | int  | `pos`    | Helper for initial vertex position |
+| Key      | Type | Default  | Description                            |
+| -------- | ---- | -------- | -------------------------------------- |
+| id       | uint | `0`      | ID of vertex                           |
+| pos      | Vec2 | `(0, 0)` | Position of vertex                     |
+| uv       | Vec2 | `(0, 0)` | UV of vertex                           |
+| init_pos | int  | `pos`    | Helper for initial vertex position[^2] |
 
 #### Bind
 
