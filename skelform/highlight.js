@@ -146,6 +146,14 @@ var hljs = (function() {
 
   /** @type {Renderer} */
   class HTMLRenderer {
+    genericFunc = [
+      "timeFrame",
+      "formatFrame",
+      "animate",
+      "construct",
+      "checkBoneFlip",
+      "getBoneTexture"
+    ]
     blacklist = [
       "sort",
       "clone",
@@ -179,13 +187,8 @@ var hljs = (function() {
       "Zip",
       "ZipLib",
       "Json",
-
-      // todo: direct these to their proper pages
-      "timeFrame",
-      "formatFrame",
-      "animate",
-      "construct",
-      "checkBoneFlip"
+      "drawMesh",
+      "drawTexture"
     ]
 
     /**
@@ -227,16 +230,34 @@ var hljs = (function() {
 
       // add <a href> to SkelForm types
       if (node.scope == "title.class" && !this.blacklist.includes(nodeName)) {
-        const hasS = (nodeName != "Armature" && nodeName[nodeName.length - 1] != 's') ? "s" : "";
-        let href = node.children[0] + hasS;
-        if (nodeName == "InverseKinematics") {
-          href = "inverse-kinematics"
+        const hasS = nodeName[nodeName.length - 1] != 's' ? "s" : "";
+        let finalName = nodeName + hasS;
+        let anchor = '#';
+        if (nodeName == "Armature") {
+          finalName = "";
+          anchor = '';
         }
-        this.functionRef("/file-specs.html#" + href);
+        this.functionRef("/file-specs.html" + anchor + this.toKebabCase(finalName));
+      }
+
+      // add <a href> to generic functions
+      if (node.scope == "title.function" && this.genericFunc.includes(nodeName)) {
+        this.functionRef(`/generic/${this.toKebabCase(nodeName)}.html`);
       }
 
       this.span(className);
     }
+
+    // Source - https://stackoverflow.com/a/54246501
+    // Posted by user578895, modified by community. See post 'Timeline' for change history
+    // Retrieved 2026-06-15, License - CC BY-SA 4.0
+
+    toKebabCase(str) {
+      // ignore first letter
+      str = str.charAt(0).toLowerCase() + str.slice(1);
+
+      return str.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`)
+    };
 
     /**
      * Adds a node close to the output stream (if needed)
