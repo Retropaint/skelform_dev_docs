@@ -174,10 +174,18 @@ var hljs = (function() {
       "forEach",
       "Object",
       "Vec2",
+      "Texture2D",
+      "Image",
+      "Zip",
+      "ZipLib",
+      "Json",
 
       // todo: direct these to their proper pages
       "timeFrame",
       "formatFrame",
+      "animate",
+      "construct",
+      "checkBoneFlip"
     ]
 
     /**
