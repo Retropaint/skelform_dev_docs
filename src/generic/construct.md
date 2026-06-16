@@ -27,7 +27,7 @@ function Construct(armature: Armature): Bone[] {
     } else {
         // constructed_bones may have been used later for drawing
         // which sorts them by zindex, so sort back by id
-        constBones.sort(bone => bone.id);
+        constBones.sort((bone) => bone.id);
     }
 
     // 1st inheritance pass
@@ -49,7 +49,7 @@ function Construct(armature: Armature): Bone[] {
     }
 
     // mesh deformation
-    constructVerts((constBones, armature.visuals);
+    constructVerts(constBones, armature.visuals);
 }
 ```
 
@@ -456,7 +456,7 @@ function constructVerts(bones: Bone[], visuals: Visuals[]) {
                 // 1.
                 // get previous and next bind
                 const prev: Int = bi > 0 ? bi - 1 : bi;
-                const next: Int = min((bi + 1, visual.binds.length - 1);
+                const next: Int = min(bi + 1, visual.binds.length - 1);
                 const prevBone: Bone = bones.find(bone => bone.id == visual.binds[prev].bone_id);
                 const nextBone: Bone = bones.find(bone => bone.id == visual.binds[next].bone_id);
 

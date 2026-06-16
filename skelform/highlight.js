@@ -233,12 +233,12 @@ var hljs = (function() {
         const hasS = (nodeName[nodeName.length - 1] != 's' && nodeName != "Armature") ? "s" : "";
         let finalName = nodeName + hasS;
         let anchor = '#';
-        this.functionRef("/file-specs.html" + anchor + this.toKebabCase(finalName));
+        this.functionRef("/dev-docs/file-specs.html" + anchor + this.toKebabCase(finalName));
       }
 
       // add <a href> to generic functions
       if (node.scope == "title.function" && this.genericFunc.includes(nodeName)) {
-        this.functionRef(`/generic/${this.toKebabCase(nodeName)}.html`);
+        this.functionRef(`/dev-docs/generic/${this.toKebabCase(nodeName)}.html`);
       }
 
       this.span(className);
