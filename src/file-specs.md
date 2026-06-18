@@ -128,21 +128,21 @@ Vertices assigned to a bind.
 
 ## Physics
 
-| Key               | Type  | Default  | Description                                                                                                           |
-| ----------------- | ----- | -------- | --------------------------------------------------------------------------------------------------------------------- |
-| global_pos        | Vec2  | `(0, 0)` | Bone's position based on physics. Overrides `bone.position` in [inheritance()](/generic/construct.html#inheritance)   |
-| global_scale      | Vec2  | `(0, 0)` | Bone's scale based on physics. Overrides `bone.scale` in [inheritance()](/generic/construct.html#inheritance)         |
-| global_rot        | Vec2  | `(0, 0)` | Bone's rotation based on physics. Overrides `bone.rotation` in [inheritance()](/generic/construct.html#inheritance)   |
-| pos_damping       | Float | `0`      | Higher damping makes position interpolate slower towards `bone.position`                                              |
-| scale_damping     | Float | `0`      | Higher damping makes scale interpolate slower towards `bone.scale`                                                    |
-| rot_damping       | Float | `0`      | Higher damping makes rotation interpolate slower towards `bone.rotation`                                              |
-| pos_ratio         | Float | `0`      | Ranges from -1 to 1. -1-0: less Y, 0-1: less X                                                                        |
-| scale_ratio       | Float | `0`      | Ranges from -1 to 1. -1-0: less Y, 0-1: less X                                                                        |
-| global_orbit      | Float | `0`      | Bone's parental orbit based on physics. Overrides `orbitRot` in [inheritance()](/generic/construct.html#inheritance) |
-| global_orbit_diff | Float | `0`      | Used to offset `global_orbit` by this much when swaying                                                               |
-| global_orbit_vel  | Float | `0`      | Used to calculate velocity when `rot_bounce` is more than 0                                                           |
-| sway              | Float | `0`      | When bone's parent is moved, how much should this bone sway?                                                          |
-| rot_bounce        | Float | `0`      | Along with sway, makes bone bouncy/wiggly                                                                             |
+| Key               | Type  | Default  | Description                                                                                                         |
+| ----------------- | ----- | -------- | ------------------------------------------------------------------------------------------------------------------- |
+| global_pos        | Vec2  | `(0, 0)` | Bone's position based on physics. Overrides `bone.position` in [inheritance()](generic/construct.html#inheritance)  |
+| global_scale      | Vec2  | `(0, 0)` | Bone's scale based on physics. Overrides `bone.scale` in [inheritance()](generic/construct.html#inheritance)        |
+| global_rot        | Float | `0`      | Bone's rotation based on physics. Overrides `bone.rotation` in [inheritance()](generic/construct.html#inheritance)  |
+| pos_damping       | Float | `0`      | Higher damping makes position interpolate slower towards `bone.position`                                            |
+| scale_damping     | Float | `0`      | Higher damping makes scale interpolate slower towards `bone.scale`                                                  |
+| rot_damping       | Float | `0`      | Higher damping makes rotation interpolate slower towards `bone.rotation`                                            |
+| pos_ratio         | Float | `0`      | Ranges from -1 to 1. -1-0: less Y, 0-1: less X                                                                      |
+| scale_ratio       | Float | `0`      | Ranges from -1 to 1. -1-0: less Y, 0-1: less X                                                                      |
+| global_orbit      | Float | `0`      | Bone's parental orbit based on physics. Overrides `orbitRot` in [inheritance()](generic/construct.html#inheritance) |
+| global_orbit_diff | Float | `0`      | Used to offset `global_orbit` by this much when swaying                                                             |
+| global_orbit_vel  | Float | `0`      | Used to calculate velocity when `rot_bounce` is more than 0                                                         |
+| sway              | Float | `0`      | When bone's parent is moved, how much should this bone sway?                                                        |
+| rot_bounce        | Float | `0`      | Along with sway, makes bone bouncy/wiggly                                                                           |
 
 ## Animations
 
@@ -208,7 +208,7 @@ counterparts. Their value is duplicated from the original field.
 
 While the original field is modified during animation, `init_` fields are used
 to return the original field back to its initial state (see
-[ResetBones()](/generic/animate.html#resetbones)).
+[ResetBones()](generic/animate.html#resetbones)).
 
 ## Constructed Bones
 
