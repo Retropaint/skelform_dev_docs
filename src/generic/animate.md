@@ -120,7 +120,7 @@ function interpolateKeyframes(
 
     // using the requested smoothing frames, interpolate the current field to the target value
     const z = { x: 0, y: 0 };
-    interpolate(currentFrame, smoothFrame, field, result, z, z);
+    return interpolate(currentFrame, smoothFrame, field, result, z, z);
 }
 ```
 
