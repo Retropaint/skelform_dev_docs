@@ -14,7 +14,6 @@ states for non-animated fields.
 ```typescript
 function Animate(
     armature: Armature,
-    visuals: Visuals[],
     anims: Animation[],
     frames: Int[],
     smoothFrames: Int[],
