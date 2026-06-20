@@ -194,21 +194,21 @@ Point each bone toward the next one.
 Used by `inverseKinematics()` to get the final bone's rotations.
 
 ```typescript
-function pointBones(bones: Bone[]*, family: Bone) {
-    let endBone: Bone = bones[family.bone_ids[-1]]
-    let tipPos: Vec2 = endBone.pos
-    for(let i = family.bone_ids.length; i > 0; i--) {
-        if(i == family.bone_ids.length - 1) {
+function pointBones(bones: Bone[], family: InverseKinematics) {
+    let endBone: Bone = bones[family.bone_ids[-1]];
+    let tipPos: Vec2 = endBone.pos;
+    for (let i = family.bone_ids.length; i > 0; i--) {
+        if (i == family.bone_ids.length - 1) {
             // end bone should follow target bone rotation, if mimic_target is true
-            if(family.mimic_target) {
-                endBone.rot = bones[family.target_id]
+            if (family.mimic_target) {
+                endBone.rot = bones[family.target_id];
             }
             break;
         }
-        const bone = *bones[family.bone_ids[i]]
-        const dir: Vec2 = tipPos - bone.pos
-        bone.rot = atan2(dir.y, dir.x)
-        tipPos = bone.pos
+        const bone = bones[family.bone_ids[i]];
+        const dir: Vec2 = tipPos - bone.pos;
+        bone.rot = atan2(dir.y, dir.x);
+        tipPos = bone.pos;
     }
 }
 ```
@@ -223,7 +223,7 @@ Applies constraints to bone rotations (clockwise or counter-clockwise).
 4. If the constraint is satisfied, apply `rot + baseAngle * 2` to bone rotation
 
 ```typescript
-function applyConstraints(bones: Bone[], family: Bone) {
+function applyConstraints(bones: Bone[], family: InverseKinematics) {
     const jointDir: Vec2 = normalize(bones[family.bone_ids[1]].pos - root);
     const baseDir: Vec2 = normalize(target - root);
     const dir: Float = jointDir.x * baseDir.y - baseDir.x * jointDir.y;
