@@ -18,7 +18,7 @@
 Constructs the armature's bones with inheritance and inverse kinematics.
 
 ```typescript
-function Construct(armature: Armature): Bone[] {
+function Construct(armature: Armature) {
     let constBones = armature.constructed_bones;
 
     // initialize constructed_bones
@@ -36,7 +36,7 @@ function Construct(armature: Armature): Bone[] {
 
     // 2nd inheritance pass: inverse kinematics
     if (armature.inverse_kinematics.length > 0) {
-        ikRots = inverseKinematics(constBones, armature.inverse_kinematics);
+        let ikRots = inverseKinematics(constBones, armature.inverse_kinematics);
         resetInheritance(constBones, armature.bones);
         inheritance(constBones, ikRots, []);
     }
@@ -84,8 +84,8 @@ function inheritance(bones: Bone[], ikRots: Object, physics: Physics[]) {
         }
 
         // override bone's rotation from inverse kinematics
-        if (ikRots[b]) {
-            bones[b].rot = ikRots[b];
+        if (ikRots.get(bones[b].id)) {
+            bones[b].rot = ikRots.get(bones[b].id);
         }
 
         // apply physics, if armature_bones is provided
@@ -146,8 +146,8 @@ wth `inverse_kinematics`.
 function inverseKinematics(
     bones: Bone[],
     inverseKinematics: InverseKinematics[],
-): Object {
-    ikRot: Object = {};
+): Map<Int, Float> {
+    let ikRots = new Map<Int, Float>();
 
     for (let family of inverseKinematics) {
         // get relevant bones from the same set
@@ -179,11 +179,11 @@ function inverseKinematics(
             if (b == family.bone_ids.length - 1) {
                 continue;
             }
-            ikRot[family.bone_ids[b]] = bones[family.bone_ids[b]].rot;
+            ikRots.set(family.bone_ids[b].id, bones[family.bone_ids[b]].rot);
         }
     }
 
-    return ikRot;
+    return ikRots;
 }
 ```
 
