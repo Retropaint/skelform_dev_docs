@@ -208,7 +208,7 @@ counterparts. Their value is duplicated from the original field.
 
 While the original field is modified during animation, `init_` fields are used
 to return the original field back to its initial state (see
-[ResetBones()](generic/animate.html#resetbones)).
+[ResetBones()](/dev-docs/generic/animate.html#resetbones)).
 
 ## Constructed Bones
 

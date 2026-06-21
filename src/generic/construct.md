@@ -363,8 +363,8 @@ function simulatePhysics(constructedBones: Bone[], physics: Physics[]) {
             }
 
             let physScale = physics.global_scale;
-            physScale.x = interpolate(2, damping.x, physScale.x, constBone.scale.x, s, e)
-            physScale.y = interpolate(2, damping.y, physScale.y, constBone.scale.y, s, e)
+            physScale.x = interpolate(2, damping.x, physScale.x, constBone.scale.x, s, e);
+            physScale.y = interpolate(2, damping.y, physScale.y, constBone.scale.y, s, e);
         }
 
         // interpolate rotation
