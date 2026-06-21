@@ -230,7 +230,7 @@ var hljs = (function() {
           this.functionRef(`/dev-docs/generic/${this.toKebabCase(nodeName)}.html`);
         } else if (nodeName == "interpolate") {
           // 'interpolate' is exclusively an Animate() function
-          this.functionRef(`/dev-docs/animate.html#interpolate`);
+          this.functionRef(`/dev-docs/generic/animate.html#interpolate`);
         } else {
           this.functionRef("#" + node.children[0])
         }
