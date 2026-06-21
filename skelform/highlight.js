@@ -223,9 +223,16 @@ var hljs = (function() {
 
       const nodeName = node.children[0]
 
-      // add <a href> to function, unless it's built-in
+      // add <a href> to SkelForm functions
       if (node.scope == "title.function" && !this.blacklist.includes(nodeName)) {
-        this.functionRef("#" + node.children[0]);
+        if (this.genericFunc.includes(nodeName)) {
+          this.functionRef(`/dev-docs/generic/${this.toKebabCase(nodeName)}.html`);
+        } else if (nodeName == "interpolate") {
+          // 'interpolate' is exclusively an Animate() function
+          this.functionRef(`/dev-docs/animate/interpolate.html`);
+        } else {
+          this.functionRef("#" + node.children[0])
+        }
       }
 
       // add <a href> to SkelForm types
@@ -236,18 +243,12 @@ var hljs = (function() {
         this.functionRef("/dev-docs/file-specs.html" + anchor + this.toKebabCase(finalName));
       }
 
-      // add <a href> to generic functions
-      if (node.scope == "title.function" && this.genericFunc.includes(nodeName)) {
-        this.functionRef(`/dev-docs/generic/${this.toKebabCase(nodeName)}.html`);
-      }
-
       this.span(className);
     }
 
     // Source - https://stackoverflow.com/a/54246501
     // Posted by user578895, modified by community. See post 'Timeline' for change history
     // Retrieved 2026-06-15, License - CC BY-SA 4.0
-
     toKebabCase(str) {
       // ignore first letter
       str = str.charAt(0).toLowerCase() + str.slice(1);
