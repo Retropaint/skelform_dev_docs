@@ -1,0 +1,87 @@
+# v0.5 -> v0.6 Migration Guide
+## 1. Remove Bone Fields
+Remove these fields from the `Bone` struct:
+```json
+{
+    // inverse kinematics
+    ik_bone_ids,
+    ik_constraint,
+    ik_target_id,
+    ik_mode,
+    init_ik_constraint,
+    init_ik_mode,
+    
+    // physics
+    phys_global_pos
+    phys_global_scale
+    phys_global_rot
+    phys_pos_damping
+    phys_scale_damping
+    phys_rot_damping
+    phys_pos_ratio
+    phys_scale_ratio
+    phys_global_orbit
+    phys_global_orbit_diff
+    phys_global_orbit_vel
+    phys_sway
+    phys_rot_bounce
+
+    // visuals
+    tex,
+    zindex,
+    tint,
+    vertices,
+    indices,
+    binds
+    init_tex,
+    init_tint,
+    init_zindex
+}
+```
+
+## 2. Create New Arrays
+Notice that the fields above have been separated into 3 groups:
+- [Inverse Kinematics](<https://skelform.org/dev-docs/file-specs.html#inverse-kinematics>)
+- [Physics](<https://skelform.org/dev-docs/file-specs.html#physics>)
+- [Visuals](<https://skelform.org/dev-docs/file-specs.html#visuals>)
+
+Move the above fields to their respective arrays.
+
+Keep in mind that `ik_` and `phys_` initials should be removed from these respective groups (eg; `ik_bone_ids` is now `bone_ids`).
+
+## 3. Fix Old References
+All references to previous bone fields should be changed to use the respective array instead, eg;
+```typescript
+// old
+if(bone.tex) {
+  // do stuff with bone.tex
+}
+
+// new
+if(bone.visuals_id != -1) {
+  let visual = visuals[bone.visuals_id];
+  // do stuff with visual.tex
+}
+```
+
+Functions of interest:
+- [Animate()](<https://skelform.org/dev-docs/generic/animate.html>)
+- [Construct() (Generic)](<https://skelform.org/dev-docs/generic/construct.html>)
+- [Construct() (Engine)](<https://skelform.org/dev-docs/engine/construct.html>)
+- [Draw()](<https://skelform.org/dev-docs/engine/draw.html>)
+
+## 4. Add Mimic Target Logic
+Add the following to support the new `mimic_target` field in inverse kinematics:
+```typescript
+function pointBones() {
+  // ...
+  	if(i == family.bone_ids.length - 1) {
+  	    // end bone should follow target bone rotation, if mimic_target is true
+  	    if(family.mimic_target) {
+  	        endBone.rot = bones[family.target_id]
+  	    }
+  	    break;
+  	}
+  // ...
+}
+```
