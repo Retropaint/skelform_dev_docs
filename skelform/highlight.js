@@ -188,7 +188,8 @@ var hljs = (function() {
       "ZipLib",
       "Json",
       "drawMesh",
-      "drawTexture"
+      "drawTexture",
+      "Map"
     ]
 
     /**
@@ -229,7 +230,7 @@ var hljs = (function() {
           this.functionRef(`/dev-docs/generic/${this.toKebabCase(nodeName)}.html`);
         } else if (nodeName == "interpolate") {
           // 'interpolate' is exclusively an Animate() function
-          this.functionRef(`/dev-docs/animate/interpolate.html`);
+          this.functionRef(`/dev-docs/animate.html#interpolate`);
         } else {
           this.functionRef("#" + node.children[0])
         }
@@ -3266,7 +3267,7 @@ if (typeof exports === 'object' && typeof module !== 'undefined') { module.expor
         ),
         end: IDENT_RE$1,
         // built-in keywords that should not be considered variables
-        keywords: ["let", "break", "continue", "const", "true", "false", "else", "undefined"],
+        keywords: ["let", "break", "continue", "const", "true", "false", "else", "undefined", "new"],
         className: "variable",
         relevance: 1
       };
