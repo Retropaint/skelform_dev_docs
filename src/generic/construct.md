@@ -197,15 +197,15 @@ Used by `inverseKinematics()` to get the final bone's rotations.
 function pointBones(bones: Bone[], family: InverseKinematics) {
     let endBone: Bone = bones[family.bone_ids[-1]];
     let tipPos: Vec2 = endBone.pos;
-    for (let i = family.bone_ids.length; i > 0; i--) {
+    for (let i = family.bone_ids.length - 1; i > 0; i--) {
+        const bone = bones[family.bone_ids[i]];
         if (i == family.bone_ids.length - 1) {
             // end bone should follow target bone rotation, if mimic_target is true
             if (family.mimic_target) {
-                endBone.rot = bones[family.target_id];
+                bone.rot = bones[family.target_id].rot;
             }
-            break;
+            continue;
         }
-        const bone = bones[family.bone_ids[i]];
         const dir: Vec2 = tipPos - bone.pos;
         bone.rot = atan2(dir.y, dir.x);
         tipPos = bone.pos;
