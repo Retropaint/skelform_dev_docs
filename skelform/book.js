@@ -518,15 +518,32 @@ aria-label="Show hidden lines"></button>';
     });
 })();
 
-(function versions() {
+(async function versions() {
     const html = document.querySelector('html');
     const versionToggleButton = document.getElementById('mdbook-version-toggle');
+
+    // show current version as toggle's text
+    versionToggleButton.innerText = window.location.pathname.split('/')[2];
+
     const versionPopup = document.getElementById('mdbook-version-list');
     const versionColorMetaTag = document.querySelector('meta[name="version-color"]');
-    const versionIds = [];
-    versionPopup.querySelectorAll('button.version').forEach(function(el) {
-        versionIds.push(el.id);
-    });
+    let verEl = document.getElementById("version-item");
+    let verButton = document.getElementById("mdbook-version");
+
+    // populate version popup from versions.json
+    let result = await fetch("https://skelform.org/versions.json");
+    let json = await result.json();
+    json.docs.forEach((version, v) => {
+      let button = verButton.cloneNode();
+      let el = verEl.cloneNode();
+      el.appendChild(button);
+      versionPopup.appendChild(el)
+      button.style.display = "block";
+      button.innerText = version.id
+      button.href = `/dev-docs/${version.id}/${version.intro}`
+    })
+
+
     const stylesheets = {
         ayuHighlight: document.querySelector('#mdbook-ayu-highlight-css'),
         tomorrowNight: document.querySelector('#mdbook-tomorrow-night-css'),

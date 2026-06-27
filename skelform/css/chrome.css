@@ -704,6 +704,9 @@ html:not(.js) .sidebar-resize-handle {
 .theme-popup .theme:hover {
     background-color: var(--theme-hover);
 }
+.theme-popup a {
+    text-decoration: none;
+}
 
 .theme-selected::before {
     display: inline-block;
