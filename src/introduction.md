@@ -1,4 +1,4 @@
-# How To Read This
+# Introduction
 
 This is a developer-focused document for developing SkelForm runtimes.
 
