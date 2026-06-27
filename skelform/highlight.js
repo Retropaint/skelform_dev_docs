@@ -152,7 +152,8 @@ var hljs = (function() {
       "animate",
       "construct",
       "checkBoneFlip",
-      "getBoneTexture"
+      "getBoneTexture",
+      "rotateVec2"
     ]
     blacklist = [
       "sort",

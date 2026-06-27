@@ -26,8 +26,10 @@ function Construct(armature: Armature*, options: ConstructOptions): Bone[] {
         const_bone.pos   *= options.scale;
         const_bone.pos   += options.position;
 
-        // bones must be flipped if scale is in the negatives
-        GenericRuntime.checkBoneFlip(bone, options.scale)
+        // flip bone if it's facing left
+        if(isFacingLeft(options.scale)) {
+            bone.rot = -bone.rot;
+        }
 
         // velocity only affects position for physics
         if(const_bone.physics_id != -1) {

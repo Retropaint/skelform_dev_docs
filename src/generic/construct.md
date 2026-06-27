@@ -3,7 +3,6 @@
 - [`Construct()`](#construct)
     - [`inheritance()`](#inheritance)
     - [`resetInheritance()`](#resetinheritance)
-    - [`rotate()`](#rotate)
     - [`inverseKinematics()`](#inversekinematics)
         - [`pointBones()`](#pointbones)
         - [`applyConstraints()`](#applyconstraints)
@@ -11,6 +10,7 @@
         - [`arcIk()`](#arcik)
     - [`simulatePhysics()`](#simulatephysics)
     - [`constructVerts()`](#constructverts)
+        - [`inheritVert()`](#inheritvert)
         - [Pathing Explained](#pathing-explained)
 
 # `Construct()`
@@ -55,7 +55,7 @@ function Construct(armature: Armature) {
 
 ## `inheritance()`
 
-Child bones need to inherit their parent.
+Applies parent bone properties to their children.
 
 ```typescript
 function inheritance(bones: Bone[], ikRots: Object, physics: Physics[]) {
@@ -78,7 +78,7 @@ function inheritance(bones: Bone[], ikRots: Object, physics: Physics[]) {
             bones[b].pos *= parent.scale;
 
             // rotate child around parent as if it were orbitting
-            bones[b].pos = rotate(bones[b].pos, parent.rot);
+            bones[b].pos = rotateVec2(bones[b].pos, parent.rot);
 
             bones[b].pos += parent.pos;
         }
@@ -117,19 +117,6 @@ resetInheritance(constructedBones: Bone[], bones: Bone[]) {
         constructedBones[b].pos = bones[b].pos;
         constructedBones[b].rot = bones[b].rot;
         constructedBones[b].scale = bones[b].scale;
-    }
-}
-```
-
-## `rotate()`
-
-Helper for rotating a Vec2.
-
-```typescript
-function rotate(point: Vec2, rot: float): Vec2 {
-    return Vec2 {
-        x: point.x * rot.cos() - point.y * rot.sin(),
-        y: point.x * rot.sin() + point.y * rot.cos(),
     }
 }
 ```
@@ -306,7 +293,7 @@ function arcIk(bones: Bone[], root: Vec2, target: Vec2) {
             root.y + (1.0 - peak) * sin(dist[b] * PI) * baseMag,
         );
 
-        const rotated: Float = rotate(bones[b].pos - root, baseAngle);
+        const rotated: Float = rotateVec2(bones[b].pos - root, baseAngle);
         bones[b].pos = rotated + root;
     }
 }
@@ -426,7 +413,7 @@ function constructVerts(bones: Bone[], visuals: Visuals[]) {
         // This will be overridden if vertex has a bind.
         for(let v = 0; v < visual.vertices.length; v++) {
             visual.vertices[v].pos = visual.vertices[v].init_pos;
-            visual.vertices[v] = inheritVert(visual.vertices[v].pos, bone)
+            visual.vertices[v] = inheritVert(visual.vertices[v].pos, bone, visual)
         }
 
         for(let bi = 0; bi < visual.binds.length; bi++) {
@@ -473,7 +460,7 @@ function constructVerts(bones: Bone[], visuals: Visuals[]) {
                 // move vert to bind, then rotate it around bind by normalAngle
                 const vert: Vertex = visual.vertices[id];
                 vert.pos = vert.initPos + bindBone.pos;
-                const rotated: Vec2 = rotate(vert.pos - bindBone.pos, normalAngle);
+                const rotated: Vec2 = rotateVec2(vert.pos - bindBone.pos, normalAngle);
                 vert.pos = bindBone.pos + (rotated * bind.verts[v].weight);
                 visual.vertices[id] = vert;
             }
@@ -481,11 +468,19 @@ function constructVerts(bones: Bone[], visuals: Visuals[]) {
     }
 }
 
-function inheritVert(pos: Vec2, bone: Bone): Vec2 {
-    pos *= bone.scale
-    pos = rotate(pos, bone.rot)
-    pos += bone.pos
-    return pos
+
+```
+
+## inheritVert()
+
+Retruns a vertex's new position with applied bone and visual data inheritance.
+
+```typescript
+function inheritVert(pos: Vec2, bone: Bone, visual: Visual): Vec2 {
+    pos *= bone.scale * visuals.pivot_scale;
+    pos = rotateVec2(pos, bone.rot + visuals.pivot_rot);
+    pos += bone.pos;
+    return pos;
 }
 ```
 

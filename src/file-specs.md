@@ -30,37 +30,37 @@ This section will only cover the content in `armature.json`.
 
 ## Armature
 
-| Key                | Type                                       | Default                                   | Description                                  |
-| ------------------ | ------------------------------------------ | ----------------------------------------- | -------------------------------------------- |
-| version            | String                                     | `""`                                      | Editor version that exported this file       |
-| baked_ik           | Bool                                       | `false`                                   | Was this file exported with baked IK frames? |
-| img_format         | String                                     | `"PNG"`                                   | Exported atlas image format (PNG, JPG, etc)  |
-| clear_color        | Color[^1]                                  | <span class="color">`(0, 0, 0, 0)`</span> | Exported clear color of atlas images         |
-| bones              | [Bone](#bone)[]                            | `[]`                                      | Array of all bones                           |
-| animations         | [Animation](#animation)[]                  | `[]`                                      | Array of all animations                      |
-| atlases            | [Atlas](#atlas)[]                          | `[]`                                      | Array of all atlases                         |
-| styles             | [Styles](#styles)[]                        | `[]`                                      | Array of all styles                          |
-| inverse_kinematics | [InverseKinematics](#inverse-kinematics)[] | `[]`                                      | Array of all bone inverse kinematics data    |
-| visuals            | [Visuals](#visuals)[]                      | `[]`                                      | Array of all bone visuals (texture, mesh)    |
-| physics            | [Physics](#physics)[]                      | `[]`                                      | Array of all bone physics data               |
+| Key                | Type                                       | Default         | Description                                  |
+| ------------------ | ------------------------------------------ | --------------- | -------------------------------------------- |
+| version            | String                                     | `""`            | Editor version that exported this file       |
+| baked_ik           | Bool                                       | `false`         | Was this file exported with baked IK frames? |
+| img_format         | String                                     | `"PNG"`         | Exported atlas image format (PNG, JPG, etc)  |
+| clear_color        | Color[^2]                                  | Transparent[^3] | Exported clear color of atlas images         |
+| bones              | [Bone](#bone)[]                            | `[]`            | Array of all bones                           |
+| animations         | [Animation](#animation)[]                  | `[]`            | Array of all animations                      |
+| atlases            | [Atlas](#atlas)[]                          | `[]`            | Array of all atlases                         |
+| styles             | [Styles](#styles)[]                        | `[]`            | Array of all styles                          |
+| inverse_kinematics | [InverseKinematics](#inverse-kinematics)[] | `[]`            | Array of all bone inverse kinematics data    |
+| visuals            | [Visuals](#visuals)[]                      | `[]`            | Array of all bone visuals (texture, mesh)    |
+| physics            | [Physics](#physics)[]                      | `[]`            | Array of all bone physics data               |
 
 ## Bones
 
-| Key                   | Type      | Default                                           | Description                                        |
-| --------------------- | --------- | ------------------------------------------------- | -------------------------------------------------- |
-| id                    | Uint      | `0`                                               | Bone ID                                            |
-| name                  | String    | `""`                                              | Name of bone                                       |
-| pos                   | Vec2      | `(0, 0)`                                          | Position of bone                                   |
-| rot                   | Float     | `0`                                               | Rotation of bone                                   |
-| scale                 | Vec2      | `(1, 1)`                                          | Scale of bone                                      |
-| parent_id             | Int       | `-1`                                              | Bone parent ID (-1 if none)                        |
-| tex                   | String    | `""`                                              | Name of texture to use                             |
-| zindex                | Int       | `0`                                               | Z-index of bone (higher index renders above lower) |
-| hidden                | Bool      | `false`                                           | Whether this bone is hidden                        |
-| tint                  | Color[^1] | <span class="color">`(255, 255, 255, 255)`</span> | Color tint                                         |
-| inverse_kinematics_id | Int       | `-1`                                              | [Inverse Kinematics](#inverse-kinematics) ID       |
-| visuals_id            | Int       | `-1`                                              | [Visuals](#visuals) ID                             |
-| physics_id            | Int       | `-1`                                              | [Physics](#physics) ID                             |
+| Key                   | Type      | Default   | Description                                        |
+| --------------------- | --------- | --------- | -------------------------------------------------- |
+| id                    | Uint      | `0`       | Bone ID                                            |
+| name                  | String    | `""`      | Name of bone                                       |
+| pos                   | Vec2      | `(0, 0)`  | Position of bone                                   |
+| rot                   | Float     | `0`       | Rotation of bone                                   |
+| scale                 | Vec2      | `(1, 1)`  | Scale of bone                                      |
+| parent_id             | Int       | `-1`      | Bone parent ID (-1 if none)                        |
+| tex                   | String    | `""`      | Name of texture to use                             |
+| zindex                | Int       | `0`       | Z-index of bone (higher index renders above lower) |
+| hidden                | Bool      | `false`   | Whether this bone is hidden                        |
+| tint                  | Color[^2] | White[^4] | Color tint                                         |
+| inverse_kinematics_id | Int       | `-1`      | [Inverse Kinematics](#inverse-kinematics) ID       |
+| visuals_id            | Int       | `-1`      | [Visuals](#visuals) ID                             |
+| physics_id            | Int       | `-1`      | [Physics](#physics) ID                             |
 
 ## Inverse Kinematics
 
@@ -74,25 +74,28 @@ Inverse kinematics is stored in the root (first) bone of each set of IK bones.
 | target_id         | Uint   | `-1`           | Target bone ID                                   |
 | bone_ids          | Uint[] | `[]`           | ID of all bones in this family                   |
 | mimic_target      | Bool   | `false`        | Should the last bone follow target's rotation?   |
-| init_constraint   | String | `constraint`   | Initial field for `constraint`[^2]               |
-| init_mode         | String | `mode`         | Initial field for `mode`[^2]                     |
-| init_mimic_target | Bool   | `mimic_target` | Initial field for `mimic_target`[^2]             |
+| init_constraint   | String | `constraint`   | Initial field for `constraint`[^1]               |
+| init_mode         | String | `mode`         | Initial field for `mode`                         |
+| init_mimic_target | Bool   | `mimic_target` | Initial field for `mimic_target`                 |
 
 ## Visuals
 
 Visual data of each bone (texture & mesh)
 
-| Key         | Type                | Default                                           | Description                                            |
-| ----------- | ------------------- | ------------------------------------------------- | ------------------------------------------------------ |
-| tex         | String              | `""`                                              | Name of texture to use                                 |
-| zindex      | Int                 | `0`                                               | Z-index of bone (higher index renders above lower)     |
-| tint        | Color[^1]           | <span class="color">`(255, 255, 255, 255)`</span> | Multiplicative color tint for texture                  |
-| vertices    | [Vertex](#vertex)[] | `[]`                                              | Array of vertices                                      |
-| indices     | Uint[]              | `[]`                                              | Each index is vertex ID. Every 3 IDs forms 1 triangle. |
-| binds       | [Bind](#bind)[]     | `[]`                                              | Array of bone binds                                    |
-| init_tex    | String              | `""`                                              | Initial field for `tex`[^2]                            |
-| init_tint   | Color[^1]           | <span class="color">`(255, 255, 255, 255)`</span> | Initial field for `tint`[^2]                           |
-| init_zindex | Int                 | `0`                                               | Initial field for `zindex`[^2]                         |
+| Key         | Type                | Default   | Description                                            |
+| ----------- | ------------------- | --------- | ------------------------------------------------------ |
+| tex         | String              | `""`      | Name of texture to use                                 |
+| zindex      | Int                 | `0`       | Z-index of bone (higher index renders above lower)     |
+| tint        | Color[^2]           | White[^4] | Multiplicative color tint for texture                  |
+| vertices    | [Vertex](#vertex)[] | `[]`      | Array of vertices                                      |
+| indices     | Uint[]              | `[]`      | Each index is vertex ID. Every 3 IDs forms 1 triangle. |
+| binds       | [Bind](#bind)[]     | `[]`      | Array of bone binds                                    |
+| pivot_pos   | [Vec2](#vec2)       | `(0, 0)`  | Position of texture pivot                              |
+| pivot_scale | [Vec2](#vec2)       | `(0, 0)`  | Scale of texture pivot                                 |
+| pivot_rot   | [Float]             | `0`       | Rotation of texture pivot                              |
+| init_tex    | String              | `""`      | Initial field for `tex`[^1]                            |
+| init_tint   | Color[^2]           | White[^4] | Initial field for `tint`                               |
+| init_zindex | Int                 | `0`       | Initial field for `zindex`                             |
 
 #### Vertex
 
@@ -104,7 +107,7 @@ as well as how the texture is mapped (UV).
 | id       | Uint | `0`      | ID of vertex                           |
 | pos      | Vec2 | `(0, 0)` | Position of vertex                     |
 | uv       | Vec2 | `(0, 0)` | UV of vertex                           |
-| init_pos | Int  | `pos`    | Helper for initial vertex position[^2] |
+| init_pos | Int  | `pos`    | Helper for initial vertex position[^1] |
 
 #### Bind
 
@@ -216,6 +219,10 @@ An extra set of bones is recommended for optimization in the `Construct()`
 generic function. This is a clone of the bones array, but with construction
 applied to it for use later with `Draw()`.
 
-[^1]: A variant of Vec4: `(r, g, b, a)`
+[^1]: See [Initial Fields](#initialfields)
 
-[^2]: See [Initial Fields](#initialfields)
+[^2]: A variant of Vec4: `(red, green, blue, alpha)`
+
+[^3]: Transparent: `(0, 0, 0, 0)`
+
+[^4]: White: `(255, 255, 255, 255)`

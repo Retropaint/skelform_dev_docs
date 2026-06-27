@@ -43,10 +43,20 @@ function Draw(
         }
 
         // get active texture
-        const tex = GenericRuntime.getBoneTexture(visual.tex, styles);
+        const tex: Texture = GenericRuntime.getBoneTexture(visual.tex, styles);
         if (!tex) {
             continue;
         }
+
+        // will be used to flip pivots if necessary
+        let dir = isFacingLeft(bone.scale) ? -1 : 1;
+
+        // setup pivot
+        let pivotPos = visual.pivot_pos * tex.size;
+        pivotPos = rotateVec2(pivotPos, bone.rot * dir);
+        pivotPos *= bone.scale * visual.pivot_scale;
+        // invert Y if engine is -Y
+        pivotPos.y = -pivotPos.y;
 
         // use tex.atlasIdx to get the atlas that this texture is in
         const atlas = atlases[tex.atlasIdx];
@@ -68,8 +78,17 @@ function Draw(
         // SkelForm uses center origin, so it must be adjusted like so.
         const pushCenter: Vec2 = (tex.size / 2) * bone.scale;
 
-        // render bone as regular rect
-        drawTexture(realTex, bone.pos - pushCenter);
+        let finalRot: Float = bone.rot + visual.pivot_rot * dir;
+        let finalScale: Vec2 = bone.scale * visual.pivot_scale;
+
+        // render bone as regular rect.
+        // Assume this is a draw function that takes (texture, pos, rot, scale)
+        drawTexture(
+            realTex,
+            bone.pos + pivotPos - pushCenter,
+            finalRot,
+            finalScale,
+        );
     }
 }
 ```
