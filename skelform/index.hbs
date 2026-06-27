@@ -158,6 +158,15 @@
                             <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-skelform">SkelForm</button></li>
                         </ul>
+
+                        <button id="mdbook-version-toggle" class="icon-button" type="button" title="Change version" aria-label="Change version" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-version-list">
+                            {{fa "solid" "paintbrush"}}
+                        </button>
+                        <ul id="mdbook-version-list" class="theme-popup" aria-label="versions" role="menu" style="left: 100px">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-version-default_version">v0.7</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-version-light">v0.6</button></li>
+                        </ul>
+
                         {{#if search_enabled}}
                         <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
                             {{fa "solid" "magnifying-glass"}}
