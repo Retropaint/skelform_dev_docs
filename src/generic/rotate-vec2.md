@@ -2,8 +2,8 @@
 
 Helper for rotating a Vec2.
 
-Used in [generic Construct()](/dev-docs/generic/construct.html) and
-[Draw()](/dev-docs/engine/draw.html) to rotate bones and pivots.
+Used in [generic Construct()](../generic/construct.html) and
+[Draw()](../engine/draw.html) to rotate bones and pivots.
 
 ```typescript
 function RotateVec2(point: Vec2, rot: float): Vec2 {

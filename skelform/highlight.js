@@ -228,10 +228,10 @@ var hljs = (function() {
       // add <a href> to SkelForm functions
       if (node.scope == "title.function" && !this.blacklist.includes(nodeName)) {
         if (this.genericFunc.includes(nodeName)) {
-          this.functionRef(`/dev-docs/generic/${this.toKebabCase(nodeName)}.html`);
+          this.functionRef(`../generic/${this.toKebabCase(nodeName)}.html`);
         } else if (nodeName == "interpolate") {
           // 'interpolate' is exclusively an Animate() function
-          this.functionRef(`/dev-docs/generic/animate.html#interpolate`);
+          this.functionRef(`../generic/animate.html#interpolate`);
         } else {
           this.functionRef("#" + node.children[0])
         }
@@ -242,7 +242,7 @@ var hljs = (function() {
         const hasS = (nodeName[nodeName.length - 1] != 's' && nodeName != "Armature") ? "s" : "";
         let finalName = nodeName + hasS;
         let anchor = '#';
-        this.functionRef("/dev-docs/file-specs.html" + anchor + this.toKebabCase(finalName));
+        this.functionRef("../file-specs.html" + anchor + this.toKebabCase(finalName));
       }
 
       this.span(className);
