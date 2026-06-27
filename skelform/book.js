@@ -543,30 +543,9 @@ aria-label="Show hidden lines"></button>';
       button.href = `/dev-docs/${version.id}/${version.intro}`
     })
 
-
-    const stylesheets = {
-        ayuHighlight: document.querySelector('#mdbook-ayu-highlight-css'),
-        tomorrowNight: document.querySelector('#mdbook-tomorrow-night-css'),
-        highlight: document.querySelector('#mdbook-highlight-css'),
-    };
-
     function showversions() {
         versionPopup.style.display = 'block';
         versionToggleButton.setAttribute('aria-expanded', true);
-    }
-
-    function updateversionSelected() {
-        return;
-        versionPopup.querySelectorAll('.version-selected').forEach(function(el) {
-            el.classList.remove('version-selected');
-        });
-        const selected = get_saved_version();
-        let element = versionPopup.querySelector('button#mdbook-version-' + selected);
-        if (element === null) {
-            // Fall back in case there is no "Default" item.
-            element = versionPopup.querySelector('button#mdbook-version-' + get_version());
-        }
-        element.classList.add('version-selected');
     }
 
     function hideversions() {
@@ -575,75 +554,11 @@ aria-label="Show hidden lines"></button>';
         versionToggleButton.focus();
     }
 
-    function get_saved_version() {
-        let version = null;
-        try {
-            version = localStorage.getItem('mdbook-version');
-        } catch {
-            // ignore error.
-        }
-        return version;
-    }
-
-    function delete_saved_version() {
-        localStorage.removeItem('mdbook-version');
-    }
-
-    function get_version() {
-        const version = get_saved_version();
-        if (version === null || version === undefined || !versionIds.includes('mdbook-version-' + version)) {
-            if (typeof default_dark_version === 'undefined') {
-                // A customized index.hbs might not define this, so fall back to
-                // old behavior of determining the default on page load.
-                return '';
-            }
-            return window.matchMedia('(prefers-color-scheme: dark)').matches
-                ? default_dark_version
-                : default_light_version;
-        } else {
-            return version;
-        }
-    }
-
-    const query = window.matchMedia('(prefers-color-scheme: dark)');
-    query.onchange = function() {
-        set_version(get_version(), false);
-    };
-
     versionToggleButton.addEventListener('click', function() {
         if (versionPopup.style.display === 'block') {
             hideversions();
         } else {
             showversions();
-        }
-    });
-
-    versionPopup.addEventListener('click', function(e) {
-        let version;
-        if (e.target.className === 'version') {
-            version = e.target.id;
-        } else if (e.target.parentElement.className === 'version') {
-            version = e.target.parentElement.id;
-        } else {
-            return;
-        }
-        version = version.replace(/^mdbook-version-/, '');
-
-        if (ersion === null) {
-            delete_saved_version();
-            set_version(get_version(), false);
-        } else {
-            set_version(version);
-        }
-    });
-
-    versionPopup.addEventListener('focusout', function(e) {
-        // e.relatedTarget is null in Safari and Firefox on macOS (see workaround below)
-        if (!!e.relatedTarget &&
-            !versionToggleButton.contains(e.relatedTarget) &&
-            !versionPopup.contains(e.relatedTarget)
-        ) {
-            hideversions();
         }
     });
 
