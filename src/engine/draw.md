@@ -22,25 +22,11 @@ function Draw(
         return visualsA.zindex - visualsB.zindex;
     });
 
-    // initialize a fixed array of false, for propagated visibility
-    let hiddens = new Array(bones.length).fill(false);
-
     for (let bone of bones) {
-        if (bone.visuals_id == -1) {
+        if (bone.hidden || bone.visuals_id == -1) {
             continue;
         }
         const visual = visuals[bone.visual_id];
-
-        // save this bone's hidden status so it can be propagated to its children,
-        // and ignore rendering if it's hidden
-        let hidden = bone.hidden || false;
-        if (bone.parent_id != -1 && hiddens[bone.parent_id]) {
-            hidden = true;
-        }
-        hiddens[b] = hidden;
-        if (hidden) {
-            continue;
-        }
 
         // get active texture
         const tex: Texture = GenericRuntime.getBoneTexture(visual.tex, styles);
