@@ -30,6 +30,9 @@ function Construct(armature: Armature) {
         constBones.sort((bone) => bone.id);
     }
 
+    // propagate hidden status from bones to their children
+    propagateHidden(armature.constructed_bones);
+
     // 1st inheritance pass
     resetInheritance(constBones, armature.bones);
     inheritance(constBones, {}, []);
@@ -53,6 +56,23 @@ function Construct(armature: Armature) {
 }
 ```
 
+## `propagateHidden()`
+
+Applies hidden status to bone children, based on their parent.
+
+```typescript
+function propagate_hidden(bones: &mut Vec<Bone>) {
+    let hiddens = new Array(bones.length).fill(false);
+    bones.forEach(bone => {
+        let isParentHidden = bone.parent_id != -1 && hiddens[bone.parent_id];
+        if bone.hidden || isParentHidden {
+            hiddens[bone.id] = true;
+            bone.hidden = true;
+        }
+    })
+}
+```
+
 ## `inheritance()`
 
 Applies parent bone properties to their children.
@@ -70,6 +90,11 @@ function inheritance(bones: Bone[], ikRots: Object, physics: Physics[]) {
             if (phys != undefined && phys.sway > 0) {
                 orbitRot -= phys.global_orbit_diff;
             }
+
+            if (IsFacingLeft(parent.scale)) {
+                bones[b].rot = -bones[b].rot;
+            }
+
             bones[b].rot += orbitRot;
 
             bones[b].scale *= parent.scale;
@@ -162,8 +187,14 @@ function inverseKinematics(
 
         // add rotations to ikRot, with bone ID being the key
         for (let b = 0; b < family.bone_ids.length; b++) {
-            // last bone of IK should have free rotation
+            // last bone of IK should have free rotation (or mimic target)
             if (b == family.bone_ids.length - 1) {
+                if (family.mimic_target) {
+                    ikRots.set(
+                        family.bone_ids[b].id,
+                        bones[family.target_id].rot,
+                    );
+                }
                 continue;
             }
             ikRots.set(family.bone_ids[b].id, bones[family.bone_ids[b]].rot);
@@ -187,10 +218,6 @@ function pointBones(bones: Bone[], family: InverseKinematics) {
     for (let i = family.bone_ids.length - 1; i > 0; i--) {
         const bone = bones[family.bone_ids[i]];
         if (i == family.bone_ids.length - 1) {
-            // end bone should follow target bone rotation, if mimic_target is true
-            if (family.mimic_target) {
-                bone.rot = bones[family.target_id].rot;
-            }
             continue;
         }
         const dir: Vec2 = tipPos - bone.pos;
