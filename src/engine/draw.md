@@ -22,16 +22,16 @@ function Draw(
         return visualsA.zindex - visualsB.zindex;
     });
 
-    for (let bone of bones) {
+    bone.forEach((bone) => {
         if (bone.hidden || bone.visuals_id == -1) {
-            continue;
+            return;
         }
         const visual = visuals[bone.visual_id];
 
         // get active texture
         const tex: Texture = GenericRuntime.getBoneTexture(visual.tex, styles);
         if (!tex) {
-            continue;
+            return;
         }
 
         // will be used to flip pivots if necessary
@@ -56,7 +56,7 @@ function Draw(
         // render bone as mesh
         if (visual.vertices.length > 0) {
             drawMesh(bone, visual, tex, realTex);
-            continue;
+            return;
         }
 
         // A lot of game engines have a non-center sprite origin.
@@ -69,12 +69,8 @@ function Draw(
 
         // render bone as regular rect.
         // Assume this is a draw function that takes (texture, pos, rot, scale)
-        drawTexture(
-            realTex,
-            bone.pos + pivotPos - pushCenter,
-            finalRot,
-            finalScale,
-        );
-    }
+        let pos = bone.pos + pivotPos - pushCenter;
+        drawTexture(realTex, pos, finalRot, finalScale);
+    });
 }
 ```
