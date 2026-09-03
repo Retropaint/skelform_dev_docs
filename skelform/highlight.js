@@ -153,7 +153,8 @@ var hljs = (function() {
       "construct",
       "checkBoneFlip",
       "getBoneTexture",
-      "rotateVec2"
+      "rotateVec2",
+      "isFacingLeft",
     ]
     blacklist = [
       "sort",
@@ -190,7 +191,8 @@ var hljs = (function() {
       "Json",
       "drawMesh",
       "drawTexture",
-      "Map"
+      "Map",
+      "get"
     ]
 
     /**

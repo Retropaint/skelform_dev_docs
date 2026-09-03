@@ -12,6 +12,7 @@
     - [`constructVerts()`](#constructverts)
         - [`inheritVert()`](#inheritvert)
         - [Pathing Explained](#pathing-explained)
+    - [`propagateHidden()`](#propagatehidden)
 
 # `Construct()`
 
@@ -29,9 +30,6 @@ function Construct(armature: Armature) {
         // which sorts them by zindex, so sort back by id
         constBones.sort((bone) => bone.id);
     }
-
-    // propagate hidden status from bones to their children
-    propagateHidden(armature.constructed_bones);
 
     // 1st inheritance pass
     resetInheritance(constBones, armature.bones);
@@ -53,23 +51,9 @@ function Construct(armature: Armature) {
 
     // mesh deformation
     constructVerts(constBones, armature.visuals);
-}
-```
 
-## `propagateHidden()`
-
-Applies hidden status to bone children, based on their parent.
-
-```typescript
-function propagate_hidden(bones: &mut Vec<Bone>) {
-    let hiddens = new Array(bones.length).fill(false);
-    bones.forEach(bone => {
-        let isParentHidden = bone.parent_id != -1 && hiddens[bone.parent_id];
-        if bone.hidden || isParentHidden {
-            hiddens[bone.id] = true;
-            bone.hidden = true;
-        }
-    })
+    // propagate hidden status from bones to their children
+    propagateHidden(constBones);
 }
 ```
 
@@ -91,6 +75,7 @@ function inheritance(bones: Bone[], ikRots: Object, physics: Physics[]) {
                 orbitRot -= phys.global_orbit_diff;
             }
 
+            // flip rotation if parent is facing left
             if (IsFacingLeft(parent.scale)) {
                 bones[b].rot = -bones[b].rot;
             }
@@ -190,10 +175,8 @@ function inverseKinematics(
             // last bone of IK should have free rotation (or mimic target)
             if (b == family.bone_ids.length - 1) {
                 if (family.mimic_target) {
-                    ikRots.set(
-                        family.bone_ids[b].id,
-                        bones[family.target_id].rot,
-                    );
+                    let rot = bones[family.target_id].rot;
+                    ikRots.set(family.bone_ids[b].id, rot);
                 }
                 continue;
             }
@@ -552,3 +535,20 @@ To do so:
 
 1. Reset vertex position to its initial position + bind position
 2. Rotate vertex around bind with angle from 2nd step
+
+## `propagateHidden()`
+
+Applies hidden status to bone children, based on their parent.
+
+```typescript
+function propagateHidden(bones: Bone[]) {
+    let hiddens = new Array(bones.length).fill(false);
+    bones.forEach((bone) => {
+        let isParentHidden = bone.parent_id != -1 && hiddens[bone.parent_id];
+        if (bone.hidden || isParentHidden) {
+            hiddens[bone.id] = true;
+            bone.hidden = true;
+        }
+    });
+}
+```
