@@ -127,6 +127,7 @@ resetInheritance(constructedBones: Bone[], bones: Bone[]) {
         constructedBones[b].pos = bones[b].pos;
         constructedBones[b].rot = bones[b].rot;
         constructedBones[b].scale = bones[b].scale;
+        constructedBones[b].hidden = bones[b].hidden;
     }
 }
 ```
