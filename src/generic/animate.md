@@ -44,8 +44,10 @@ function Animate(
             const f = frames[a];
             const sf = smoothFrames[a];
 
+            // the bone being animated is based on keyframe.bone_name
+            let bone = armature.bones.find((kf) => kf.bone_name == bone.name);
+
             // animate basic fields
-            let bone = armature.bones[kf.bone_id];
             if (kf.element == "PositionX")
                 interpolateKeyframes(bone.pos.x, kf, nextKf, f, sf);
             if (kf.element == "PositionY")
@@ -246,8 +248,8 @@ function resetBones(
     // add every element that's being animated for each bone
     anims.forEach(anim => {
         anim.keyframes.forEach(kf => {
-            if(!elementMap[kf.bone_id].contains(kf.element)) {
-                elementMap[kf.bone_id].push(kf.element)
+            if(!elementMap[kf.bone_name].contains(kf.element)) {
+                elementMap[kf.bone_name].push(kf.element)
             }
         })
     jj
@@ -257,34 +259,33 @@ function resetBones(
 
     // reset every element that's not in the map back to its initial state
     armature.bones.forEach(bone => {
-
         // reset basic fields
-        if (!elementMap[bone.id]["PositionX"])
+        if (!elementMap[bone.name]["PositionX"])
             interpolate(f, sf, bone.pos.x, bone.init_pos.x, z, z)
-        if (!elementMap[bone.id]["PositionY"])
+        if (!elementMap[bone.name]["PositionY"])
             interpolate(f, sf, bone.pos.y, bone.init_pos.y, z, z)
-        if (!elementMap[bone.id]["Rotation"])
+        if (!elementMap[bone.name]["Rotation"])
             interpolate(f, sf, bone.rot, bone.init_rot, z, z)
-        if (!elementMap[bone.id]["ScaleX"])
+        if (!elementMap[bone.name]["ScaleX"])
             interpolate(f, sf, bone.scale.x, bone.init_scale.x, z, z)
-        if (!elementMap[bone.id]["ScaleY"])
+        if (!elementMap[bone.name]["ScaleY"])
             interpolate(f, sf, bone.scale.y, bone.init_scale.y, z, z)
-        if (!elementMap[bone.id]["Hidden"])
+        if (!elementMap[bone.name]["Hidden"])
             bone.hidden = bone.init_hidden
 
         // reset visual fields
         if bone.visuals_id != -1 {
             let visuals = armature.visuals[bone.visual_id]
 
-            if (!elementMap[bone.id]["Texture"])
+            if (!elementMap[bone.name]["Texture"])
                 visuals.tex = visuals.init_tex;
-            if (!elementMap[bone.id]["TintR"])
+            if (!elementMap[bone.name]["TintR"])
                 interpolate(f, sf, visuals.tint.r, visuals.init_tint.r, z, z)
-            if (!elementMap[bone.id]["TintG"])
+            if (!elementMap[bone.name]["TintG"])
                 interpolate(f, sf, visuals.tint.g, visuals.init_tint.g, z, z)
-            if (!elementMap[bone.id]["TintB"])
+            if (!elementMap[bone.name]["TintB"])
                 interpolate(f, sf, visuals.tint.b, visuals.init_tint.b, z, z)
-            if (!elementMap[bone.id]["TintA"])
+            if (!elementMap[bone.name]["TintA"])
                 interpolate(f, sf, visuals.tint.a, visuals.init_tint.a, z, z)
         }
 
@@ -292,9 +293,9 @@ function resetBones(
         if (bone.ik_family_id != -1) {
             let ik = armature.inverse_kinematics[bone.ik_family_id]
 
-            if (!elementMap[bone.id]["IkConstraint"])
+            if (!elementMap[bone.name]["IkConstraint"])
                 ik.constraint = ik.init_constraint;
-            if (!elementMap[bone.id]["MimicTarget"])
+            if (!elementMap[bone.name]["MimicTarget"])
                 ik.mimic_target = ik.init_mimic_target;
         }]
     })

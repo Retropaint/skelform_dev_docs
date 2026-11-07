@@ -166,7 +166,7 @@ Eg: `element: PosX` with `value: 20` means 'Position X = 20 at `frame`'
 | Key          | Type   | Default | Description                              |
 | ------------ | ------ | ------- | ---------------------------------------- |
 | frame        | Uint   | `0`     | frame of keyframe                        |
-| bone_id      | Uint   | `0`     | ID of bone that keyframe refers to       |
+| bone_name    | String | `""`    | Name of bone that keyframe refers to     |
 | element      | String | `""`    | Element to be animated by this keyframe  |
 | value        | Float  | `0`     | Value to set `element` of bone to        |
 | value_str    | String | `""`    | String variant of value                  |
