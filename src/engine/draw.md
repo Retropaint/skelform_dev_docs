@@ -5,6 +5,8 @@ the armature.
 
 Propagated visibility is handled via a fixed Bool array.
 
+**Note:** for simplicity reasons, meshes do _not_ need to account for pivots.
+
 ```typescript
 function Draw(
     bones: Bone[],
@@ -53,7 +55,8 @@ function Draw(
         // do what is best for the engine
         const realTex = clip(atlas, tex.offset, tex.size);
 
-        // render bone as mesh
+        // render bone as mesh.
+        // note: meshes do not need to account for pivots.
         if (visual.vertices.length > 0) {
             drawMesh(bone, visual, tex, realTex);
             return;
