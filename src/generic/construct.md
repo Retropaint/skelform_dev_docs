@@ -80,9 +80,23 @@ function inheritance(bones: Bone[], ikRots: Object, physics: Physics[]) {
                 bones[b].rot = -bones[b].rot;
             }
 
-            bones[b].rot += orbitRot;
+            // scale this bone by its parent with respect to its initial rotation
+            //
+            // eg; if parent is widened and this bone is at 90 deg, its height should be
+            // increased rather than its width.
+            //
+            // distnace formula (sqrt of a^2 + b^2) is used to counter elongation in diagonal
+            // angles.
+            let cos = cos(bones[i].rot);
+            let sin = sin(bones[i].rot);
+            let inheritedScale = Vec2(
+                sqrt((pow2(parent.scale.x * cos) + pow2(parent.scale.y * sin)),
+                sqrt((pow2(parent.scale.x * sin) + pow2(parent.scale.y * cos)),
+            );
+            bones[b].scale *= inheritedScale;
 
-            bones[b].scale *= parent.scale;
+            // apply parent's rotation
+            bones[b].rot += orbitRot;
 
             // adjust child's distance from player as it gets bigger/smaller
             bones[b].pos *= parent.scale;
