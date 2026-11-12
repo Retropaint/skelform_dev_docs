@@ -41,7 +41,8 @@ function Draw(
 
         // setup pivot.
         // note: this may be different depending on how the engine draws textures.
-        let pivotPos: Vec2 = visual.pivot_pos * tex.size * bone.scale * visual.pivot_scale;
+        let pivotPos: Vec2 =
+            visual.pivot_pos * tex.size * bone.scale * visual.pivot_scale;
         pivotPos = rotateVec2(pivotPos, bone.rot * dir);
         // invert Y if engine is -Y
         pivotPos.y = -pivotPos.y;
@@ -65,7 +66,8 @@ function Draw(
         // A lot of game engines have a non-center sprite origin.
         // In this case, the origin is top-left of the sprite.
         // SkelForm uses center origin, so it must be adjusted like so.
-        const pushCenter: Vec2 = (tex.size / 2) * bone.scale * visual.pivot_scale;
+        const pushCenter: Vec2 =
+            (tex.size / 2) * bone.scale * visual.pivot_scale;
 
         let finalRot: Float = bone.rot + visual.pivot_rot * dir;
         let finalScale: Vec2 = bone.scale * visual.pivot_scale;
