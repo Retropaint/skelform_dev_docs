@@ -89,9 +89,15 @@ function inheritance(bones: Bone[], ikRots: Object, physics: Physics[]) {
             // angles.
             let cos = cos(bones[i].rot);
             let sin = sin(bones[i].rot);
+            // negative scales need to be explicitly multiplied, otherwise final scale
+            // will always be positive
+            let dir = Vec2(
+                parent.scale.x > 0 ? 1 : -1,
+                parent.scale.y > 0 ? 1 : -1,
+            )
             let inheritedScale = Vec2(
-                sqrt((pow2(parent.scale.x * cos) + pow2(parent.scale.y * sin)),
-                sqrt((pow2(parent.scale.x * sin) + pow2(parent.scale.y * cos)),
+                sqrt((pow2(parent.scale.x * cos) + pow2(parent.scale.y * sin)) * dir.x,
+                sqrt((pow2(parent.scale.x * sin) + pow2(parent.scale.y * cos)) * dir.y,
             );
             bones[b].scale *= inheritedScale;
 

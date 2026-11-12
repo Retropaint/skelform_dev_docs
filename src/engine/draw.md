@@ -41,9 +41,8 @@ function Draw(
 
         // setup pivot.
         // note: this may be different depending on how the engine draws textures.
-        let pivotPos: Vec2 =
-            visual.pivot_pos * tex.size * bone.scale * visual.pivot_scale;
-        pivotPos = rotateVec2(pivotPos, bone.rot * dir);
+        let pivotPos = rotateVec2(visual.pivot_pos * tex.size, bone.rot * dir);
+        pivotPos *= bone.scale;
         // invert Y if engine is -Y
         pivotPos.y = -pivotPos.y;
 
