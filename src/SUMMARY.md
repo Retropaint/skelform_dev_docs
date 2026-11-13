@@ -1,6 +1,7 @@
 # Summary
 
 - [Introduction](./introduction.md)
+- [Changelog](./changelog.md)
 - [File Structure](./file-specs.md)
 - [Generic Runtimes](./generic-runtimes.md)
     - [`Animate()`](./generic/animate.md)
